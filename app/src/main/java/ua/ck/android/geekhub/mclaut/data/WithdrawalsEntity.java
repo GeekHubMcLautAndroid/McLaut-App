@@ -10,7 +10,7 @@ import java.sql.Date;
  * Created by bogda on 15.11.2017.
  */
 
-@Entity
+@Entity(tableName = "withdrawals")
 public class WithdrawalsEntity {
     @PrimaryKey(autoGenerate = true)
     private int id;

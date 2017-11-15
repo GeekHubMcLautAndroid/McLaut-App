@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * Created by bogda on 13.11.2017.
  */
-@Entity
+@Entity(tableName = "userInfo")
 public class UserInfoEntity {
     @PrimaryKey
     private String id;
@@ -80,7 +80,7 @@ public class UserInfoEntity {
         return withdrawDateLast;
     }
 }
- @Entity
+ @Entity(tableName = "userConnectionsInfo")
  class UserConnectionsInfo{
     @PrimaryKey
     private String id;

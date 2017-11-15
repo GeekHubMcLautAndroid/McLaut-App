@@ -9,7 +9,7 @@ import java.sql.Date;
 /**
  * Created by bogda on 15.11.2017.
  */
-@Entity
+@Entity(tableName = "payments")
 public class PaymentsEntity {
     @PrimaryKey(autoGenerate = true)
     private int id;
