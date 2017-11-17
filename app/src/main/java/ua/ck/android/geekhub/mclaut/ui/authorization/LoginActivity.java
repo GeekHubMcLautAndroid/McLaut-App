@@ -1,13 +1,15 @@
 package ua.ck.android.geekhub.mclaut.ui.authorization;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
+import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.widget.Button;
 import android.widget.Spinner;
-import android.widget.Toast;
 
+import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -26,17 +28,47 @@ public class LoginActivity extends AppCompatActivity {
     @BindView(R.id.login_activity_password_text_input_edittext)
     TextInputEditText passwordEditText;
     @BindView(R.id.login_activity_button_sign_in)
-    Button buttonLogin;
+    CircularProgressButton buttonLogin;
+
+    private LoginViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
+
+        viewModel = ViewModelProviders.of(this).get(LoginViewModel.class);
+        viewModel.getProgressStatusData().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(@Nullable Boolean aBoolean) {
+                if(aBoolean){
+                    showProgress();
+                }
+                else {
+                    hideProgress();
+                }
+            }
+        });
     }
 
     @OnClick(R.id.login_activity_button_sign_in)
     public void logInButtonClick(){
-        //TODO: Login procedure
+        viewModel.login(loginTextInputEditText.getText().toString(),
+                passwordEditText.getText().toString());
     }
+
+    public void showProgress(){
+        buttonLogin.startAnimation();
+        cityesSpinner.setEnabled(false);
+        loginTextInputLayout.setEnabled(false);
+        passwordTextInputLayout.setEnabled(false);
+    }
+    public  void hideProgress(){
+        buttonLogin.revertAnimation();
+        cityesSpinner.setEnabled(true);
+        loginTextInputLayout.setEnabled(true);
+        passwordTextInputLayout.setEnabled(true);
+    }
+
 }

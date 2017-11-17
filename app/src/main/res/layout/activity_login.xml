@@ -58,6 +58,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawablePadding="8dp"
+                android:inputType="textPassword"
                 android:drawableStart="@drawable/ic_password_edittext_icon"
                 android:textColor="@android:color/white"
                 android:theme="@style/LoginScreenEdittextStyle" />
@@ -82,14 +83,20 @@
             android:spinnerMode="dialog"
             android:theme="@style/SpinnerStyle" />
 
-        <Button
+        <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
             android:id="@+id/login_activity_button_sign_in"
-            style="@style/Base.Widget.AppCompat.Button.Colored"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="24dp"
-            android:text="@string/log_in_button_text" />
+            android:text="@string/log_in_button_text"
+            android:background="@color/colorAccent"
+            app:spinning_bar_width="4dp"
+            app:spinning_bar_color="#FFF"
+            app:spinning_bar_padding="6dp"
+            android:textColor="@android:color/white"
+            />
+
     </LinearLayout>
 
 </LinearLayout>
