@@ -1,8 +1,6 @@
 <resources>
 
-    <!-- Base application theme. -->
     <style name="McLautAppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
@@ -11,6 +9,19 @@
     <style name="McLautAppThemeWithoutActionBar" parent="McLautAppTheme">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="SpinnerStyle">
+        <item name="colorControlNormal">@android:color/white</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
+    <style name="SpinnerPopupTheme">
+        <item name="android:textColor">@android:color/black</item>
+    </style>
+    <style name="LoginScreenEdittextStyle">
+        <item name="android:textColorHint">@android:color/white</item>
+        <item name="android:colorControlNormal">@android:color/white</item>
     </style>
 
 </resources>

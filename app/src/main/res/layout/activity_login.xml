@@ -1,14 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/backgroundColor"
+    android:descendantFocusability="beforeDescendants"
+    android:focusableInTouchMode="true"
     android:orientation="vertical"
     tools:context="ua.ck.android.geekhub.mclaut.ui.authorization.LoginActivity">
 
     <ImageView
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="70dp"
         android:layout_marginEnd="@dimen/login_screen_sideways_margin"
         android:layout_marginStart="@dimen/login_screen_sideways_margin"
         android:layout_marginTop="@dimen/login_screen_image_top_margin"
@@ -24,42 +28,68 @@
         android:orientation="vertical">
 
         <android.support.design.widget.TextInputLayout
+            android:id="@+id/login_activity_login_text_input_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:hint="@string/login">
+            android:layout_marginBottom="16dp"
+            android:hint="@string/login"
+            android:textColorHint="@android:color/white">
 
             <android.support.design.widget.TextInputEditText
+                android:id="@+id/login_activity_login_text_input_edittext"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:drawablePadding="8dp"
+                android:drawableStart="@drawable/ic_username_edittext_icon"
+                android:textColor="@android:color/white"
+                android:theme="@style/LoginScreenEdittextStyle" />
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
+            android:id="@+id/login_activity_password_text_input_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/password">
+            android:layout_marginBottom="16dp"
+            android:hint="@string/password"
+            android:textColorHint="@android:color/white">
 
             <android.support.design.widget.TextInputEditText
+                android:id="@+id/login_activity_password_text_input_edittext"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:drawablePadding="8dp"
+                android:drawableStart="@drawable/ic_password_edittext_icon"
+                android:textColor="@android:color/white"
+                android:theme="@style/LoginScreenEdittextStyle" />
         </android.support.design.widget.TextInputLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="@string/city"
+            android:textColor="@android:color/white"
+            android:textSize="16sp" />
 
         <Spinner
             android:id="@+id/login_activity_city_spinner"
+            style="@style/Widget.AppCompat.Spinner.Underlined"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/login_screen_sideways_margin"
-            android:layout_marginStart="@dimen/login_screen_sideways_margin"
             android:layout_marginTop="8dp"
-            android:entries="@array/mclaut_cityes"/>
+            android:entries="@array/mclaut_cityes"
+            android:popupTheme="@style/SpinnerPopupTheme"
+            android:spinnerMode="dialog"
+            android:theme="@style/SpinnerStyle" />
 
         <Button
+            android:id="@+id/login_activity_button_sign_in"
             style="@style/Base.Widget.AppCompat.Button.Colored"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
+            android:layout_marginTop="24dp"
             android:text="@string/log_in_button_text" />
-
     </LinearLayout>
 
 </LinearLayout>

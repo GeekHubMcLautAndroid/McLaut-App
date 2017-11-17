@@ -10,4 +10,5 @@
     <string name="cityes_pereyaskav_khmelnitskiy">Переяслав - Хмельницкий</string>
     <string name="cityes_vatutine">Ватутино</string>
     <string name="cityes_zvynigorodga">Звенигородка</string>
+    <string name="city">City:</string>
 </resources>
