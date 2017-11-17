@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="login">Имя пользователя</string>
+    <string name="password">Пароль</string>
+    <string name="log_in_button_text">Войти</string>
+    <string name="cityes_cherkassy">Черкассы</string>
+    <string name="cityes_smila">Смела</string>
+    <string name="cityes_kaniv">Канев</string>
+    <string name="cityes_zolotonosha">Золотоноша</string>
+    <string name="cityes_pereyaskav_khmelnitskiy">Переяслав - Хмельницкий</string>
+    <string name="cityes_vatutine">Ватутино</string>
+    <string name="cityes_zvynigorodga">Звенигородка</string>
+</resources>

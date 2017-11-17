@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">McLaut</string>
+    <string name="login">Login</string>
+    <string name="password">Password</string>
+    <string name="log_in_button_text">Log In</string>
+    <string name="cityes_cherkassy">Cherkasy</string>
+    <string name="cityes_smila">Smila</string>
+    <string name="cityes_kaniv">Kaniv</string>
+    <string name="cityes_zolotonosha">Zolotonosha</string>
+    <string name="cityes_pereyaskav_khmelnitskiy">Pereyaslav Khmelnitsky</string>
+    <string name="cityes_vatutine">Vatutine</string>
+    <string name="cityes_zvynigorodga">Zvynigorodka</string>
 </resources>
