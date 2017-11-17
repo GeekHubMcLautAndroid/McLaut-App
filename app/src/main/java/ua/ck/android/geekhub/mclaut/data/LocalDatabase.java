@@ -6,6 +6,7 @@ import android.arch.persistence.room.DatabaseConfiguration;
 import android.arch.persistence.room.InvalidationTracker;
 import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
+import android.arch.persistence.room.TypeConverters;
 import android.content.Context;
 
 /**
@@ -16,9 +17,9 @@ import android.content.Context;
         UserConnectionsInfo.class,
         PaymentsEntity.class,
         WithdrawalsEntity.class}, version = 1)
+@TypeConverters({DateConverter.class})
 public abstract class LocalDatabase extends RoomDatabase {
 
-    public abstract Dao dao();
     private static final String DATABASE_NAME = "McLautDatabase";
     private static final Object LOCK = new Object();
     private static volatile LocalDatabase instance;
@@ -35,6 +36,8 @@ public abstract class LocalDatabase extends RoomDatabase {
         }
         return instance;
     }
+
+    public abstract Dao dao();
 
     @Override
     protected SupportSQLiteOpenHelper createOpenHelper(DatabaseConfiguration config) {

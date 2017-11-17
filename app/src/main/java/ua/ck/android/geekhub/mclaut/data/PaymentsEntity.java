@@ -2,9 +2,9 @@ package ua.ck.android.geekhub.mclaut.data;
 
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
-import android.arch.persistence.room.TypeConverters;
 
-import java.sql.Date;
+import java.util.Date;
+
 
 /**
  * Created by bogda on 15.11.2017.
@@ -15,7 +15,6 @@ public class PaymentsEntity {
     private int id;
     private int type;
     private String idClient;
-    @TypeConverters(DateConverter.class)
     private Date date;
     private double sum;
     private double sumBefore;
