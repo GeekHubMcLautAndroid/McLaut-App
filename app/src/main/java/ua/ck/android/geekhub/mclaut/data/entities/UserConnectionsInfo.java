@@ -5,6 +5,8 @@ import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
+import com.google.gson.annotations.SerializedName;
+
 import static android.arch.persistence.room.ForeignKey.CASCADE;
 
 /**
@@ -17,9 +19,12 @@ public class UserConnectionsInfo{
     @PrimaryKey
     @NonNull
     private String id;
+    @SerializedName("id_client")
     private String idClient;
+    @SerializedName("is_active")
     private String isActive;
     private String login;
+    @SerializedName("pay_at_day")
     private String payAtDay;
     private String tariff;
 

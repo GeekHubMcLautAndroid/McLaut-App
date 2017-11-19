@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="mclaut_cityes">
+        <item>Черкаси</item>
+        <item>Сміла</item>
+        <item>Канів</item>
+        <item>Золотоноша</item>
+        <item>Переяслав-Хмельницкий</item>
+        <item>Ватутіне</item>
+        <item>Звенигородка</item>
+    </string-array>
+</resources>
