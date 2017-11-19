@@ -1,4 +1,4 @@
-package ua.ck.android.geekhub.mclaut.data;
+package ua.ck.android.geekhub.mclaut.data.database;
 
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
