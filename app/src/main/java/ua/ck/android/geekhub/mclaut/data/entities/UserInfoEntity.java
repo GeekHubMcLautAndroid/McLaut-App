@@ -40,9 +40,6 @@ public class UserInfoEntity {
         this.withdrawDateLast = withdrawDateLast;
     }
 
-    public UserInfoEntity() {
-    }
-
     @NonNull
     public String getId() {
         return id;

@@ -9,6 +9,7 @@ import java.util.Date;
 
 @Entity(tableName = "withdrawals")
 public class WithdrawalsEntity {
+
     @PrimaryKey(autoGenerate = true)
     private int id;
     private int type;

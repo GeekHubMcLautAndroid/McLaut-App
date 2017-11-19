@@ -19,9 +19,10 @@ import ua.ck.android.geekhub.mclaut.data.entities.WithdrawalsEntity;
  */
 
 @Database(entities = {UserInfoEntity.class,
-        UserConnectionsInfo.class,
-        PaymentsEntity.class,
-        WithdrawalsEntity.class}, version = 1)
+                      UserConnectionsInfo.class,
+                      PaymentsEntity.class,
+                      WithdrawalsEntity.class}, version = 1)
+
 @TypeConverters({DateConverter.class})
 public abstract class LocalDatabase extends RoomDatabase {
 
