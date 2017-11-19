@@ -3,6 +3,10 @@ package ua.ck.android.geekhub.mclaut.data.database;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.OnConflictStrategy;
 
+import ua.ck.android.geekhub.mclaut.data.entities.PaymentsEntity;
+import ua.ck.android.geekhub.mclaut.data.entities.UserInfoEntity;
+import ua.ck.android.geekhub.mclaut.data.entities.WithdrawalsEntity;
+
 /**
  * Created by bogda on 15.11.2017.
  */
