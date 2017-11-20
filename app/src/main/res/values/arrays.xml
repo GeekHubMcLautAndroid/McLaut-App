@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="mclaut_cityes">
-        <item>@string/cityes_cherkassy</item>
-        <item>@string/cityes_smila</item>
-        <item>@string/cityes_kaniv</item>
-        <item>@string/cityes_zolotonosha</item>
-        <item>@string/cityes_pereyaskav_khmelnitskiy</item>
-        <item>@string/cityes_vatutine</item>
-        <item>@string/cityes_zvynigorodga</item>
+        <item>Cherkasy</item>
+        <item>Smila</item>
+        <item>Kaniv</item>
+        <item>Zolotonosha</item>
+        <item>Pereyaskav-Khmelnitskiy</item>
+        <item>Vatutine</item>
+        <item>Zvynigorodka</item>
     </string-array>
 </resources>

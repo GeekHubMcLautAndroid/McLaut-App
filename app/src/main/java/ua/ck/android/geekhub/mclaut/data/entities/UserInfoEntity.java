@@ -5,6 +5,8 @@ import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.Date;
 import java.util.List;
 
@@ -19,11 +21,14 @@ public class UserInfoEntity {
     @NonNull
     private String id;
     private String login;
+    @SerializedName("is_active")
     private String isActive;
     private String account;
     private String balance;
     private String name;
+    @SerializedName("payment_date_last")
     private Date paymentDateLast;
+    @SerializedName("withdrawal_date_last")
     private Date withdrawDateLast;
 
 
