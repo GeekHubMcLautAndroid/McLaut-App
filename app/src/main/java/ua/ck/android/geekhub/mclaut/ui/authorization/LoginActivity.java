@@ -11,7 +11,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
 import butterknife.BindView;
@@ -21,6 +25,8 @@ import ua.ck.android.geekhub.mclaut.R;
 import ua.ck.android.geekhub.mclaut.ui.MainActivity;
 
 public class LoginActivity extends AppCompatActivity implements TextWatcher {
+
+    public static final int RESPONSE_FAILTURE_CODE = -100;
 
     @BindView(R.id.login_activity_city_spinner)
     Spinner cityesSpinner;
@@ -55,6 +61,7 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher {
                 }
             }
         });
+        loginTextInputEditText.addTextChangedListener(this);
         passwordEditText.addTextChangedListener(this);
         viewModel.getResultStatus().observe(this, new Observer<Integer>() {
             @Override
@@ -68,15 +75,48 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher {
                         passwordEditText.getText().clear();
                         passwordTextInputLayout.setError(getString(R.string.error_login));
                         passwordTextInputLayout.setErrorEnabled(true);
+                        break;
+                    case RESPONSE_FAILTURE_CODE:
+                        passwordEditText.getText().clear();
+                        Toast.makeText(ctx,getString(R.string.error_no_internet),Toast.LENGTH_SHORT).show();
                 }
+            }
+        });
+
+        passwordEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+                if ((keyEvent != null && (keyEvent.getKeyCode() == KeyEvent.KEYCODE_ENTER)) || (i == EditorInfo.IME_ACTION_DONE)) {
+                    login();
+                }
+                return false;
             }
         });
     }
 
     @OnClick(R.id.login_activity_button_sign_in)
     public void logInButtonClick(){
-        viewModel.login(loginTextInputEditText.getText().toString(),
-                passwordEditText.getText().toString(), cityesSpinner.getSelectedItemPosition());
+        login();
+    }
+
+    private void login(){
+        String login = loginTextInputEditText.getText().toString();
+        String password = passwordEditText.getText().toString();
+        int city = cityesSpinner.getSelectedItemPosition();
+        boolean error = false;
+        if(login.equals("")) {
+            loginTextInputLayout.setError(getString(R.string.error_empty_field));
+            loginTextInputLayout.setErrorEnabled(true);
+            error = true;
+        }
+        if(password.equals("")){
+            passwordTextInputLayout.setError(getString(R.string.error_empty_field));
+            passwordTextInputLayout.setErrorEnabled(true);
+            error = true;
+        }
+        if(!error) {
+            viewModel.login(login, password, city);
+        }
     }
 
     public void showProgress(){
@@ -95,6 +135,7 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher {
     @Override
     public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
         passwordTextInputLayout.setErrorEnabled(false);
+        loginTextInputLayout.setErrorEnabled(false);
     }
 
     @Override

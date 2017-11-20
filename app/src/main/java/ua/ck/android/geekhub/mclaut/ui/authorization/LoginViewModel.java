@@ -23,6 +23,7 @@ public class LoginViewModel extends ViewModel implements Observer<LoginResultInf
     @Override
     public void onChanged(@Nullable LoginResultInfo loginResultInfo) {
                 resultStatus.postValue(loginResultInfo.getLocalResultCode());
+                showProgressStatus.postValue(false);
     }
 
     public MutableLiveData<Boolean> getProgressStatusData(){

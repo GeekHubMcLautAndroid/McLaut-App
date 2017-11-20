@@ -5,4 +5,6 @@
     <string name="log_in_button_text">Log In</string>
     <string name="city">City:</string>
     <string name="error_login">Login or password is incorrect</string>
+    <string name="error_no_internet">Connection error</string>
+    <string name="error_empty_field">Empty field</string>
 </resources>
