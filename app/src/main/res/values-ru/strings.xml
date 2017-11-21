@@ -5,4 +5,6 @@
     <string name="log_in_button_text">Войти</string>
     <string name="city">City:</string>
     <string name="error_login">Неправильные имя пользователя и/или пароль</string>
+    <string name="error_no_internet">Ошибка подключения</string>
+    <string name="error_empty_field">Заполните это поле</string>
 </resources>
