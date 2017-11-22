@@ -7,4 +7,11 @@
     <string name="error_login">Login or password is incorrect</string>
     <string name="error_no_internet">Connection error</string>
     <string name="error_empty_field">Empty field</string>
+
+    <!--DrawerToggle strings-->
+    <string name="drawer_main_open">open_drawer</string>
+    <string name="drawer_main_close">close_drawer</string>
+    <!--                    -->
+
+
 </resources>
