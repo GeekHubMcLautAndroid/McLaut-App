@@ -11,7 +11,15 @@
     <!--DrawerToggle strings-->
     <string name="drawer_main_open">open_drawer</string>
     <string name="drawer_main_close">close_drawer</string>
-    <!--                    -->
+    
+    <!--Drawer items names-->
+    <string name="general_information">General information</string>
+    <string name="payments_group_name">Cash operation</string>
+    <string name="payments">Payments</string>
+    <string name="withdrawals">Withdrawal</string>
+    <string name="settings">Settings</string>
+    
+    
 
 
 </resources>

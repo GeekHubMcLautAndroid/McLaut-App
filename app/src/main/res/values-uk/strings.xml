@@ -7,4 +7,12 @@
     <string name="error_login">Невірні ім\'я користувача та/або пароль</string>
     <string name="error_no_internet">Помилка підключення</string>
     <string name="error_empty_field">Заповніть це поле</string>
+
+    <!--Drawer items names-->
+    <string name="general_information">Загальна інформація</string>
+    <string name="payments_group_name">Грошові операції</string>
+    <string name="payments">Поповнення</string>
+    <string name="withdrawals">Зняття</string>
+    <string name="settings">Налаштування</string>
+
 </resources>

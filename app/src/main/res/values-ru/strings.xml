@@ -3,8 +3,15 @@
     <string name="login">Имя пользователя</string>
     <string name="password">Пароль</string>
     <string name="log_in_button_text">Войти</string>
-    <string name="city">City:</string>
+    <string name="city">Город:</string>
     <string name="error_login">Неправильные имя пользователя и/или пароль</string>
     <string name="error_no_internet">Ошибка подключения</string>
     <string name="error_empty_field">Заполните это поле</string>
+
+    <!--Drawer items names-->
+    <string name="general_information">Главная Информация</string>
+    <string name="payments_group_name">Денежные операции</string>
+    <string name="payments">Пополнения</string>
+    <string name="withdrawals">Снятия</string>
+    <string name="settings">Настройки</string>
 </resources>

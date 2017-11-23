@@ -2,4 +2,10 @@
 <resources>
     <dimen name="login_screen_image_top_margin">25dp</dimen>
     <dimen name="login_screen_sideways_margin">16dp</dimen>
+
+    <dimen name="header_logo_margin">20dp</dimen>
+    <dimen name="header_logo_height">80dp</dimen>
+    <dimen name="header_user_name_tv_font_size">20sp</dimen>
+    <dimen name="header_user_id_tv_font_size">15sp</dimen>
+    <dimen name="header_tv_margin">8dp</dimen>
 </resources>
