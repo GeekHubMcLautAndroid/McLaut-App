@@ -30,8 +30,18 @@ public class McLautHashGenerator {
                 ).getBytes(StandardCharsets.UTF_8), 2);
     }
 
-    public static String generateGetDataHash(String certificate, int city){
-        String queryAction = "action=getInfo&" +
+    public static String getUserInfo(String certificate,int city){
+        return generateGetDataHash("getInfo",certificate,city);
+    }
+    public static String getWithdrawalsInfo(String certificate, int city){
+        return generateGetDataHash("getWithdrawals",certificate,city);
+    }
+    public static String getPaymentsInfo(String certificate, int city){
+        return generateGetDataHash("getPayments",certificate,city);
+    }
+
+    private static String generateGetDataHash(String action,String certificate, int city){
+        String queryAction = "action="+ action +"&" +
                 "certificate=" + certificate +
                 "&city=" + city;
 

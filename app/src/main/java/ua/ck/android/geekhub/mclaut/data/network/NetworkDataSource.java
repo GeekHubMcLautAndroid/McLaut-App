@@ -8,6 +8,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import ua.ck.android.geekhub.mclaut.data.entities.LoginResultInfo;
+import ua.ck.android.geekhub.mclaut.data.entities.PaymentsListEntity;
 import ua.ck.android.geekhub.mclaut.data.entities.UserInfoEntity;
 import ua.ck.android.geekhub.mclaut.data.entities.WithdrawalsListEntity;
 import ua.ck.android.geekhub.mclaut.tools.McLautHashGenerator;
@@ -68,7 +69,7 @@ public class NetworkDataSource {
     public MutableLiveData<UserInfoEntity> getUserInfo(String certificate, int city){
         final MutableLiveData<UserInfoEntity> result = new MutableLiveData<>();
 
-        String hash = McLautHashGenerator.generateGetDataHash(certificate,city);
+        String hash = McLautHashGenerator.getUserInfo(certificate,city);
 
         mclautMethodsInterface.getUserInfo(hash).enqueue(new Callback<UserInfoEntity>() {
             @Override
@@ -91,7 +92,7 @@ public class NetworkDataSource {
     public MutableLiveData<WithdrawalsListEntity> getWithdrawals(String certificate, int city){
         final MutableLiveData<WithdrawalsListEntity> result = new MutableLiveData<>();
 
-        String hash = McLautHashGenerator.generateGetDataHash(certificate,city);
+        String hash = McLautHashGenerator.getWithdrawalsInfo(certificate,city);
 
         mclautMethodsInterface.getWithdrawals(hash).enqueue(new Callback<WithdrawalsListEntity>() {
             @Override
@@ -110,5 +111,26 @@ public class NetworkDataSource {
         });
         return result;
     }
+    public MutableLiveData<PaymentsListEntity> getPayments(String certificate, int city){
+        final MutableLiveData<PaymentsListEntity> result = new MutableLiveData<>();
 
+        String hash = McLautHashGenerator.getPaymentsInfo(certificate,city);
+
+        mclautMethodsInterface.getPayments(hash).enqueue(new Callback<PaymentsListEntity>() {
+            @Override
+            public void onResponse(Call<PaymentsListEntity> call, Response<PaymentsListEntity> response) {
+                PaymentsListEntity resData = response.body();
+                resData.setLocalResCode(RESPONSE_SUCCESSFUL_CODE);
+                result.postValue(resData);
+            }
+
+            @Override
+            public void onFailure(Call<PaymentsListEntity> call, Throwable t) {
+                PaymentsListEntity resData = new PaymentsListEntity();
+                resData.setLocalResCode(RESPONSE_FAILURE_CODE);
+                result.postValue(resData);
+            }
+        });
+        return result;
+    }
 }
