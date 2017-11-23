@@ -9,8 +9,8 @@
     <string name="error_empty_field">Empty field</string>
 
     <!--DrawerToggle strings-->
-    <string name="drawer_main_open">open_drawer</string>
-    <string name="drawer_main_close">close_drawer</string>
+    <string name="drawer_main_open" translatable="false">open_drawer</string>
+    <string name="drawer_main_close" translatable="false">close_drawer</string>
     
     <!--Drawer items names-->
     <string name="general_information">General information</string>

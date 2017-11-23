@@ -30,7 +30,7 @@ public class McLautHashGenerator {
                 ).getBytes(StandardCharsets.UTF_8), 2);
     }
 
-    public static String generateUserInfoHash(String certificate, int city){
+    public static String generateGetDataHash(String certificate, int city){
         String queryAction = "action=getInfo&" +
                 "certificate=" + certificate +
                 "&city=" + city;
