@@ -102,6 +102,38 @@ public class UserInfoEntity {
     public void setLocalResCode(int localResCode) {
         this.localResCode = localResCode;
     }
+
+    public void setId(@NonNull String id) {
+        this.id = id;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
+    public void setIsActive(String isActive) {
+        this.isActive = isActive;
+    }
+
+    public void setAccount(String account) {
+        this.account = account;
+    }
+
+    public void setBalance(String balance) {
+        this.balance = balance;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setPaymentDateLast(Date paymentDateLast) {
+        this.paymentDateLast = paymentDateLast;
+    }
+
+    public void setWithdrawDateLast(Date withdrawDateLast) {
+        this.withdrawDateLast = withdrawDateLast;
+    }
 }
 
 
