@@ -33,8 +33,8 @@ public class UserInfoEntity {
 
 
     public UserInfoEntity(@NonNull String id, String login, String isActive, String account, String balance,
-                          String name, Date paymentDateLast, Date withdrawDateLast,
-                          List<UserConnectionsInfo> connectionsInfos) {
+                          String name, Date paymentDateLast, Date withdrawDateLast
+                         ) {
         this.id = id;
         this.login = login;
         this.isActive = isActive;
@@ -43,9 +43,6 @@ public class UserInfoEntity {
         this.name = name;
         this.paymentDateLast = paymentDateLast;
         this.withdrawDateLast = withdrawDateLast;
-    }
-
-    public UserInfoEntity() {
     }
 
     @NonNull
@@ -54,65 +51,35 @@ public class UserInfoEntity {
     }
 
     @NonNull
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public String getLogin() {
         return login;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
     }
 
     public String getIsActive() {
         return isActive;
     }
 
-    public void setIsActive(String isActive) {
-        this.isActive = isActive;
-    }
-
     public String getAccount() {
         return account;
-    }
-
-    public void setAccount(String account) {
-        this.account = account;
     }
 
     public String getBalance() {
         return balance;
     }
 
-    public void setBalance(String balance) {
-        this.balance = balance;
-    }
-
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public Date getPaymentDateLast() {
         return paymentDateLast;
     }
 
-    public void setPaymentDateLast(Date paymentDateLast) {
-        this.paymentDateLast = paymentDateLast;
-    }
-
     public Date getWithdrawDateLast() {
         return withdrawDateLast;
     }
 
-    public void setWithdrawDateLast(Date withdrawDateLast) {
-        this.withdrawDateLast = withdrawDateLast;
-    }
 }
 
 

@@ -19,8 +19,6 @@ public class Repository {
         return instance;
     }
 
-
-
     public MutableLiveData<LoginResultInfo> getLoginInfo(String login, String password, int city){
         MutableLiveData<LoginResultInfo> loginResultsLiveData = NetworkDataSource.getInstance().
                 checkLogin(login,password,city);

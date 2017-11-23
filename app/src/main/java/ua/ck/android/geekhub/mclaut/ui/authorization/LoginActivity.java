@@ -40,6 +40,7 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher {
     TextInputEditText passwordEditText;
     @BindView(R.id.login_activity_button_sign_in)
     CircularProgressButton buttonLogin;
+
     private Context ctx = this;
     private LoginViewModel viewModel;
 
@@ -96,6 +97,11 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher {
 
     @OnClick(R.id.login_activity_button_sign_in)
     public void logInButtonClick(){
+
+        viewModel.login(loginTextInputEditText.getText().toString(),
+                        passwordEditText.getText().toString(),
+                        cityesSpinner.getSelectedItemPosition());
+
         login();
     }
 
@@ -117,6 +123,7 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher {
         if(!error) {
             viewModel.login(login, password, city);
         }
+
     }
 
     public void showProgress(){

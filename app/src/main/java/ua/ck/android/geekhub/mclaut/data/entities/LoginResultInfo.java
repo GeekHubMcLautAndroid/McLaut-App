@@ -22,23 +22,12 @@ public class LoginResultInfo {
         return resultCode;
     }
 
-    public void setResultCode(int resultCode) {
-        this.resultCode = resultCode;
-    }
-
     public String getCertificate() {
         return certificate;
-    }
-
-    public void setCertificate(String certificate) {
-        this.certificate = certificate;
     }
 
     public int getLocalResultCode() {
         return localResultCode;
     }
 
-    public void setLocalResultCode(int localResultCode) {
-        this.localResultCode = localResultCode;
-    }
 }

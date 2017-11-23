@@ -2,10 +2,13 @@ package ua.ck.android.geekhub.mclaut.data.database;
 
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.OnConflictStrategy;
+import android.arch.persistence.room.Query;
 
-import ua.ck.android.geekhub.mclaut.data.entities.PaymentsEntity;
+import java.util.List;
+
+import ua.ck.android.geekhub.mclaut.data.entities.CashTransactionsEntity;
+import ua.ck.android.geekhub.mclaut.data.entities.UserConnectionsInfo;
 import ua.ck.android.geekhub.mclaut.data.entities.UserInfoEntity;
-import ua.ck.android.geekhub.mclaut.data.entities.WithdrawalsEntity;
 
 /**
  * Created by bogda on 15.11.2017.
@@ -16,10 +19,31 @@ public interface Dao {
     void insertUserInfo(UserInfoEntity entity);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertPaymentsEntities(PaymentsEntity... entities);
+    void insertUserConnectionsInfo(UserConnectionsInfo entity);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertWithdrawalsEntities(WithdrawalsEntity... entities);
+    void insertCashTransactionsEntities(CashTransactionsEntity... entities);
+
+    @Query("SELECT * FROM cashTransactions " +
+            "        WHERE typeOfTransaction = 1 " + // 1 equals PAYMENTS
+            "        ORDER BY date")
+    List<CashTransactionsEntity> findAllPaymentsEntities();
+
+    @Query("SELECT * FROM cashTransactions " +
+            "        WHERE typeOfTransaction = " + CashTransactionsEntity.WITHDRAWALS
+            +     // 0 equals WITHDRAWALS
+            "        ORDER BY date")
+    List<CashTransactionsEntity> findAllWithdrawalsEntities();
+
+    @Query("SELECT * FROM userInfo" +
+            "        WHERE id = :userId")
+    UserInfoEntity findUserInfoEntityById(int userId);
+
+
+    @Query("SELECT * FROM userConnectionsInfo" +
+            "        WHERE idClient = :userId")
+    UserInfoEntity findUserConnectionInfoEntityById(int userId);
+
 
 
     //TODO: Write other needs methods

@@ -13,8 +13,11 @@ import static android.arch.persistence.room.ForeignKey.CASCADE;
  * Created by bogda on 19.11.2017.
  */
 
-@Entity(tableName = "userConnectionsInfo", foreignKeys = @ForeignKey(onDelete = CASCADE,
-        entity = UserInfoEntity.class, parentColumns = "id", childColumns = "idClient"))
+@Entity(tableName = "userConnectionsInfo",
+        foreignKeys = @ForeignKey(onDelete = CASCADE,
+                                    entity = UserInfoEntity.class,
+                                             parentColumns = "id",
+                                             childColumns = "idClient"))
 public class UserConnectionsInfo{
     @PrimaryKey
     @NonNull
