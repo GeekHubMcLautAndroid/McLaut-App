@@ -39,10 +39,13 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
+
         if(isFirstInit){
             isFirstInit = false;
             firstInit();
         }
+
+
 
         fragmentManager = getSupportFragmentManager();
         mainViewModel = ViewModelProviders.of(this).get(MainViewModel.class);

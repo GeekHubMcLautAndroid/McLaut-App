@@ -6,6 +6,7 @@ import retrofit2.http.Path;
 import retrofit2.http.Query;
 import ua.ck.android.geekhub.mclaut.data.entities.LoginResultInfo;
 import ua.ck.android.geekhub.mclaut.data.entities.UserConnectionsInfo;
+import ua.ck.android.geekhub.mclaut.data.entities.UserInfoEntity;
 
 /**
  * Created by bogda on 19.11.2017.
@@ -13,7 +14,9 @@ import ua.ck.android.geekhub.mclaut.data.entities.UserConnectionsInfo;
 
 public interface MclautMethodsInterface {
     @GET("api.php?")
-    Call<UserConnectionsInfo> getUserConnectionsInfo(@Query("hash") String hash);
-    @GET("api.php?")
     Call<LoginResultInfo> login(@Query("hash") String hash);
+
+    @GET("api.php?")
+    Call<UserInfoEntity> getUserInfo(@Query("hash") String hash);
+
 }

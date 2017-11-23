@@ -2,6 +2,7 @@ package ua.ck.android.geekhub.mclaut.data.entities;
 
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
@@ -30,7 +31,10 @@ public class UserInfoEntity {
     private Date paymentDateLast;
     @SerializedName("withdrawal_date_last")
     private Date withdrawDateLast;
-
+    @Ignore
+    private List<UserConnectionsInfo> userConnectionsInfoList;
+    @Ignore
+    private int localResCode;
 
     public UserInfoEntity(@NonNull String id, String login, String isActive, String account, String balance,
                           String name, Date paymentDateLast, Date withdrawDateLast
@@ -43,6 +47,9 @@ public class UserInfoEntity {
         this.name = name;
         this.paymentDateLast = paymentDateLast;
         this.withdrawDateLast = withdrawDateLast;
+    }
+
+    public UserInfoEntity() {
     }
 
     @NonNull
@@ -80,6 +87,21 @@ public class UserInfoEntity {
         return withdrawDateLast;
     }
 
+    public List<UserConnectionsInfo> getUserConnectionsInfoList() {
+        return userConnectionsInfoList;
+    }
+
+    public int getLocalResCode() {
+        return localResCode;
+    }
+
+    public void setUserConnectionsInfoList(List<UserConnectionsInfo> userConnectionsInfoList) {
+        this.userConnectionsInfoList = userConnectionsInfoList;
+    }
+
+    public void setLocalResCode(int localResCode) {
+        this.localResCode = localResCode;
+    }
 }
 
 

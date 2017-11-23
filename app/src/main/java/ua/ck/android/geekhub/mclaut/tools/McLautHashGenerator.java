@@ -15,25 +15,44 @@ import ua.ck.android.geekhub.mclaut.BuildConfig;
 public class McLautHashGenerator {
 
     public static String generateLoginHash(String login, String password, int city){
-        String deviceInfo = "API[" + Build.VERSION.SDK + "], "
-                + "Device[" + Build.DEVICE + "], "
-                + "Model[" + Build.MODEL + "],"
-                + "Product[" + Build.PRODUCT + "]";
         String queryAction = "action=checkLogin&" +
                 "login=" + login +
                 "&pass=" + password +
                 "&city=" + city;
 
-        String fullUrl = "app=mobile&version=" + BuildConfig.VERSION_CODE + "." +
-                BuildConfig.VERSION_NAME +  "&version_code="+BuildConfig.VERSION_CODE+"&" + queryAction;
 
         return Base64.encodeToString(
-                (fullUrl +
+                (generateFullUrlHash(queryAction) +
                         "&system_info=" +
                         Base64.encodeToString(
-                                deviceInfo.getBytes(StandardCharsets.UTF_8),
+                                generateDeviceInfoHash().getBytes(StandardCharsets.UTF_8),
                                 2)
                 ).getBytes(StandardCharsets.UTF_8), 2);
+    }
 
+    public static String generateUserInfoHash(String certificate, int city){
+        String queryAction = "action=getInfo&" +
+                "certificate=" + certificate +
+                "&city=" + city;
+
+
+        return Base64.encodeToString(
+                (generateFullUrlHash(queryAction) +
+                        "&system_info=" +
+                        Base64.encodeToString(
+                                generateDeviceInfoHash().getBytes(StandardCharsets.UTF_8),
+                                2)
+                ).getBytes(StandardCharsets.UTF_8), 2);
+    }
+
+    private static String generateDeviceInfoHash(){
+        return "API[" + Build.VERSION.SDK + "], "
+                + "Device[" + Build.DEVICE + "], "
+                + "Model[" + Build.MODEL + "],"
+                + "Product[" + Build.PRODUCT + "]";
+    }
+    private static String generateFullUrlHash(String queryAction){
+        return "app=mobile&version=" + BuildConfig.VERSION_CODE + "." +
+                BuildConfig.VERSION_NAME +  "&version_code="+BuildConfig.VERSION_CODE+"&" + queryAction;
     }
 }
