@@ -32,6 +32,8 @@ public class UserInfoEntity {
     @SerializedName("withdrawal_date_last")
     private Date withdrawDateLast;
     @Ignore
+    private String certificate;
+    @Ignore
     private List<UserConnectionsInfo> userConnectionsInfoList;
     @Ignore
     private int localResCode;
@@ -102,6 +104,8 @@ public class UserInfoEntity {
     public void setLocalResCode(int localResCode) {
         this.localResCode = localResCode;
     }
+
+    public void setCertificate(String certificate) {this.certificate = certificate; }
 
     public void setId(@NonNull String id) {
         this.id = id;

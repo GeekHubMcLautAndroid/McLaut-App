@@ -7,14 +7,14 @@ public class PaymentsListEntity {
     private List<CashTransactionsEntity> payments;
     private int localResCode;
 
-    public PaymentsListEntity(List<CashTransactionsEntity> withdrawals) {
-        this.payments = withdrawals;
+    public PaymentsListEntity(List<CashTransactionsEntity> payments) {
+        this.payments = payments;
     }
 
     public PaymentsListEntity() {
     }
 
-    public List<CashTransactionsEntity> getWithdrawals() {
+    public List<CashTransactionsEntity> getPayments() {
         return payments;
     }
 

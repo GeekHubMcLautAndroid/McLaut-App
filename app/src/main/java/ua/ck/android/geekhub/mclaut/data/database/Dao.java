@@ -1,5 +1,6 @@
 package ua.ck.android.geekhub.mclaut.data.database;
 
+import android.arch.lifecycle.MutableLiveData;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
@@ -22,7 +23,7 @@ public interface Dao {
     void insertUserConnectionsInfo(UserConnectionsInfo entity);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertCashTransactionsEntities(CashTransactionsEntity... entities);
+    void insertCashTransactionsEntities(CashTransactionsEntity entity);
 
     @Query("SELECT * FROM cashTransactions " +
             "        WHERE typeOfTransaction = 1 " + // 1 equals PAYMENTS
@@ -30,21 +31,25 @@ public interface Dao {
     List<CashTransactionsEntity> findAllPaymentsEntities();
 
     @Query("SELECT * FROM cashTransactions " +
-            "        WHERE typeOfTransaction = " + CashTransactionsEntity.WITHDRAWALS
-            +     // 0 equals WITHDRAWALS
+            "        WHERE typeOfTransaction = 0" + // 0 equals WITHDRAWALS
             "        ORDER BY date")
     List<CashTransactionsEntity> findAllWithdrawalsEntities();
 
     @Query("SELECT * FROM userInfo" +
             "        WHERE id = :userId")
-    UserInfoEntity findUserInfoEntityById(int userId);
+    MutableLiveData<UserInfoEntity> getUserInfoEntityById(int userId);
 
 
     @Query("SELECT * FROM userConnectionsInfo" +
             "        WHERE idClient = :userId")
-    UserInfoEntity findUserConnectionInfoEntityById(int userId);
+    MutableLiveData<UserInfoEntity> findUserConnectionInfoEntityById(int userId);
 
+    @Query("SELECT id FROM userInfo")
+    MutableLiveData<List<Integer>> getAllUsersId();
 
+    @Query("SELECT name FROM userInfo" +
+            "           WHERE id = :userId")
+    MutableLiveData<String> getUserNameById(int userId);
 
     //TODO: Write other needs methods
 }

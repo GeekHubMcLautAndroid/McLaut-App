@@ -1,6 +1,7 @@
 package ua.ck.android.geekhub.mclaut.data.entities;
 
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 
 import java.util.Date;
@@ -18,16 +19,17 @@ public class CashTransactionsEntity {
     @PrimaryKey(autoGenerate = true)
     private int id;
     private int type;
+    @Ignore
     private int typeOfTransaction;
+
     private String idClient;
     private Date date;
     private double sum;
     private double sumBefore;
 
-    public CashTransactionsEntity(int typeOfTransaction ,int id, int type, String idClient, Date date, double sum, double sumBefore) {
+    public CashTransactionsEntity(int id, int type, String idClient, Date date, double sum, double sumBefore) {
         this.id = id;
         this.type = type;
-        this.typeOfTransaction = typeOfTransaction;
         this.idClient = idClient;
         this.date = date;
         this.sum = sum;
@@ -60,5 +62,13 @@ public class CashTransactionsEntity {
 
     public double getSumBefore() {
         return sumBefore;
+    }
+
+    public void setTypeOfTransaction(int type){
+        if(type == PAYMENTS){
+            this.typeOfTransaction = PAYMENTS;
+            return;
+        }
+        this.typeOfTransaction = WITHDRAWALS;
     }
 }
