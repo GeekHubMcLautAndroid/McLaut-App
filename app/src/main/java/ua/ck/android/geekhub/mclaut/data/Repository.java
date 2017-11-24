@@ -2,11 +2,8 @@ package ua.ck.android.geekhub.mclaut.data;
 
 import android.arch.lifecycle.MutableLiveData;
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.support.v7.app.AppCompatActivity;
 
 import java.util.Iterator;
-import java.util.List;
 
 import ua.ck.android.geekhub.mclaut.data.database.LocalDatabase;
 import ua.ck.android.geekhub.mclaut.data.entities.CashTransactionsEntity;
@@ -20,15 +17,13 @@ import ua.ck.android.geekhub.mclaut.data.network.NetworkDataSource;
 public class Repository {
 
     private static Repository instance;
-    private LocalDatabase localDatabase;
 
-    private Repository(Context context) {
-        localDatabase = LocalDatabase.getInstance(context);
+    private Repository() {
     }
 
-    public static Repository getInstance(Context context){
+    public static Repository getInstance(){
         if(instance == null){
-            instance = new Repository(context);
+            instance = new Repository();
         }
         return instance;
     }
@@ -38,15 +33,15 @@ public class Repository {
         return NetworkDataSource.getInstance().checkLogin(login,password,city);
     }
 
-    public MutableLiveData<UserInfoEntity> getUserInfo(int userId){
+    public MutableLiveData<UserInfoEntity> getUserInfo(Context context, String userId){
 
-        return localDatabase.dao().getUserInfoEntityById(userId);
+        return LocalDatabase.getInstance(context).dao().getUserInfoEntityById(userId);
     }
 
-    public MutableLiveData<WithdrawalsListEntity> getWithdrawalsInfo(String certificate, int city){
+    public MutableLiveData<WithdrawalsListEntity> getWithdrawalsInfo(Context context, String certificate, int city){
 
         WithdrawalsListEntity withdrawalsList = new WithdrawalsListEntity(
-                localDatabase.dao()
+                LocalDatabase.getInstance(context).dao()
                         .findAllWithdrawalsEntities());
 
         MutableLiveData<WithdrawalsListEntity> request = new MutableLiveData<>();
@@ -55,10 +50,10 @@ public class Repository {
         return request;
     }
 
-    public MutableLiveData<PaymentsListEntity> getPaymentsInfo(String certificate, int city){
+    public MutableLiveData<PaymentsListEntity> getPaymentsInfo(Context context, String certificate, int city){
 
         PaymentsListEntity paymentsList = new PaymentsListEntity(
-                localDatabase.dao()
+                LocalDatabase.getInstance(context).dao()
                         .findAllPaymentsEntities());
 
         MutableLiveData<PaymentsListEntity> request = new MutableLiveData<>();
@@ -67,32 +62,97 @@ public class Repository {
         return request;
     }
 
-    public void insertUserInfoToDatabase(UserInfoEntity userInfoEntity){
-        localDatabase.dao().insertUserInfo(userInfoEntity);
+    public void insertUserInfoToDatabase(Context context,UserInfoEntity userInfoEntity){
+        LocalDatabase.getInstance(context).dao().insertUserInfo(userInfoEntity);
     }
 
-    public void insertUserConnectionInfoToDatabase(UserConnectionsInfo userConnectionsInfo){
-        localDatabase.dao().insertUserConnectionsInfo(userConnectionsInfo);
+    public void insertUserConnectionInfoToDatabase(Context context, UserConnectionsInfo userConnectionsInfo){
+        LocalDatabase.getInstance(context).dao().insertUserConnectionsInfo(userConnectionsInfo);
     }
 
-    public void insertPaymentsToDatabase(PaymentsListEntity paymentsList){
+    public void insertPaymentsToDatabase(Context context, PaymentsListEntity paymentsList){
         for (Iterator<CashTransactionsEntity> iter = paymentsList.getPayments().iterator();
-                iter.hasNext();){
+                iter.hasNext(); ){
 
             CashTransactionsEntity payment = iter.next();
             payment.setTypeOfTransaction(CashTransactionsEntity.PAYMENTS);
-            localDatabase.dao().insertCashTransactionsEntities(payment);
+            LocalDatabase.getInstance(context).dao().insertCashTransactionsEntities(payment);
         }
     }
 
-    public void insertWithdrawalsToDatabase(WithdrawalsListEntity withdrawalsList){
+    public void insertWithdrawalsToDatabase(Context context, WithdrawalsListEntity withdrawalsList){
+
         for (Iterator<CashTransactionsEntity> iter = withdrawalsList.getWithdrawals().iterator();
-             iter.hasNext();){
+             iter.hasNext(); ){
 
             CashTransactionsEntity withdrawal = iter.next();
             withdrawal.setTypeOfTransaction(CashTransactionsEntity.WITHDRAWALS);
-            localDatabase.dao().insertCashTransactionsEntities(withdrawal);
+            LocalDatabase.getInstance(context).dao().insertCashTransactionsEntities(withdrawal);
         }
+    }
+
+    public void addNewUserToDatabase(Context context, String login, String password, int city){
+        MutableLiveData<LoginResultInfo> loginResult = NetworkDataSource
+                .getInstance()
+                .checkLogin(login, password, city);
+
+        MutableLiveData<UserInfoEntity> newUserInfo = NetworkDataSource
+                .getInstance()
+                .getUserInfo(loginResult.getValue().getCertificate(), city);
+
+        newUserInfo.getValue().setCertificate(loginResult.getValue().getCertificate());
+        newUserInfo.getValue().setCity(city);
+
+        insertUserInfoToDatabase(context, newUserInfo.getValue());
+        refreshAllDataForUser(context, newUserInfo.getValue().getId());
+    }
+
+    private Context refresherContext;
+    private String refresherCertificate;
+    private int refresherCity;
+
+    public void refreshAllDataForUser(Context context, String userId){
+        refresherContext = context;
+        refreshUserInfo(userId);
+        refreshUserCashTransactions();
+    }
+
+    private void refreshUserInfo(String userId){
+
+        refresherCertificate =  LocalDatabase.getInstance(refresherContext).dao()
+                .getUserCertificate(userId);
+        refresherCity =  LocalDatabase.getInstance(refresherContext).dao()
+                .getUserCity(userId);
+
+        MutableLiveData<UserInfoEntity> updatedUserInfo = NetworkDataSource
+                .getInstance()
+                .getUserInfo(refresherCertificate, refresherCity);
+
+        updatedUserInfo.getValue().setCertificate(refresherCertificate);
+
+        updatedUserInfo.getValue().setCity(refresherCity);
+
+
+        insertUserInfoToDatabase(refresherContext, updatedUserInfo.getValue());
+    }
+
+    private void refreshUserCashTransactions(){
+        refreshPayments();
+        refreshWithdrawals();
+    }
+
+    private void refreshPayments(){
+        MutableLiveData<PaymentsListEntity> updatedUserPayments = NetworkDataSource
+                .getInstance()
+                .getPayments(refresherCertificate, refresherCity);
+        insertPaymentsToDatabase(refresherContext, updatedUserPayments.getValue());
+    }
+
+    private void refreshWithdrawals(){
+        MutableLiveData<PaymentsListEntity> updatedUserWithdramals = NetworkDataSource
+                .getInstance()
+                .getPayments(refresherCertificate, refresherCity);
+        insertPaymentsToDatabase(refresherContext, updatedUserWithdramals.getValue());
     }
 
     //TODO: Write new information from network to local database
