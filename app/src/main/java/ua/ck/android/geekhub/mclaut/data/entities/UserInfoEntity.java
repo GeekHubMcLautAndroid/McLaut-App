@@ -34,6 +34,8 @@ public class UserInfoEntity {
     @Ignore
     private String certificate;
     @Ignore
+    private int city;
+    @Ignore
     private List<UserConnectionsInfo> userConnectionsInfoList;
     @Ignore
     private int localResCode;
@@ -106,6 +108,8 @@ public class UserInfoEntity {
     }
 
     public void setCertificate(String certificate) {this.certificate = certificate; }
+
+    public void setCity(int city) {this.city = city; }
 
     public void setId(@NonNull String id) {
         this.id = id;
