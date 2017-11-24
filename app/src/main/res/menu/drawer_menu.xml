@@ -3,13 +3,10 @@
         <item
             android:id="@+id/general_information_fragment"
             android:checked="true"
-            android:title="@string/general_information"/>
+            android:title="@string/general_information" />
         <item
-            android:id="@+id/payments_fragment"
-            android:title="@string/payments" />
-        <item
-            android:id="@+id/withdrawals_fragment"
-            android:title="@string/withdrawals" />
+            android:id="@+id/cash_operations"
+            android:title="@string/cash_operations" />
         <item
             android:id="@+id/settings_fragment"
             android:title="@string/settings" />
