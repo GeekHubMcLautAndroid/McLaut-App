@@ -37,19 +37,27 @@ public interface Dao {
 
     @Query("SELECT * FROM userInfo" +
             "        WHERE id = :userId")
-    MutableLiveData<UserInfoEntity> getUserInfoEntityById(int userId);
+    MutableLiveData<UserInfoEntity> getUserInfoEntityById(String userId);
 
 
     @Query("SELECT * FROM userConnectionsInfo" +
             "        WHERE idClient = :userId")
-    MutableLiveData<UserInfoEntity> findUserConnectionInfoEntityById(int userId);
+    MutableLiveData<UserInfoEntity> findUserConnectionInfoEntityById(String userId);
 
     @Query("SELECT id FROM userInfo")
     MutableLiveData<List<Integer>> getAllUsersId();
 
     @Query("SELECT name FROM userInfo" +
             "           WHERE id = :userId")
-    MutableLiveData<String> getUserNameById(int userId);
+    MutableLiveData<String> getUserNameById(String userId);
+
+    @Query("SELECT certificate FROM userInfo" +
+            "                  WHERE id = :userId")
+    String getUserCertificate(String userId);
+
+    @Query("SELECT city FROM userInfo" +
+            "                  WHERE id = :userId")
+    int getUserCity(String userId);
 
     //TODO: Write other needs methods
 }
