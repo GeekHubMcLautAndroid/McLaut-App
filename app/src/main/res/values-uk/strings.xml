@@ -14,5 +14,6 @@
     <string name="payments">Поповнення</string>
     <string name="withdrawals">Зняття</string>
     <string name="settings">Налаштування</string>
+    <string name="cash_operations">Грошові операції</string>
 
 </resources>

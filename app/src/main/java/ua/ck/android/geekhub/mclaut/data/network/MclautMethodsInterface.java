@@ -11,9 +11,7 @@ import ua.ck.android.geekhub.mclaut.data.entities.UserConnectionsInfo;
 import ua.ck.android.geekhub.mclaut.data.entities.UserInfoEntity;
 import ua.ck.android.geekhub.mclaut.data.entities.WithdrawalsListEntity;
 
-/**
- * Created by bogda on 19.11.2017.
- */
+
 
 public interface MclautMethodsInterface {
     @GET("api.php?")
