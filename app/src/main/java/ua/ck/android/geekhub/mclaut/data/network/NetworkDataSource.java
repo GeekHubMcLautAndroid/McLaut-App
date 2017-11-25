@@ -7,6 +7,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import ua.ck.android.geekhub.mclaut.data.Repository;
 import ua.ck.android.geekhub.mclaut.data.entities.LoginResultInfo;
 import ua.ck.android.geekhub.mclaut.data.entities.PaymentsListEntity;
 import ua.ck.android.geekhub.mclaut.data.entities.UserInfoEntity;
@@ -27,6 +28,7 @@ public class NetworkDataSource {
             .baseUrl("http://app.mclaut.com/")
             .addConverterFactory(GsonConverterFactory.create())
             .build();
+
     private MclautMethodsInterface mclautMethodsInterface;
 
     private NetworkDataSource() {
@@ -41,7 +43,7 @@ public class NetworkDataSource {
     }
 
 
-    public MutableLiveData<LoginResultInfo> checkLogin(String login, String password, int city) {
+    public MutableLiveData<LoginResultInfo> checkLogin(String login, String password, final int city) {
 
         final MutableLiveData<LoginResultInfo> result = new MutableLiveData<>();
 
@@ -63,6 +65,7 @@ public class NetworkDataSource {
                 result.postValue(info);
             }
         });
+
         return result;
     }
 

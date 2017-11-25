@@ -22,6 +22,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import ua.ck.android.geekhub.mclaut.R;
+import ua.ck.android.geekhub.mclaut.data.Repository;
 import ua.ck.android.geekhub.mclaut.ui.MainActivity;
 
 public class LoginActivity extends AppCompatActivity implements TextWatcher {
@@ -70,6 +71,13 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher {
                 switch (integer){
                     case 1:
                         Intent intent = new Intent(ctx,MainActivity.class);
+                        Repository
+                                .getInstance()
+                                .addNewUserToDatabase(ctx,
+                                        loginTextInputEditText.getText().toString(),
+                                        passwordEditText.getText().toString(),
+                                        cityesSpinner.getSelectedItemPosition());
+
                         startActivity(intent);
                         break;
                     case 0:

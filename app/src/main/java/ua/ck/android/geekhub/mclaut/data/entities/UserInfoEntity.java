@@ -21,127 +21,149 @@ public class UserInfoEntity {
     @PrimaryKey
     @NonNull
     private String id;
+    private int city;
+    private String name;
     private String login;
-    @SerializedName("is_active")
-    private String isActive;
     private String account;
     private String balance;
-    private String name;
-    @SerializedName("payment_date_last")
-    private Date paymentDateLast;
-    @SerializedName("withdrawal_date_last")
-    private Date withdrawDateLast;
-    @Ignore
-    private String certificate;
-    @Ignore
-    private int city;
-    @Ignore
-    private List<UserConnectionsInfo> userConnectionsInfoList;
+    @SerializedName("is_active")
+    private String isActive;
     @Ignore
     private int localResCode;
+    private String certificate;
+    @SerializedName("payment_date_last")
+    private Long paymentDateLast;
+    @SerializedName("withdrawal_date_last")
+    private Long withdrawDateLast;
+    @Ignore
+    private List<UserConnectionsInfo> userConnectionsInfoList;
+
 
     public UserInfoEntity(@NonNull String id, String login, String isActive, String account, String balance,
-                          String name, Date paymentDateLast, Date withdrawDateLast
+                          String name, Long paymentDateLast, Long withdrawDateLast
                          ) {
         this.id = id;
+        this.name = name;
         this.login = login;
-        this.isActive = isActive;
         this.account = account;
         this.balance = balance;
-        this.name = name;
+        this.isActive = isActive;
         this.paymentDateLast = paymentDateLast;
         this.withdrawDateLast = withdrawDateLast;
     }
 
+    @Ignore
     public UserInfoEntity() {
     }
-
-    @NonNull
-    public String getId() {
-        return id;
-    }
-
-    @NonNull
-
-    public String getLogin() {
-        return login;
-    }
-
-    public String getIsActive() {
-        return isActive;
-    }
-
-    public String getAccount() {
-        return account;
-    }
-
-    public String getBalance() {
-        return balance;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public Date getPaymentDateLast() {
-        return paymentDateLast;
-    }
-
-    public Date getWithdrawDateLast() {
-        return withdrawDateLast;
-    }
-
-    public List<UserConnectionsInfo> getUserConnectionsInfoList() {
-        return userConnectionsInfoList;
-    }
-
-    public int getLocalResCode() {
-        return localResCode;
-    }
-
-    public void setUserConnectionsInfoList(List<UserConnectionsInfo> userConnectionsInfoList) {
-        this.userConnectionsInfoList = userConnectionsInfoList;
-    }
-
-    public void setLocalResCode(int localResCode) {
-        this.localResCode = localResCode;
-    }
-
-    public void setCertificate(String certificate) {this.certificate = certificate; }
-
-    public void setCity(int city) {this.city = city; }
 
     public void setId(@NonNull String id) {
         this.id = id;
     }
+    @NonNull
+    public String getId() {
+        return id;
+    }
+    ///
 
     public void setLogin(String login) {
         this.login = login;
     }
+    @NonNull
+    public String getLogin() {
+        return login;
+    }
+    ///
+
+    public void setCertificate(String certificate) {this.certificate = certificate; }
+    public String getCertificate() {return certificate; }
+    ///
+
+    public void setCity(int city) {this.city = city; }
+    public int getCity() {return city; }
+    ///
 
     public void setIsActive(String isActive) {
         this.isActive = isActive;
     }
+    public String getIsActive() {
+        return isActive;
+    }
+    ///
 
     public void setAccount(String account) {
         this.account = account;
     }
+    public String getAccount() {
+        return account;
+    }
+    ///
 
     public void setBalance(String balance) {
         this.balance = balance;
     }
+    public String getBalance() {
+        return balance;
+    }
+    ///
 
     public void setName(String name) {
         this.name = name;
     }
+    public String getName() {
+        return name;
+    }
+    ///
 
-    public void setPaymentDateLast(Date paymentDateLast) {
+    public void setPaymentDateLast(Long paymentDateLast) {
         this.paymentDateLast = paymentDateLast;
     }
+    public Long getPaymentDateLast() {
+        return paymentDateLast;
+    }
+    ///
 
-    public void setWithdrawDateLast(Date withdrawDateLast) {
+    public void setWithdrawDateLast(Long withdrawDateLast) {
         this.withdrawDateLast = withdrawDateLast;
     }
+    public Long getWithdrawDateLast() {
+        return withdrawDateLast;
+    }
+    ///
+
+    public void setLocalResCode(int localResCode) {
+        this.localResCode = localResCode;
+    }
+    public int getLocalResCode() {
+        return localResCode;
+    }
+    ///
+
+    public void setUserConnectionsInfoList(List<UserConnectionsInfo> userConnectionsInfoList) {
+        this.userConnectionsInfoList = userConnectionsInfoList;
+    }
+    public List<UserConnectionsInfo> getUserConnectionsInfoList() {
+        return userConnectionsInfoList;
+    }
+
+
+    ///
+    ///
+    ///
+    public Date getConvertedPaymentDateLast() {
+        return new Date(paymentDateLast * 1000);
+    }
+
+    public Date getConvertedWithdrawDateLast() {
+        return new Date(withdrawDateLast * 1000);
+    }
+
+
+
+
+
+
+
+
 }
 
 

@@ -19,20 +19,19 @@ public class CashTransactionsEntity {
     @PrimaryKey(autoGenerate = true)
     private int id;
     private int type;
-    @Ignore
     private int typeOfTransaction;
 
-    private String idClient;
-    private Date date;
+    private Long date;
     private double sum;
+    private String idClient;
     private double sumBefore;
 
-    public CashTransactionsEntity(int id, int type, String idClient, Date date, double sum, double sumBefore) {
+    public CashTransactionsEntity(int id, int type, String idClient, Long date, double sum, double sumBefore) {
         this.id = id;
-        this.type = type;
-        this.idClient = idClient;
-        this.date = date;
         this.sum = sum;
+        this.type = type;
+        this.date = date;
+        this.idClient = idClient;
         this.sumBefore = sumBefore;
     }
 
@@ -44,26 +43,27 @@ public class CashTransactionsEntity {
         return type;
     }
 
-    public int getTypeOfTransaction() {
-        return typeOfTransaction;
+    public double getSum() {
+        return sum;
+    }
+
+    public Long getDate() {
+        return date;
     }
 
     public String getIdClient() {
         return idClient;
     }
 
-    public Date getDate() {
-        return date;
-    }
-
-    public double getSum() {
-        return sum;
-    }
-
     public double getSumBefore() {
         return sumBefore;
     }
 
+    public int getTypeOfTransaction() {
+        return typeOfTransaction;
+    }
+
+    ///
     public void setTypeOfTransaction(int type){
         if(type == PAYMENTS){
             this.typeOfTransaction = PAYMENTS;

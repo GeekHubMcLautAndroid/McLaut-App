@@ -19,10 +19,11 @@ import static android.arch.persistence.room.ForeignKey.CASCADE;
                                              parentColumns = "id",
                                              childColumns = "idClient"))
 public class UserConnectionsInfo{
-    @PrimaryKey
-    @NonNull
+
     private String id;
     @SerializedName("id_client")
+    @PrimaryKey
+    @NonNull
     private String idClient;
     @SerializedName("is_active")
     private String isActive;

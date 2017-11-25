@@ -1,7 +1,9 @@
 package ua.ck.android.geekhub.mclaut.data;
 
 import android.arch.lifecycle.MutableLiveData;
+import android.arch.lifecycle.Observer;
 import android.content.Context;
+import android.support.annotation.Nullable;
 
 import java.util.Iterator;
 
@@ -17,6 +19,10 @@ import ua.ck.android.geekhub.mclaut.data.network.NetworkDataSource;
 public class Repository {
 
     private static Repository instance;
+
+    private Context refresherContext;
+    private String refresherCertificate;
+    private int refresherCity;
 
     private Repository() {
     }
@@ -35,7 +41,9 @@ public class Repository {
 
     public MutableLiveData<UserInfoEntity> getUserInfo(Context context, String userId){
 
-        return LocalDatabase.getInstance(context).dao().getUserInfoEntityById(userId);
+        MutableLiveData<UserInfoEntity> request = new MutableLiveData<>();
+        request.setValue(LocalDatabase.getInstance(context).dao().getUserInfoEntityById(userId));
+        return request;
     }
 
     public MutableLiveData<WithdrawalsListEntity> getWithdrawalsInfo(Context context, String certificate, int city){
@@ -62,54 +70,76 @@ public class Repository {
         return request;
     }
 
-    public void insertUserInfoToDatabase(Context context,UserInfoEntity userInfoEntity){
-        LocalDatabase.getInstance(context).dao().insertUserInfo(userInfoEntity);
+    private void insertUserInfoToDatabase(UserInfoEntity userInfoEntity){
+        LocalDatabase.getInstance(refresherContext).dao().insertUserInfo(userInfoEntity);
     }
 
-    public void insertUserConnectionInfoToDatabase(Context context, UserConnectionsInfo userConnectionsInfo){
-        LocalDatabase.getInstance(context).dao().insertUserConnectionsInfo(userConnectionsInfo);
+    private void insertUserConnectionInfoToDatabase(UserConnectionsInfo userConnectionsInfo){
+        LocalDatabase.getInstance(refresherContext).dao().insertUserConnectionsInfo(userConnectionsInfo);
     }
 
-    public void insertPaymentsToDatabase(Context context, PaymentsListEntity paymentsList){
+    private void insertPaymentsToDatabase(PaymentsListEntity paymentsList){
         for (Iterator<CashTransactionsEntity> iter = paymentsList.getPayments().iterator();
                 iter.hasNext(); ){
 
             CashTransactionsEntity payment = iter.next();
             payment.setTypeOfTransaction(CashTransactionsEntity.PAYMENTS);
-            LocalDatabase.getInstance(context).dao().insertCashTransactionsEntities(payment);
+            LocalDatabase.getInstance(refresherContext).dao().insertCashTransactionsEntities(payment);
         }
     }
 
-    public void insertWithdrawalsToDatabase(Context context, WithdrawalsListEntity withdrawalsList){
+    private void insertWithdrawalsToDatabase(WithdrawalsListEntity withdrawalsList){
 
         for (Iterator<CashTransactionsEntity> iter = withdrawalsList.getWithdrawals().iterator();
              iter.hasNext(); ){
 
             CashTransactionsEntity withdrawal = iter.next();
             withdrawal.setTypeOfTransaction(CashTransactionsEntity.WITHDRAWALS);
-            LocalDatabase.getInstance(context).dao().insertCashTransactionsEntities(withdrawal);
+            LocalDatabase.getInstance(refresherContext).dao().insertCashTransactionsEntities(withdrawal);
         }
     }
 
     public void addNewUserToDatabase(Context context, String login, String password, int city){
-        MutableLiveData<LoginResultInfo> loginResult = NetworkDataSource
-                .getInstance()
-                .checkLogin(login, password, city);
+        refresherCity = city;
+        refresherContext = context;
 
-        MutableLiveData<UserInfoEntity> newUserInfo = NetworkDataSource
-                .getInstance()
-                .getUserInfo(loginResult.getValue().getCertificate(), city);
+        NetworkDataSource.getInstance().checkLogin(login, password, city)
+                .observeForever(new Observer<LoginResultInfo>() {
+            @Override
+            public void onChanged(@Nullable LoginResultInfo loginResultInfo) {
+                if (loginResultInfo.getResultCode() == NetworkDataSource.RESPONSE_SUCCESSFUL_CODE) {
 
-        newUserInfo.getValue().setCertificate(loginResult.getValue().getCertificate());
-        newUserInfo.getValue().setCity(city);
-
-        insertUserInfoToDatabase(context, newUserInfo.getValue());
-        refreshAllDataForUser(context, newUserInfo.getValue().getId());
+                    Repository.getInstance().refresherCertificate = loginResultInfo.getCertificate();
+                    findUserInfoInInternet();
+                }
+            }
+        });
     }
 
-    private Context refresherContext;
-    private String refresherCertificate;
-    private int refresherCity;
+    private void findUserInfoInInternet() {
+        NetworkDataSource.getInstance().getUserInfo(refresherCertificate, refresherCity)
+            .observeForever(new Observer<UserInfoEntity>() {
+                @Override
+                public void onChanged(@Nullable UserInfoEntity userInfoEntity) {
+                    if (userInfoEntity.getLocalResCode() == NetworkDataSource.RESPONSE_SUCCESSFUL_CODE) {
+                        putUserInfoToDatabase(userInfoEntity);
+                        refreshAllDataForUser(userInfoEntity.getId());
+                    }
+                }
+            });
+    }
+
+    private void putUserInfoToDatabase(UserInfoEntity userInfoEntity){
+        userInfoEntity.setCertificate(Repository.getInstance().refresherCertificate);
+        userInfoEntity.setCity(Repository.getInstance().refresherCity);
+        insertUserInfoToDatabase(userInfoEntity);
+    }
+
+
+    public void refreshAllDataForUser(String userId){
+        refreshUserInfo(userId);
+        refreshUserCashTransactions();
+    }
 
     public void refreshAllDataForUser(Context context, String userId){
         refresherContext = context;
@@ -124,16 +154,7 @@ public class Repository {
         refresherCity =  LocalDatabase.getInstance(refresherContext).dao()
                 .getUserCity(userId);
 
-        MutableLiveData<UserInfoEntity> updatedUserInfo = NetworkDataSource
-                .getInstance()
-                .getUserInfo(refresherCertificate, refresherCity);
-
-        updatedUserInfo.getValue().setCertificate(refresherCertificate);
-
-        updatedUserInfo.getValue().setCity(refresherCity);
-
-
-        insertUserInfoToDatabase(refresherContext, updatedUserInfo.getValue());
+        findUserInfoInInternet();
     }
 
     private void refreshUserCashTransactions(){
@@ -142,17 +163,28 @@ public class Repository {
     }
 
     private void refreshPayments(){
-        MutableLiveData<PaymentsListEntity> updatedUserPayments = NetworkDataSource
-                .getInstance()
-                .getPayments(refresherCertificate, refresherCity);
-        insertPaymentsToDatabase(refresherContext, updatedUserPayments.getValue());
+         NetworkDataSource.getInstance().getPayments(refresherCertificate, refresherCity)
+                 .observeForever(new Observer<PaymentsListEntity>() {
+                     @Override
+                     public void onChanged(@Nullable PaymentsListEntity paymentsListEntity) {
+                         if(paymentsListEntity.getLocalResCode() == NetworkDataSource.RESPONSE_SUCCESSFUL_CODE ) {
+                             insertPaymentsToDatabase(paymentsListEntity);
+                         }
+                     }
+                 });
+
     }
 
     private void refreshWithdrawals(){
-        MutableLiveData<PaymentsListEntity> updatedUserWithdramals = NetworkDataSource
-                .getInstance()
-                .getPayments(refresherCertificate, refresherCity);
-        insertPaymentsToDatabase(refresherContext, updatedUserWithdramals.getValue());
+        NetworkDataSource.getInstance().getWithdrawals(refresherCertificate, refresherCity)
+                .observeForever(new Observer<WithdrawalsListEntity>() {
+                    @Override
+                    public void onChanged(@Nullable WithdrawalsListEntity withdrawalsListEntity) {
+                        if(withdrawalsListEntity.getLocalResCode() == NetworkDataSource.RESPONSE_SUCCESSFUL_CODE ) {
+                            insertWithdrawalsToDatabase(withdrawalsListEntity);
+                        }
+                    }
+                });
     }
 
     //TODO: Write new information from network to local database

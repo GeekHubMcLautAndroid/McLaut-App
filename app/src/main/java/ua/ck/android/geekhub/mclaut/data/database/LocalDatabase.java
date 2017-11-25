@@ -6,7 +6,6 @@ import android.arch.persistence.room.DatabaseConfiguration;
 import android.arch.persistence.room.InvalidationTracker;
 import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
-import android.arch.persistence.room.TypeConverters;
 import android.content.Context;
 
 import ua.ck.android.geekhub.mclaut.data.entities.CashTransactionsEntity;
@@ -19,9 +18,8 @@ import ua.ck.android.geekhub.mclaut.data.entities.UserInfoEntity;
 
 @Database(entities = {UserInfoEntity.class,
                       UserConnectionsInfo.class,
-                      CashTransactionsEntity.class}, version = 1)
+                      CashTransactionsEntity.class}, version = 1, exportSchema = false)
 
-@TypeConverters({DateConverter.class})
 public abstract class LocalDatabase extends RoomDatabase {
 
     private static final String DATABASE_NAME = "McLautDatabase";
