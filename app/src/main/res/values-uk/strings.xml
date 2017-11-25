@@ -21,4 +21,7 @@
     <string name="no_active_label">Не активний</string>
     <string name="tariff_label">Тариф: </string>
     <string name="pay_at_day_label">Плата за добу: </string>
+    <string name="account_number_label">Номер рахунку: </string>
+    <string name="its_left_label">Залишилося</string>
+    <string name="days_of_service_label">днів надання послуг</string>
 </resources>

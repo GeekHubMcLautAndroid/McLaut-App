@@ -57,13 +57,13 @@ public class ConnectionsRecyclerAdapter extends RecyclerView.Adapter<Connections
 }
 class ConnectionsViewHolder extends RecyclerView.ViewHolder{
     @BindView(R.id.connections_item_login_textview)
-    private TextView loginTextView;
+    TextView loginTextView;
     @BindView(R.id.connections_item_is_active_textview)
-    private TextView isActiveTextView;
+    TextView isActiveTextView;
     @BindView(R.id.connections_item_tariff_textview)
-    private TextView tariffTextView;
+    TextView tariffTextView;
     @BindView(R.id.connections_item_pay_at_day_textview)
-    private TextView payAtDayTextView;
+    TextView payAtDayTextView;
     private Context context;
     public ConnectionsViewHolder(View itemView, Context context) {
         super(itemView);
@@ -80,10 +80,10 @@ class ConnectionsViewHolder extends RecyclerView.ViewHolder{
             isActiveTextView.setText(context.getString(R.string.no_active_label));
             isActiveTextView.setTextColor(ContextCompat.getColor(context,android.R.color.holo_red_dark));
         }
-        String tariff = context.getString(R.string.tariff_label) + info.getTariff();
+        String tariff = context.getString(R.string.tariff_label) + " " + info.getTariff();
         tariffTextView.setText(tariff);
 
-        String payAtDay = context.getString(R.string.pay_at_day_label) + info.getPayAtDay() + "₴";
+        String payAtDay = context.getString(R.string.pay_at_day_label) + " " + info.getPayAtDay() + "₴";
         payAtDayTextView.setText(payAtDay);
 
     }

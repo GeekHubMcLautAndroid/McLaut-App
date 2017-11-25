@@ -21,4 +21,7 @@
     <string name="no_active_label">Не активный</string>
     <string name="tariff_label">Тариф: </string>
     <string name="pay_at_day_label">Оплата за сутки: </string>
+    <string name="account_number_label">Номер счёта: </string>
+    <string name="its_left_label">Осталось</string>
+    <string name="days_of_service_label">дней предоставления услуг</string>
 </resources>

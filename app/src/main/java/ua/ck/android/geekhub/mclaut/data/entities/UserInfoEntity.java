@@ -27,10 +27,6 @@ public class UserInfoEntity {
     private String account;
     private String balance;
     private String name;
-    @SerializedName("payment_date_last")
-    private Date paymentDateLast;
-    @SerializedName("withdrawal_date_last")
-    private Date withdrawDateLast;
     @Ignore
     @SerializedName("users")
     private List<UserConnectionsInfo> userConnectionsInfoList;
@@ -46,8 +42,6 @@ public class UserInfoEntity {
         this.account = account;
         this.balance = balance;
         this.name = name;
-        this.paymentDateLast = paymentDateLast;
-        this.withdrawDateLast = withdrawDateLast;
     }
 
     public UserInfoEntity() {
@@ -78,14 +72,6 @@ public class UserInfoEntity {
 
     public String getName() {
         return name;
-    }
-
-    public Date getPaymentDateLast() {
-        return paymentDateLast;
-    }
-
-    public Date getWithdrawDateLast() {
-        return withdrawDateLast;
     }
 
     public List<UserConnectionsInfo> getUserConnectionsInfoList() {
@@ -128,13 +114,6 @@ public class UserInfoEntity {
         this.name = name;
     }
 
-    public void setPaymentDateLast(Date paymentDateLast) {
-        this.paymentDateLast = paymentDateLast;
-    }
-
-    public void setWithdrawDateLast(Date withdrawDateLast) {
-        this.withdrawDateLast = withdrawDateLast;
-    }
 }
 
 

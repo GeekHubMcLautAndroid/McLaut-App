@@ -22,4 +22,7 @@
     <string name="no_active_label">No active</string>
     <string name="tariff_label">Tariff: </string>
     <string name="pay_at_day_label">Pay at day: </string>
+    <string name="account_number_label">Account number: </string>
+    <string name="its_left_label">Its left</string>
+    <string name="days_of_service_label">days of service provision</string>
 </resources>
