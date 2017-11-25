@@ -14,4 +14,6 @@
     <string name="payments">Пополнения</string>
     <string name="withdrawals">Снятия</string>
     <string name="settings">Настройки</string>
+    <string name="payment_next">Далее</string>
+    <string name="payment_card_number">Номер карты</string>
 </resources>

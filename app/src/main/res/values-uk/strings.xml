@@ -14,5 +14,7 @@
     <string name="payments">Поповнення</string>
     <string name="withdrawals">Зняття</string>
     <string name="settings">Налаштування</string>
+    <string name="payment_next">Далі</string>
+    <string name="payment_card_number">Номер картки</string>
 
 </resources>
