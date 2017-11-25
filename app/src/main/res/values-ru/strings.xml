@@ -15,4 +15,6 @@
     <string name="withdrawals">Снятия</string>
     <string name="settings">Настройки</string>
     <string name="cash_operations">Денежные операции</string>
+    <string name="label_user_information">Информация пользователя</string>
+    <string name="label_connections">Подключения</string>
 </resources>

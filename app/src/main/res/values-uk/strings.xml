@@ -15,5 +15,7 @@
     <string name="withdrawals">Зняття</string>
     <string name="settings">Налаштування</string>
     <string name="cash_operations">Грошові операції</string>
+    <string name="label_user_information">Інформація користувача</string>
+    <string name="label_connections">Підключення</string>
 
 </resources>

@@ -32,6 +32,7 @@ public class UserInfoEntity {
     @SerializedName("withdrawal_date_last")
     private Date withdrawDateLast;
     @Ignore
+    @SerializedName("users")
     private List<UserConnectionsInfo> userConnectionsInfoList;
     @Ignore
     private int localResCode;
