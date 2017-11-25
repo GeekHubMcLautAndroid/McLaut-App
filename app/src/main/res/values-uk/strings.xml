@@ -17,5 +17,8 @@
     <string name="cash_operations">Грошові операції</string>
     <string name="label_user_information">Інформація користувача</string>
     <string name="label_connections">Підключення</string>
-
+    <string name="active_label">Активний</string>
+    <string name="no_active_label">Не активний</string>
+    <string name="tariff_label">Тариф: </string>
+    <string name="pay_at_day_label">Плата за добу: </string>
 </resources>

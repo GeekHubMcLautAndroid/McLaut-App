@@ -4,6 +4,7 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,10 +25,10 @@ public class UserInfoFragment extends Fragment {
     TextView usernameTextView;
     @BindView(R.id.user_info_fragment_isactive_textview)
     TextView isActiveTextView;
-    @BindView(R.id.user_info_fragment_login_textview)
-    TextView loginTextView;
     @BindView(R.id.user_info_fragment_account_number_textview)
     TextView accountNumberTextView;
+    @BindView(R.id.user_info_fragment_connections_recyclerview)
+    RecyclerView connectionsRecycler;
 
     @Nullable
     @Override
@@ -36,6 +37,8 @@ public class UserInfoFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_user_info,container,false);
 
         ButterKnife.bind(this,rootView);
+
+
 
         return rootView;
     }

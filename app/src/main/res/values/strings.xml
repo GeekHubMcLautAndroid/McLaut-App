@@ -18,6 +18,8 @@
     <string name="settings">Settings</string>
     <string name="label_user_information">User information</string>
     <string name="label_connections">Connections</string>
-
-
+    <string name="active_label">Active</string>
+    <string name="no_active_label">No active</string>
+    <string name="tariff_label">Tariff: </string>
+    <string name="pay_at_day_label">Pay at day: </string>
 </resources>

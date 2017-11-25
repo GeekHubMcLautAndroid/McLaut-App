@@ -17,4 +17,8 @@
     <string name="cash_operations">Денежные операции</string>
     <string name="label_user_information">Информация пользователя</string>
     <string name="label_connections">Подключения</string>
+    <string name="active_label">Активный</string>
+    <string name="no_active_label">Не активный</string>
+    <string name="tariff_label">Тариф: </string>
+    <string name="pay_at_day_label">Оплата за сутки: </string>
 </resources>
