@@ -1,6 +1,7 @@
 package ua.ck.android.geekhub.mclaut.ui.tachcardPay;
 
 
+import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -28,6 +29,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import ua.ck.android.geekhub.mclaut.R;
+import ua.ck.android.geekhub.mclaut.ui.authorization.LoginViewModel;
 
 public class TachcardPayStep1Fragment extends Fragment {
     @BindView(R.id.fragment_tachcard_pay_card_number_text_input_edit_text)
@@ -55,6 +57,7 @@ public class TachcardPayStep1Fragment extends Fragment {
 
     OnPaymentRedirect paymentRedirectListener;
 
+
     public interface OnPaymentRedirect {
         public void redirect(String location, String html);
     }
@@ -65,6 +68,17 @@ public class TachcardPayStep1Fragment extends Fragment {
         viewModel = ViewModelProviders.of(this).get(TachcardPayViewModel.class);
         View rootView = inflater.inflate(R.layout.fragment_tachcard_pay, container, false);
         ButterKnife.bind(this, rootView);
+        viewModel = ViewModelProviders.of(this).get(TachcardPayViewModel.class);
+        viewModel.getProgressStatusData().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(@Nullable Boolean aBoolean) {
+                if (aBoolean) {
+                    showProgress();
+                } else {
+                    hideProgress();
+                }
+            }
+        });
         return rootView;
     }
 
@@ -88,58 +102,6 @@ public class TachcardPayStep1Fragment extends Fragment {
         }
         if (cvv.length() != 3) {
             cvvTIL.setErrorEnabled(true);
-        }
-    }
-    //TODO:move to network;
-    class Payment extends AsyncTask<String, Void, Integer> {
-        Document page;
-
-        @Override
-        protected void onPostExecute(Integer result) {
-            switch (result) {
-                case 1:
-                    paymentRedirectListener.redirect(page.location(), page.html());
-                    break;
-                default:
-                    break;
-            }
-        }
-
-        @Override
-        protected Integer doInBackground(String... strings) {
-            Connection.Response main;
-            Element secondStage;
-            String tc_user_session;
-            try {
-                main = Jsoup.connect(strings[0]).userAgent("Mozilla").execute();
-                secondStage = main.parse().getElementById("secondStage");
-                tc_user_session = main.cookie("tc_user_session");
-            } catch (IOException e) {
-                return null;
-            }
-            Elements hiddenInputs = secondStage.select("input[type=hidden]");
-            String pan = strings[1];
-            String mm = strings[2];
-            String yy = strings[3];
-            String cvv = strings[4];
-            try {
-                page = Jsoup.connect("https://user.tachcard.com/uk/pay-from-card")
-                        .data(hiddenInputs.get(0).attr("name"), hiddenInputs.get(0).attr("value"))
-                        .data(hiddenInputs.get(1).attr("name"), "1")
-                        .data(hiddenInputs.get(2).attr("name"), hiddenInputs.get(2).attr("value"))
-                        .data("pan", pan)
-                        .data("mm", mm)
-                        .data("yy", yy)
-                        .data("cvv", cvv)
-                        .cookie("tc_user_session", tc_user_session)
-                        .userAgent("Mozilla")
-                        .ignoreHttpErrors(true)
-                        .followRedirects(true)
-                        .post();
-            } catch (IOException e) {
-                return null;
-            }
-            return 1;
         }
     }
 
