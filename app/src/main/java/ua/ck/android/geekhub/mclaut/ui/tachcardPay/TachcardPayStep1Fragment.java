@@ -70,9 +70,27 @@ public class TachcardPayStep1Fragment extends Fragment {
 
     @OnClick(R.id.tachcard_pay_confirm)
     public void confirmPayment() {
-
+        String cardNumber = cardNumberTIET.getText().toString();
+        String mm = mmTIEL.getText().toString();
+        String yy = yyTIEL.getText().toString();
+        String cvv = cvvTIEL.getText().toString();
+        int[] digits = new int[cardNumber.length()];
+        for (int i = 0; i < digits.length; i++) {
+            digits[i] = Integer.parseInt(String.valueOf(cardNumber.charAt(i)));
+        }
+        if (cardNumber.length() < 16 || checkLuhn(digits)) {
+            cardNumberTIL.setError("Введіть коректний номер картки.");
+            hideProgress();
+            return;
+        }
+        if (Integer.parseInt(mm) < 1 || Integer.parseInt(mm) > 12 || mm.length() != 2) {
+            mmTIL.setErrorEnabled(true);
+        }
+        if (cvv.length() != 3) {
+            cvvTIL.setErrorEnabled(true);
+        }
     }
-
+    //TODO:move to network;
     class Payment extends AsyncTask<String, Void, Integer> {
         Document page;
 
@@ -123,5 +141,36 @@ public class TachcardPayStep1Fragment extends Fragment {
             }
             return 1;
         }
+    }
+
+    public void showProgress() {
+        confirmCPB.startAnimation();
+        selectCardButton.setEnabled(false);
+        cardNumberTIET.setEnabled(false);
+        mmTIEL.setEnabled(false);
+        yyTIEL.setEnabled(false);
+        cvvTIEL.setEnabled(false);
+    }
+
+    public void hideProgress() {
+        confirmCPB.revertAnimation();
+        selectCardButton.setEnabled(true);
+        cardNumberTIET.setEnabled(true);
+        mmTIEL.setEnabled(true);
+        yyTIEL.setEnabled(true);
+        cvvTIEL.setEnabled(true);
+    }
+
+    private boolean checkLuhn(int[] digits) {
+        int sum = 0;
+        int length = digits.length;
+        for (int i = 0; i < length; i++) {
+            int digit = digits[length - i - 1];
+            if (i % 2 == 1) {
+                digit *= 2;
+            }
+            sum += digit > 9 ? digit - 9 : digit;
+        }
+        return sum % 10 == 0;
     }
 }
