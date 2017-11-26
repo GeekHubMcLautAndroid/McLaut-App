@@ -1,12 +1,13 @@
 package ua.ck.android.geekhub.mclaut.data.database;
 
-import android.arch.lifecycle.MutableLiveData;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
+import android.arch.persistence.room.Update;
 
 import java.util.List;
 
+import ua.ck.android.geekhub.mclaut.data.entities.CardInfoEntity;
 import ua.ck.android.geekhub.mclaut.data.entities.CashTransactionsEntity;
 import ua.ck.android.geekhub.mclaut.data.entities.UserConnectionsInfo;
 import ua.ck.android.geekhub.mclaut.data.entities.UserInfoEntity;
@@ -16,12 +17,39 @@ import ua.ck.android.geekhub.mclaut.data.entities.UserInfoEntity;
  */
 @android.arch.persistence.room.Dao
 public interface Dao {
+// UserInfo
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertUserInfo(UserInfoEntity entity);
 
+    @Query("SELECT * FROM userInfo" +
+            "        WHERE id = :userId")
+    UserInfoEntity getUserInfoEntityById(String userId);
+
+    @Query("SELECT name FROM userInfo" +
+            "           WHERE id = :userId")
+    String getUserNameById(String userId);
+
+    @Query("SELECT certificate FROM userInfo" +
+            "                  WHERE id = :userId")
+    String getUserCertificate(String userId);
+
+    @Query("SELECT city FROM userInfo" +
+            "                  WHERE id = :userId")
+    int getUserCity(String userId);
+
+////
+
+// UserConnectionInfo
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertUserConnectionsInfo(UserConnectionsInfo entity);
 
+    @Query("SELECT * FROM userConnectionsInfo" +
+            "        WHERE idClient = :userId")
+    UserConnectionsInfo findUserConnectionInfoEntityById(String userId);
+
+////
+
+// СashTransactions
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertCashTransactionsEntities(CashTransactionsEntity entity);
 
@@ -35,28 +63,25 @@ public interface Dao {
             "        ORDER BY date")
     List<CashTransactionsEntity> findAllWithdrawalsEntities(String userId);
 
-    @Query("SELECT * FROM userInfo" +
-            "        WHERE id = :userId")
-    UserInfoEntity getUserInfoEntityById(String userId);
+////
 
-    @Query("SELECT * FROM userConnectionsInfo" +
-            "        WHERE idClient = :userId")
-    UserConnectionsInfo findUserConnectionInfoEntityById(String userId);
+// CardInfo
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insertCardInfoEntity(CardInfoEntity entity);
+
+    @Update
+    void updateCardEntity(CardInfoEntity entity);
+
+    @Query("SELECT * FROM cardEntity " +
+            "        ORDER BY counterOfUses DESC")
+    List<CardInfoEntity> getAllCardsInfo();
+
+////
 
     @Query("SELECT id FROM userInfo")
     List<String> getAllUsersId();
 
-    @Query("SELECT name FROM userInfo" +
-            "           WHERE id = :userId")
-    String getUserNameById(String userId);
 
-    @Query("SELECT certificate FROM userInfo" +
-            "                  WHERE id = :userId")
-    String getUserCertificate(String userId);
-
-    @Query("SELECT city FROM userInfo" +
-            "                  WHERE id = :userId")
-    int getUserCity(String userId);
 
     //TODO: Write other needs methods
 }

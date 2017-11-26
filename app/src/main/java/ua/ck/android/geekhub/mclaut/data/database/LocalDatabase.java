@@ -8,6 +8,7 @@ import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 
+import ua.ck.android.geekhub.mclaut.data.entities.CardInfoEntity;
 import ua.ck.android.geekhub.mclaut.data.entities.CashTransactionsEntity;
 import ua.ck.android.geekhub.mclaut.data.entities.UserConnectionsInfo;
 import ua.ck.android.geekhub.mclaut.data.entities.UserInfoEntity;
@@ -18,7 +19,8 @@ import ua.ck.android.geekhub.mclaut.data.entities.UserInfoEntity;
 
 @Database(entities = {UserInfoEntity.class,
                       UserConnectionsInfo.class,
-                      CashTransactionsEntity.class}, version = 1, exportSchema = false)
+                      CashTransactionsEntity.class,
+                      CardInfoEntity.class}, version = 1, exportSchema = false)
 
 public abstract class LocalDatabase extends RoomDatabase {
 

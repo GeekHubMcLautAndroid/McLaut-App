@@ -9,6 +9,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import ua.ck.android.geekhub.mclaut.data.database.LocalDatabase;
+import ua.ck.android.geekhub.mclaut.data.entities.CardInfoEntity;
 import ua.ck.android.geekhub.mclaut.data.entities.CashTransactionsEntity;
 import ua.ck.android.geekhub.mclaut.data.entities.LoginResultInfo;
 import ua.ck.android.geekhub.mclaut.data.entities.PaymentsListEntity;
@@ -90,6 +91,18 @@ public class Repository {
         executor.databaseExecutor().execute(() ->{
             List<String> usersIdList = LocalDatabase.getInstance(context).dao().getAllUsersId();
             request.postValue(usersIdList);
+        });
+
+        return request;
+    }
+
+    public MutableLiveData<List<CardInfoEntity>> getAllCardList(Context context) {
+        final MutableLiveData<List<CardInfoEntity>> request = new MutableLiveData<>();
+
+        executor.databaseExecutor().execute(() ->{
+            List<CardInfoEntity> cardInfoList = LocalDatabase.getInstance(context).dao()
+                    .getAllCardsInfo();
+            request.postValue(cardInfoList);
         });
 
         return request;
