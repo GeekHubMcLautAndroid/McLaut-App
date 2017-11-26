@@ -30,6 +30,12 @@ public class CardInfoEntity {
         this.counterOfUses = 0;
     }
 
+    public void setId(int id) { this.id = id; }
+
+    public void setCounterOfUses(int counterOfUses) { this.counterOfUses = counterOfUses; }
+
+    public int getId() {return id; }
+
     public String getCardNumber(){
         return cardNumber;
     }
@@ -41,6 +47,8 @@ public class CardInfoEntity {
     public String getEndYear(){
         return endYear;
     }
+
+    public int getCounterOfUses() { return counterOfUses; }
 
     public void incrementCounterOfUses(Context context){
         counterOfUses++;

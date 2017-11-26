@@ -20,7 +20,7 @@ import ua.ck.android.geekhub.mclaut.data.entities.UserInfoEntity;
 @Database(entities = {UserInfoEntity.class,
                       UserConnectionsInfo.class,
                       CashTransactionsEntity.class,
-                      CardInfoEntity.class}, version = 1, exportSchema = false)
+                      CardInfoEntity.class}, version = 1)
 
 public abstract class LocalDatabase extends RoomDatabase {
 
