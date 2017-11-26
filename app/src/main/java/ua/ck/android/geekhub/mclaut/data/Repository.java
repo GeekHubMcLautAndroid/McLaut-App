@@ -162,6 +162,27 @@ public class Repository {
         }
     }
 
+    public void deleteUserFromDatabase(Context context, UserInfoEntity userInfoEntity){
+        executor.databaseExecutor().execute(() ->{
+            LocalDatabase.getInstance(context).dao()
+                    .deleteUserInfo(userInfoEntity);
+        });
+    }
+
+    public void deleteUserFromDatabase(Context context, String userId){
+        executor.databaseExecutor().execute(() ->{
+            LocalDatabase.getInstance(context).dao()
+                    .deleteUserInfoById(userId);
+        });
+    }
+
+    public void deleteCardFromDatabase(Context context, CardInfoEntity cardInfoEntity){
+        executor.databaseExecutor().execute(() ->{
+            LocalDatabase.getInstance(context).dao().
+                    deleteCardEntity(cardInfoEntity);
+        });
+    }
+
     public void addNewUserToDatabase(Context context, String login, String password, int city){
         refresherCity = city;
         refresherContext = context;

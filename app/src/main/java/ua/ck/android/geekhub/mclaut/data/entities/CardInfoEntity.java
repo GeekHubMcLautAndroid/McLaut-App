@@ -6,6 +6,7 @@ import android.content.Context;
 
 import ua.ck.android.geekhub.mclaut.data.Repository;
 import ua.ck.android.geekhub.mclaut.data.database.LocalDatabase;
+import ua.ck.android.geekhub.mclaut.tools.McLautAppExecutor;
 
 /**
  * Created by Sergo on 11/26/17.
@@ -18,14 +19,14 @@ public class CardInfoEntity {
     private int id;
 
     private String endYear;
-    private String endMouth;
+    private String endMonth;
     private String cardNumber;
 
     private int counterOfUses;
 
-    public CardInfoEntity(String cardNumber, String endMouth, String endYear) {
+    public CardInfoEntity(String cardNumber, String endMonth, String endYear) {
         this.cardNumber = cardNumber;
-        this.endMouth = endMouth;
+        this.endMonth = endMonth;
         this.endYear = endYear;
         this.counterOfUses = 0;
     }
@@ -40,8 +41,8 @@ public class CardInfoEntity {
         return cardNumber;
     }
 
-    public String getEndMouth(){
-        return endMouth;
+    public String getEndMonth(){
+        return endMonth;
     }
 
     public String getEndYear(){
@@ -50,10 +51,33 @@ public class CardInfoEntity {
 
     public int getCounterOfUses() { return counterOfUses; }
 
-    public void incrementCounterOfUses(Context context){
+    public void incrementCounterOfUses(Context context) {
         counterOfUses++;
-        LocalDatabase.getInstance(context).dao()
-                .updateCardEntity(this);
+        update(context);
+    }
+
+    public void updateCardNumber(Context context, String cardNumber){
+        this.cardNumber = cardNumber;
+        update(context);
+    }
+
+    public void updateEndMonth(Context context, String endMonth) {
+        this.endMonth = endMonth;
+        update(context);
+    }
+
+    public void updateEndYear(Context context, String endYear) {
+        this.endMonth = endYear;
+        update(context);
+    }
+
+    private void update(Context context){
+       McLautAppExecutor executor = McLautAppExecutor.getInstance();
+
+        executor.databaseExecutor().execute(() ->{
+            LocalDatabase.getInstance(context).dao()
+                    .updateCardEntity(this);
+        });
     }
 
 }

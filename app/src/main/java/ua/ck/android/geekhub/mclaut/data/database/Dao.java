@@ -1,5 +1,6 @@
 package ua.ck.android.geekhub.mclaut.data.database;
 
+import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
@@ -20,6 +21,13 @@ public interface Dao {
 // UserInfo
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertUserInfo(UserInfoEntity entity);
+
+    @Delete
+    void deleteUserInfo(UserInfoEntity entity);
+
+    @Query("DELETE FROM userInfo" +
+            "        WHERE id = :userId")
+    void deleteUserInfoById(String userId);
 
     @Query("SELECT * FROM userInfo" +
             "        WHERE id = :userId")
@@ -68,6 +76,9 @@ public interface Dao {
 // CardInfo
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertCardInfoEntity(CardInfoEntity entity);
+
+    @Delete
+    void deleteCardEntity(CardInfoEntity entity);
 
     @Update
     void updateCardEntity(CardInfoEntity entity);
