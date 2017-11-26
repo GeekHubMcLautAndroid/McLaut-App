@@ -9,8 +9,6 @@ public class TachcardPayViewModel extends ViewModel {
     private MutableLiveData<Boolean> showProgressStatus = new MutableLiveData<>();
     private Repository repo = Repository.getInstance();
 
-
-
     public MutableLiveData<Boolean> getProgressStatusData(){
         return showProgressStatus;
     }

@@ -32,6 +32,10 @@ import ua.ck.android.geekhub.mclaut.R;
 import ua.ck.android.geekhub.mclaut.ui.authorization.LoginViewModel;
 
 public class TachcardPayStep1Fragment extends Fragment {
+    @BindView(R.id.fragment_tachcard_pay_summ_text_input_edit_text)
+    TextInputEditText summTIEL;
+    @BindView(R.id.fragment_tachcard_pay_summ_text_input_layout)
+    TextInputLayout summTIL;
     @BindView(R.id.fragment_tachcard_pay_card_number_text_input_edit_text)
     TextInputEditText cardNumberTIET;
     @BindView(R.id.fragment_tachcard_pay_card_number_text_input_layout)
@@ -84,11 +88,15 @@ public class TachcardPayStep1Fragment extends Fragment {
 
     @OnClick(R.id.tachcard_pay_confirm)
     public void confirmPayment() {
+        String summ = summTIEL.getText().toString();
         String cardNumber = cardNumberTIET.getText().toString();
         String mm = mmTIEL.getText().toString();
         String yy = yyTIEL.getText().toString();
         String cvv = cvvTIEL.getText().toString();
         int[] digits = new int[cardNumber.length()];
+        if (Double.parseDouble(summ) < 5) {
+            summTIL.setError("Мінімальна сума поповнення 5 грн.");
+        }
         for (int i = 0; i < digits.length; i++) {
             digits[i] = Integer.parseInt(String.valueOf(cardNumber.charAt(i)));
         }
@@ -99,9 +107,11 @@ public class TachcardPayStep1Fragment extends Fragment {
         }
         if (Integer.parseInt(mm) < 1 || Integer.parseInt(mm) > 12 || mm.length() != 2) {
             mmTIL.setErrorEnabled(true);
+            return;
         }
         if (cvv.length() != 3) {
             cvvTIL.setErrorEnabled(true);
+            return;
         }
     }
 
