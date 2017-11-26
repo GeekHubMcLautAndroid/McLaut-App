@@ -3,6 +3,8 @@ package ua.ck.android.geekhub.mclaut.ui.tachcardPay;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 
+import org.jsoup.nodes.Document;
+
 import ua.ck.android.geekhub.mclaut.data.Repository;
 
 public class TachcardPayViewModel extends ViewModel {
@@ -14,14 +16,18 @@ public class TachcardPayViewModel extends ViewModel {
         return showProgressStatus;
     }
 
-    public void pay(String summ, String cardNumber, String mm, String yy, String cvv) {
+    public MutableLiveData<Integer> getSetError() {
+        return setError;
+    }
+
+    public Document pay(String summ, String cardNumber, String mm, String yy, String cvv) {
         showProgressStatus.postValue(true);
         int userRegion = 0; //TODO:write get user region from bd;
         int[] digits = new int[cardNumber.length()];
         if (Double.parseDouble(summ) < 5) {
             setError.postValue(0);
             showProgressStatus.postValue(false);
-            return;
+            return null;
         }
         for (int i = 0; i < digits.length; i++) {
             digits[i] = Integer.parseInt(String.valueOf(cardNumber.charAt(i)));
@@ -29,17 +35,17 @@ public class TachcardPayViewModel extends ViewModel {
         if (cardNumber.length() < 16 || checkLuhn(digits)) {
             setError.postValue(1);
             showProgressStatus.postValue(false);
-            return;
+            return null;
         }
         if (Integer.parseInt(mm) < 1 || Integer.parseInt(mm) > 12 || mm.length() != 2) {
             setError.postValue(2);
             showProgressStatus.postValue(false);
-            return;
+            return null;
         }
         if (cvv.length() != 3) {
             setError.postValue(3);
             showProgressStatus.postValue(false);
-            return;
+            return null;
         }
         String baseUrl = "https://user.tachcard.com/uk/pay-mclaut";
         switch (userRegion) {
@@ -59,7 +65,7 @@ public class TachcardPayViewModel extends ViewModel {
                 baseUrl += "zven";
         }
         baseUrl += "?&amount=" + summ + "&account="; //TODO:write get account;
-        repo.getPaymentRedirection(baseUrl, cardNumber, mm, yy, cvv);
+        return repo.getPaymentRedirection(baseUrl, cardNumber, mm, yy, cvv).getValue();
     }
 
     private boolean checkLuhn(int[] digits) {

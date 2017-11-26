@@ -13,6 +13,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 
+import org.jsoup.nodes.Document;
+
 import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -71,7 +73,28 @@ public class TachcardPayStep1Fragment extends Fragment {
                 }
             }
         });
-        //TODO:write error check;
+        viewModel.getSetError().observe(this, new Observer<Integer>() {
+            @Override
+            public void onChanged(@Nullable Integer integer) {
+                switch (integer) {
+                    case 0:
+                        summTIL.setError("Мінімальна сума поповнення 5 грн.");
+                        break;
+                    case 1:
+                        cardNumberTIL.setError("Некоректний формат карти.");
+                        break;
+                    case 2:
+                        mmTIL.setErrorEnabled(true);
+                        yyTIL.setErrorEnabled(true);
+                        break;
+                    case 3:
+                        cvvTIL.setErrorEnabled(true);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
         return rootView;
     }
 
@@ -82,7 +105,10 @@ public class TachcardPayStep1Fragment extends Fragment {
         String mm = mmTIEL.getText().toString();
         String yy = yyTIEL.getText().toString();
         String cvv = cvvTIEL.getText().toString();
-        viewModel.pay(summ, cardNumber, mm, yy, cvv);
+        Document result = viewModel.pay(summ, cardNumber, mm, yy, cvv);
+        if (result != null) {
+            paymentRedirectListener.redirect(result.location(), result.html());
+        }
     }
 
     public void showProgress() {
