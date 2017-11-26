@@ -3,9 +3,17 @@ package ua.ck.android.geekhub.mclaut.data;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.Observer;
 import android.content.Context;
+import android.os.AsyncTask;
+import android.os.Handler;
+import android.os.Looper;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 import ua.ck.android.geekhub.mclaut.data.database.LocalDatabase;
 import ua.ck.android.geekhub.mclaut.data.entities.CashTransactionsEntity;
@@ -23,6 +31,13 @@ public class Repository {
     private Context refresherContext;
     private String refresherCertificate;
     private int refresherCity;
+
+    private final int ADD_USER_INFO = 0;
+    private final int ADD_USER_CONNECTIONS_INFO = 1;
+    private final int ADD_CASH_TRANSACTIONS = 2;
+    private final int GET_USER_INFO = 10;
+    private final int GET_USER_CONNECTIONS_INFO = 11;
+    private final int GET_CASH_TRANSACTIONS = 12;
 
     private Repository() {
     }
@@ -46,7 +61,7 @@ public class Repository {
         return request;
     }
 
-    public MutableLiveData<WithdrawalsListEntity> getWithdrawalsInfo(Context context, String certificate, int city){
+    public MutableLiveData<WithdrawalsListEntity> getWithdrawalsInfo(Context context){
 
         WithdrawalsListEntity withdrawalsList = new WithdrawalsListEntity(
                 LocalDatabase.getInstance(context).dao()
@@ -58,7 +73,7 @@ public class Repository {
         return request;
     }
 
-    public MutableLiveData<PaymentsListEntity> getPaymentsInfo(Context context, String certificate, int city){
+    public MutableLiveData<PaymentsListEntity> getPaymentsInfo(Context context){
 
         PaymentsListEntity paymentsList = new PaymentsListEntity(
                 LocalDatabase.getInstance(context).dao()
@@ -70,12 +85,17 @@ public class Repository {
         return request;
     }
 
-    private void insertUserInfoToDatabase(UserInfoEntity userInfoEntity){
-        LocalDatabase.getInstance(refresherContext).dao().insertUserInfo(userInfoEntity);
+    private void insertUserInfoToDatabase(final UserInfoEntity userInfoEntity){
+
+            LocalDatabase.getInstance(refresherContext).dao()
+                    .insertUserInfo(userInfoEntity);
     }
 
-    private void insertUserConnectionInfoToDatabase(UserConnectionsInfo userConnectionsInfo){
-        LocalDatabase.getInstance(refresherContext).dao().insertUserConnectionsInfo(userConnectionsInfo);
+    private void insertUserConnectionInfoToDatabase(List<UserConnectionsInfo> userConnectionsInfo){
+        int SINGLE_ELEMENT_INDEX = 0;
+
+        LocalDatabase.getInstance(refresherContext).dao()
+                .insertUserConnectionsInfo(userConnectionsInfo.get(SINGLE_ELEMENT_INDEX));
     }
 
     private void insertPaymentsToDatabase(PaymentsListEntity paymentsList){
@@ -84,18 +104,19 @@ public class Repository {
 
             CashTransactionsEntity payment = iter.next();
             payment.setTypeOfTransaction(CashTransactionsEntity.PAYMENTS);
-            LocalDatabase.getInstance(refresherContext).dao().insertCashTransactionsEntities(payment);
+            LocalDatabase.getInstance(refresherContext).dao()
+                    .insertCashTransactionsEntities(payment);
         }
     }
 
     private void insertWithdrawalsToDatabase(WithdrawalsListEntity withdrawalsList){
-
         for (Iterator<CashTransactionsEntity> iter = withdrawalsList.getWithdrawals().iterator();
              iter.hasNext(); ){
 
             CashTransactionsEntity withdrawal = iter.next();
             withdrawal.setTypeOfTransaction(CashTransactionsEntity.WITHDRAWALS);
-            LocalDatabase.getInstance(refresherContext).dao().insertCashTransactionsEntities(withdrawal);
+            LocalDatabase.getInstance(refresherContext).dao()
+                    .insertCashTransactionsEntities(withdrawal);
         }
     }
 
@@ -123,7 +144,8 @@ public class Repository {
                 public void onChanged(@Nullable UserInfoEntity userInfoEntity) {
                     if (userInfoEntity.getLocalResCode() == NetworkDataSource.RESPONSE_SUCCESSFUL_CODE) {
                         putUserInfoToDatabase(userInfoEntity);
-                        refreshAllDataForUser(userInfoEntity.getId());
+                        insertUserConnectionInfoToDatabase(userInfoEntity.getUserConnectionsInfoList());
+                        putAllUserDataToDatabase(userInfoEntity.getId());
                     }
                 }
             });
@@ -136,12 +158,12 @@ public class Repository {
     }
 
 
-    public void refreshAllDataForUser(String userId){
+    public void putAllUserDataToDatabase(String userId){
         refreshUserInfo(userId);
         refreshUserCashTransactions();
     }
 
-    public void refreshAllDataForUser(Context context, String userId){
+    public void refreshUserDataInDatabase(Context context, String userId){
         refresherContext = context;
         refreshUserInfo(userId);
         refreshUserCashTransactions();

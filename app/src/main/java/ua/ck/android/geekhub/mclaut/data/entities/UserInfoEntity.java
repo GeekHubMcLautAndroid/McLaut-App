@@ -1,7 +1,6 @@
 package ua.ck.android.geekhub.mclaut.data.entities;
 
 import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
@@ -11,7 +10,6 @@ import com.google.gson.annotations.SerializedName;
 import java.util.Date;
 import java.util.List;
 
-import static android.arch.persistence.room.ForeignKey.CASCADE;
 
 /**
  * Created by bogda on 13.11.2017.
@@ -36,7 +34,8 @@ public class UserInfoEntity {
     @SerializedName("withdrawal_date_last")
     private Long withdrawDateLast;
     @Ignore
-    private List<UserConnectionsInfo> userConnectionsInfoList;
+    @SerializedName("users")
+    private List<UserConnectionsInfo> userConnectionsInfo;
 
 
     public UserInfoEntity(@NonNull String id, String login, String isActive, String account, String balance,
@@ -138,11 +137,11 @@ public class UserInfoEntity {
     }
     ///
 
-    public void setUserConnectionsInfoList(List<UserConnectionsInfo> userConnectionsInfoList) {
-        this.userConnectionsInfoList = userConnectionsInfoList;
+    public void setUserConnectionsInfoList(List<UserConnectionsInfo> userConnectionsInfo) {
+        this.userConnectionsInfo = userConnectionsInfo;
     }
     public List<UserConnectionsInfo> getUserConnectionsInfoList() {
-        return userConnectionsInfoList;
+        return userConnectionsInfo;
     }
 
 
@@ -156,13 +155,6 @@ public class UserInfoEntity {
     public Date getConvertedWithdrawDateLast() {
         return new Date(withdrawDateLast * 1000);
     }
-
-
-
-
-
-
-
 
 }
 

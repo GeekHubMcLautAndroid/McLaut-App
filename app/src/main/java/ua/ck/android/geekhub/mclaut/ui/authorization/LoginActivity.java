@@ -4,6 +4,7 @@ import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
@@ -77,7 +78,6 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher {
                                         loginTextInputEditText.getText().toString(),
                                         passwordEditText.getText().toString(),
                                         cityesSpinner.getSelectedItemPosition());
-
                         startActivity(intent);
                         break;
                     case 0:
@@ -109,7 +109,6 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher {
         viewModel.login(loginTextInputEditText.getText().toString(),
                         passwordEditText.getText().toString(),
                         cityesSpinner.getSelectedItemPosition());
-
         login();
     }
 

@@ -32,7 +32,7 @@ public abstract class LocalDatabase extends RoomDatabase {
                 if(instance == null){
                     instance = Room.databaseBuilder(context.getApplicationContext(),
                             LocalDatabase.class,
-                            LocalDatabase.DATABASE_NAME).build();
+                            LocalDatabase.DATABASE_NAME).allowMainThreadQueries().build();
                 }
             }
         }
