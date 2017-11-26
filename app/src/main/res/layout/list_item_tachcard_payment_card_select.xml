@@ -47,13 +47,6 @@
                     android:gravity="right">
 
                     <ImageButton
-                        android:id="@+id/list_item_tachcard_payment_card_select_edit_image_button"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:background="@android:color/white"
-                        android:src="@drawable/pencil" />
-
-                    <ImageButton
                         android:id="@+id/list_item_tachcard_payment_card_select_remove_image_button"
                         android:layout_width="30dp"
                         android:layout_height="30dp"

@@ -24,6 +24,9 @@
     <string name="payment_mm" translatable="false">MM</string>
     <string name="payment_card_number">Card number</string>
     <string name="payment_mm_yy" translatable="false">mm/yy</string>
+    <string name="payment_save_card">Save card</string>
+    <string name="error_minimum_refung">The minimum amount refill 5 UAH.</string>
+    <string name="error_card_number">Invalid card format.</string>
 
 
 </resources>

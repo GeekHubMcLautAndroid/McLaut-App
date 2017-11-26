@@ -53,7 +53,7 @@ public class TachcardPayStep1Fragment extends Fragment {
 
 
     public interface OnPaymentRedirect {
-        public void redirect(String location, String html);
+        void redirect(String location, String html);
     }
 
     @Nullable
@@ -78,10 +78,10 @@ public class TachcardPayStep1Fragment extends Fragment {
             public void onChanged(@Nullable Integer integer) {
                 switch (integer) {
                     case 0:
-                        summTIL.setError("Мінімальна сума поповнення 5 грн.");
+                        summTIL.setError(getString(R.string.error_minimum_refung));
                         break;
                     case 1:
-                        cardNumberTIL.setError("Некоректний формат карти.");
+                        cardNumberTIL.setError(getString(R.string.error_card_number));
                         break;
                     case 2:
                         mmTIL.setErrorEnabled(true);

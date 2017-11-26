@@ -16,5 +16,7 @@
     <string name="settings">Налаштування</string>
     <string name="payment_next">Далі</string>
     <string name="payment_card_number">Номер картки</string>
-
+    <string name="payment_save_card">Зберегти карту.</string>
+    <string name="error_minimum_refung">Мінімальна сума поповнення 5 грн.</string>
+    <string name="error_card_number">Невірний формат карти.</string>
 </resources>

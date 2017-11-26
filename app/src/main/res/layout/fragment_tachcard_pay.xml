@@ -115,6 +115,21 @@
         </android.support.design.widget.TextInputLayout>
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <CheckBox
+            android:id="@+id/fragment_tachcard_pay_save_card_checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/payment_save_card" />
+    </LinearLayout>
+
     <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
         android:id="@+id/tachcard_pay_confirm"
         android:layout_width="match_parent"
