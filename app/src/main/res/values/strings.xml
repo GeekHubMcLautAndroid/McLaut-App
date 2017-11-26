@@ -21,6 +21,7 @@
     <string name="payment_yy" translatable="false">YY</string>
     <string name="payment_mm" translatable="false">MM</string>
     <string name="payment_card_number">Card number</string>
+    <string name="payment_mm_yy">mm/yy</string>
 
 
 </resources>
