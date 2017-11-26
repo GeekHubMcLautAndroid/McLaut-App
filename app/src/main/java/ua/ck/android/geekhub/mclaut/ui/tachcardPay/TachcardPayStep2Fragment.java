@@ -24,6 +24,10 @@ public class TachcardPayStep2Fragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         WebView outWebView = new WebView(inflater.getContext());
+        outWebView.getSettings().setJavaScriptEnabled(true);
+        String mine = "text/html";
+        String encoding = "UTF-8";
+        outWebView.loadDataWithBaseURL(location, html, mine, encoding, null);
         return outWebView;
     }
 }
