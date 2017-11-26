@@ -3,17 +3,10 @@ package ua.ck.android.geekhub.mclaut.data;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.Observer;
 import android.content.Context;
-import android.os.AsyncTask;
-import android.os.Handler;
-import android.os.Looper;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 
 import ua.ck.android.geekhub.mclaut.data.database.LocalDatabase;
 import ua.ck.android.geekhub.mclaut.data.entities.CashTransactionsEntity;
@@ -23,6 +16,7 @@ import ua.ck.android.geekhub.mclaut.data.entities.UserConnectionsInfo;
 import ua.ck.android.geekhub.mclaut.data.entities.UserInfoEntity;
 import ua.ck.android.geekhub.mclaut.data.entities.WithdrawalsListEntity;
 import ua.ck.android.geekhub.mclaut.data.network.NetworkDataSource;
+import ua.ck.android.geekhub.mclaut.tools.McLautAppExecutor;
 
 public class Repository {
 
@@ -31,13 +25,6 @@ public class Repository {
     private Context refresherContext;
     private String refresherCertificate;
     private int refresherCity;
-
-    private final int ADD_USER_INFO = 0;
-    private final int ADD_USER_CONNECTIONS_INFO = 1;
-    private final int ADD_CASH_TRANSACTIONS = 2;
-    private final int GET_USER_INFO = 10;
-    private final int GET_USER_CONNECTIONS_INFO = 11;
-    private final int GET_CASH_TRANSACTIONS = 12;
 
     private Repository() {
     }
@@ -86,37 +73,59 @@ public class Repository {
     }
 
     private void insertUserInfoToDatabase(final UserInfoEntity userInfoEntity){
+        McLautAppExecutor executor = McLautAppExecutor.getInstance();
 
-            LocalDatabase.getInstance(refresherContext).dao()
-                    .insertUserInfo(userInfoEntity);
+        executor.databaseExecutor()
+                .execute(() -> {
+                    LocalDatabase.getInstance(refresherContext).dao()
+                                            .insertUserInfo(userInfoEntity);
+                }
+                );
     }
 
-    private void insertUserConnectionInfoToDatabase(List<UserConnectionsInfo> userConnectionsInfo){
+    private void insertUserConnectionInfoToDatabase( List<UserConnectionsInfo> userConnectionsInfoList){
         int SINGLE_ELEMENT_INDEX = 0;
-
-        LocalDatabase.getInstance(refresherContext).dao()
-                .insertUserConnectionsInfo(userConnectionsInfo.get(SINGLE_ELEMENT_INDEX));
-    }
+        McLautAppExecutor executor = McLautAppExecutor.getInstance();
+        if (userConnectionsInfoList != null) {
+            final UserConnectionsInfo userConnectionsInfo = userConnectionsInfoList.get(SINGLE_ELEMENT_INDEX);
+            executor.databaseExecutor()
+                    .execute(() -> {
+                                LocalDatabase.getInstance(refresherContext).dao()
+                                        .insertUserConnectionsInfo(userConnectionsInfo);
+                            }
+                    );
+        }
+}
 
     private void insertPaymentsToDatabase(PaymentsListEntity paymentsList){
+        McLautAppExecutor executor = McLautAppExecutor.getInstance();
+
         for (Iterator<CashTransactionsEntity> iter = paymentsList.getPayments().iterator();
                 iter.hasNext(); ){
 
             CashTransactionsEntity payment = iter.next();
             payment.setTypeOfTransaction(CashTransactionsEntity.PAYMENTS);
-            LocalDatabase.getInstance(refresherContext).dao()
-                    .insertCashTransactionsEntities(payment);
+
+            executor.databaseExecutor().execute(() -> {
+                        LocalDatabase.getInstance(refresherContext).dao()
+                                .insertCashTransactionsEntities(payment);
+            });
         }
     }
 
     private void insertWithdrawalsToDatabase(WithdrawalsListEntity withdrawalsList){
+        McLautAppExecutor executor = McLautAppExecutor.getInstance();
+
         for (Iterator<CashTransactionsEntity> iter = withdrawalsList.getWithdrawals().iterator();
              iter.hasNext(); ){
 
             CashTransactionsEntity withdrawal = iter.next();
             withdrawal.setTypeOfTransaction(CashTransactionsEntity.WITHDRAWALS);
-            LocalDatabase.getInstance(refresherContext).dao()
-                    .insertCashTransactionsEntities(withdrawal);
+
+            executor.databaseExecutor().execute(() -> {
+                LocalDatabase.getInstance(refresherContext).dao()
+                        .insertCashTransactionsEntities(withdrawal);
+            });
         }
     }
 
@@ -170,13 +179,17 @@ public class Repository {
     }
 
     private void refreshUserInfo(String userId){
+        McLautAppExecutor executor = McLautAppExecutor.getInstance();
 
-        refresherCertificate =  LocalDatabase.getInstance(refresherContext).dao()
-                .getUserCertificate(userId);
-        refresherCity =  LocalDatabase.getInstance(refresherContext).dao()
-                .getUserCity(userId);
+        executor.databaseExecutor()
+                .execute(() -> {
+                    refresherCertificate = LocalDatabase.getInstance(refresherContext).dao()
+                            .getUserCertificate(userId);
+                    refresherCity = LocalDatabase.getInstance(refresherContext).dao()
+                            .getUserCity(userId);
 
-        findUserInfoInInternet();
+                    findUserInfoInInternet();
+                });
     }
 
     private void refreshUserCashTransactions(){
