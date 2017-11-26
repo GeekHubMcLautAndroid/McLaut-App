@@ -16,12 +16,14 @@
     <string name="general_information">General information</string>
     <string name="cash_operations">Cash operations</string>
     <string name="settings">Settings</string>
+
+    <!--Payment strings-->
     <string name="payment_next">Next</string>
     <string name="payment_cvv" translatable="false">CVV</string>
     <string name="payment_yy" translatable="false">YY</string>
     <string name="payment_mm" translatable="false">MM</string>
     <string name="payment_card_number">Card number</string>
-    <string name="payment_mm_yy">mm/yy</string>
+    <string name="payment_mm_yy" translatable="false">mm/yy</string>
 
 
 </resources>
