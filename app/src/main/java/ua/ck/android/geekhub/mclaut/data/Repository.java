@@ -21,6 +21,7 @@ import ua.ck.android.geekhub.mclaut.tools.McLautAppExecutor;
 public class Repository {
 
     private static Repository instance;
+    private McLautAppExecutor executor = McLautAppExecutor.getInstance();
 
     private Context refresherContext;
     private String refresherCertificate;
@@ -43,37 +44,58 @@ public class Repository {
 
     public MutableLiveData<UserInfoEntity> getUserInfo(Context context, String userId){
 
-        MutableLiveData<UserInfoEntity> request = new MutableLiveData<>();
-        request.setValue(LocalDatabase.getInstance(context).dao().getUserInfoEntityById(userId));
-        return request;
-    }
+        final MutableLiveData<UserInfoEntity> request = new MutableLiveData<>();
 
-    public MutableLiveData<WithdrawalsListEntity> getWithdrawalsInfo(Context context){
-
-        WithdrawalsListEntity withdrawalsList = new WithdrawalsListEntity(
-                LocalDatabase.getInstance(context).dao()
-                        .findAllWithdrawalsEntities());
-
-        MutableLiveData<WithdrawalsListEntity> request = new MutableLiveData<>();
-        request.setValue(withdrawalsList);
+        executor.databaseExecutor().execute(() ->{
+            UserInfoEntity userInfoEntity = LocalDatabase.getInstance(context).dao()
+                    .getUserInfoEntityById(userId);
+            request.postValue(userInfoEntity);
+        });
 
         return request;
     }
 
-    public MutableLiveData<PaymentsListEntity> getPaymentsInfo(Context context){
+    public MutableLiveData<WithdrawalsListEntity> getWithdrawalsInfo(Context context, String userId){
 
-        PaymentsListEntity paymentsList = new PaymentsListEntity(
+        final MutableLiveData<WithdrawalsListEntity> request = new MutableLiveData<>();
+
+        executor.databaseExecutor().execute(() ->{
+            WithdrawalsListEntity withdrawalsList = new WithdrawalsListEntity(
                 LocalDatabase.getInstance(context).dao()
-                        .findAllPaymentsEntities());
+                        .findAllWithdrawalsEntities(userId));
 
-        MutableLiveData<PaymentsListEntity> request = new MutableLiveData<>();
-        request.setValue(paymentsList);
+            request.postValue(withdrawalsList);
+        });
+
+
+        return request;
+    }
+
+    public MutableLiveData<PaymentsListEntity> getPaymentsInfo(Context context, String userId){
+        final MutableLiveData<PaymentsListEntity> request = new MutableLiveData<>();
+
+        executor.databaseExecutor().execute(() ->{
+            PaymentsListEntity paymentsList = new PaymentsListEntity(
+                    LocalDatabase.getInstance(context).dao()
+                            .findAllPaymentsEntities(userId));
+            request.setValue(paymentsList);
+        });
+
+        return request;
+    }
+
+    public MutableLiveData<List<String>> getAllUsersId(Context context){
+        final MutableLiveData<List<String>> request = new MutableLiveData<>();
+
+        executor.databaseExecutor().execute(() ->{
+            List<String> usersIdList = LocalDatabase.getInstance(context).dao().getAllUsersId();
+            request.postValue(usersIdList);
+        });
 
         return request;
     }
 
     private void insertUserInfoToDatabase(final UserInfoEntity userInfoEntity){
-        McLautAppExecutor executor = McLautAppExecutor.getInstance();
 
         executor.databaseExecutor()
                 .execute(() -> {
@@ -85,7 +107,7 @@ public class Repository {
 
     private void insertUserConnectionInfoToDatabase( List<UserConnectionsInfo> userConnectionsInfoList){
         int SINGLE_ELEMENT_INDEX = 0;
-        McLautAppExecutor executor = McLautAppExecutor.getInstance();
+
         if (userConnectionsInfoList != null) {
             final UserConnectionsInfo userConnectionsInfo = userConnectionsInfoList.get(SINGLE_ELEMENT_INDEX);
             executor.databaseExecutor()
@@ -98,7 +120,6 @@ public class Repository {
 }
 
     private void insertPaymentsToDatabase(PaymentsListEntity paymentsList){
-        McLautAppExecutor executor = McLautAppExecutor.getInstance();
 
         for (Iterator<CashTransactionsEntity> iter = paymentsList.getPayments().iterator();
                 iter.hasNext(); ){
@@ -114,7 +135,6 @@ public class Repository {
     }
 
     private void insertWithdrawalsToDatabase(WithdrawalsListEntity withdrawalsList){
-        McLautAppExecutor executor = McLautAppExecutor.getInstance();
 
         for (Iterator<CashTransactionsEntity> iter = withdrawalsList.getWithdrawals().iterator();
              iter.hasNext(); ){
@@ -179,7 +199,6 @@ public class Repository {
     }
 
     private void refreshUserInfo(String userId){
-        McLautAppExecutor executor = McLautAppExecutor.getInstance();
 
         executor.databaseExecutor()
                 .execute(() -> {

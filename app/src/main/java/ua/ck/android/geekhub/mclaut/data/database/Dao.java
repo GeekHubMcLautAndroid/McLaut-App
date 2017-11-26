@@ -26,14 +26,14 @@ public interface Dao {
     void insertCashTransactionsEntities(CashTransactionsEntity entity);
 
     @Query("SELECT * FROM cashTransactions " +
-            "        WHERE typeOfTransaction = 1 " + // 1 equals PAYMENTS
+            "        WHERE idClient = :userId AND typeOfTransaction = 1 " + // 1 equals PAYMENTS
             "        ORDER BY date")
-    List<CashTransactionsEntity> findAllPaymentsEntities();
+    List<CashTransactionsEntity> findAllPaymentsEntities(String userId);
 
     @Query("SELECT * FROM cashTransactions " +
-            "        WHERE typeOfTransaction = 0" + // 0 equals WITHDRAWALS
+            "        WHERE idClient = :userId AND typeOfTransaction = 0" + // 0 equals WITHDRAWALS
             "        ORDER BY date")
-    List<CashTransactionsEntity> findAllWithdrawalsEntities();
+    List<CashTransactionsEntity> findAllWithdrawalsEntities(String userId);
 
     @Query("SELECT * FROM userInfo" +
             "        WHERE id = :userId")
