@@ -27,7 +27,7 @@ public class TachcardDataSource {
         return instance;
     }
 
-    MutableLiveData<Document> pay(String... strings) {
+    public MutableLiveData<Document> pay(String... strings) {
         Connection.Response main;
         Element secondStage;
         String tc_user_session;
