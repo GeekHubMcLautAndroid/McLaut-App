@@ -14,9 +14,7 @@ import ua.ck.android.geekhub.mclaut.data.entities.UserInfoEntity;
 import ua.ck.android.geekhub.mclaut.data.entities.WithdrawalsListEntity;
 import ua.ck.android.geekhub.mclaut.tools.McLautHashGenerator;
 
-/**
- * Created by bogda on 19.11.2017.
- */
+
 
 public class NetworkDataSource {
     private static NetworkDataSource instance;

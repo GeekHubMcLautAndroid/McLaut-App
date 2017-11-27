@@ -119,15 +119,12 @@ public class UserInfoEntity {
     public Long getPaymentDateLast() {
         return paymentDateLast;
     }
-    ///
-
     public void setWithdrawDateLast(Long withdrawDateLast) {
         this.withdrawDateLast = withdrawDateLast;
     }
     public Long getWithdrawDateLast() {
         return withdrawDateLast;
     }
-    ///
 
     public void setLocalResCode(int localResCode) {
         this.localResCode = localResCode;
@@ -135,7 +132,7 @@ public class UserInfoEntity {
     public int getLocalResCode() {
         return localResCode;
     }
-    ///
+
 
     public void setUserConnectionsInfoList(List<UserConnectionsInfo> userConnectionsInfo) {
         this.userConnectionsInfo = userConnectionsInfo;
@@ -144,10 +141,6 @@ public class UserInfoEntity {
         return userConnectionsInfo;
     }
 
-
-    ///
-    ///
-    ///
     public Date getConvertedPaymentDateLast() {
         return new Date(paymentDateLast * 1000);
     }

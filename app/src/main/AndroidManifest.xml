@@ -11,7 +11,7 @@
         android:theme="@style/McLautAppTheme">
         <activity android:name=".ui.MainActivity"/>
         <activity android:name=".ui.authorization.LoginActivity"
-            android:theme="@style/McLautAppThemeWithoutActionBar"
+            android:theme="@style/McLautAppTheme"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
