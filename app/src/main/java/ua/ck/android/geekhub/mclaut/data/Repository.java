@@ -183,12 +183,13 @@ public class Repository {
         });
     }
 
-    public void addNewUserToDatabase(Context context, String login, String password, int city){
+    public MutableLiveData<LoginResultInfo> addNewUserToDatabase(Context context, String login, String password, int city){
         refresherCity = city;
         refresherContext = context;
 
-        NetworkDataSource.getInstance().checkLogin(login, password, city)
-                .observeForever(new Observer<LoginResultInfo>() {
+        MutableLiveData<LoginResultInfo> data = NetworkDataSource.getInstance().checkLogin(login,password,city);
+
+        data.observeForever(new Observer<LoginResultInfo>() {
             @Override
             public void onChanged(@Nullable LoginResultInfo loginResultInfo) {
                 if (loginResultInfo.getResultCode() == NetworkDataSource.RESPONSE_SUCCESSFUL_CODE) {
@@ -198,6 +199,7 @@ public class Repository {
                 }
             }
         });
+        return data;
     }
 
     private void findUserInfoInInternet() {
