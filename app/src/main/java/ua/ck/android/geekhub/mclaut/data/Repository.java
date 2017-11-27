@@ -274,6 +274,4 @@ public class Repository {
                     }
                 });
     }
-
-    //TODO: Write new information from network to local database
 }
