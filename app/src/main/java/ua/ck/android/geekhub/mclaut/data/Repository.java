@@ -196,6 +196,7 @@ public class Repository {
 
                     Repository.getInstance().refresherCertificate = loginResultInfo.getCertificate();
                     findUserInfoInInternet();
+                    data.removeObserver(this);
                 }
             }
         });
@@ -203,14 +204,16 @@ public class Repository {
     }
 
     private void findUserInfoInInternet() {
-        NetworkDataSource.getInstance().getUserInfo(refresherCertificate, refresherCity)
-            .observeForever(new Observer<UserInfoEntity>() {
+        MutableLiveData<UserInfoEntity> data = NetworkDataSource.
+                getInstance().getUserInfo(refresherCertificate, refresherCity);
+        data.observeForever(new Observer<UserInfoEntity>() {
                 @Override
                 public void onChanged(@Nullable UserInfoEntity userInfoEntity) {
                     if (userInfoEntity.getLocalResCode() == NetworkDataSource.RESPONSE_SUCCESSFUL_CODE) {
                         putUserInfoToDatabase(userInfoEntity);
                         insertUserConnectionInfoToDatabase(userInfoEntity.getUserConnectionsInfoList());
-                        putAllUserDataToDatabase(userInfoEntity.getId());
+                        refreshUserCashTransactions();
+                        data.removeObserver(this);
                     }
                 }
             });
@@ -222,11 +225,6 @@ public class Repository {
         insertUserInfoToDatabase(userInfoEntity);
     }
 
-
-    public void putAllUserDataToDatabase(String userId){
-        refreshUserInfo(userId);
-        refreshUserCashTransactions();
-    }
 
     public void refreshUserDataInDatabase(Context context, String userId){
         refresherContext = context;
@@ -253,26 +251,31 @@ public class Repository {
     }
 
     private void refreshPayments(){
-         NetworkDataSource.getInstance().getPayments(refresherCertificate, refresherCity)
-                 .observeForever(new Observer<PaymentsListEntity>() {
+        MutableLiveData<PaymentsListEntity> data = NetworkDataSource.getInstance().
+                getPayments(refresherCertificate, refresherCity);
+
+                 data.observeForever(new Observer<PaymentsListEntity>() {
                      @Override
                      public void onChanged(@Nullable PaymentsListEntity paymentsListEntity) {
                          if(paymentsListEntity.getLocalResCode() == NetworkDataSource.RESPONSE_SUCCESSFUL_CODE ) {
                              insertPaymentsToDatabase(paymentsListEntity);
                          }
+                         data.removeObserver(this);
                      }
                  });
 
     }
 
     private void refreshWithdrawals(){
-        NetworkDataSource.getInstance().getWithdrawals(refresherCertificate, refresherCity)
-                .observeForever(new Observer<WithdrawalsListEntity>() {
+        MutableLiveData<WithdrawalsListEntity> data = NetworkDataSource.
+                getInstance().getWithdrawals(refresherCertificate, refresherCity);
+        data.observeForever(new Observer<WithdrawalsListEntity>() {
                     @Override
                     public void onChanged(@Nullable WithdrawalsListEntity withdrawalsListEntity) {
                         if(withdrawalsListEntity.getLocalResCode() == NetworkDataSource.RESPONSE_SUCCESSFUL_CODE ) {
                             insertWithdrawalsToDatabase(withdrawalsListEntity);
                         }
+                        data.removeObserver(this);
                     }
                 });
     }

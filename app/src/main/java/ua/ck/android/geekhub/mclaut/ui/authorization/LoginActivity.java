@@ -2,9 +2,7 @@ package ua.ck.android.geekhub.mclaut.ui.authorization;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
@@ -29,6 +27,8 @@ import ua.ck.android.geekhub.mclaut.ui.MainActivity;
 public class LoginActivity extends AppCompatActivity implements TextWatcher {
 
     public static final int RESPONSE_FAILTURE_CODE = -100;
+    public static final int RESPONSE_SUCCESSFUL_CODE = 1;
+    public static final int RESPONSE_BAD_RESULT_CODE = 0;
 
     @BindView(R.id.login_activity_city_spinner)
     Spinner cityesSpinner;
@@ -43,7 +43,6 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher {
     @BindView(R.id.login_activity_button_sign_in)
     CircularProgressButton buttonLogin;
 
-    private Context ctx = this;
     private LoginViewModel viewModel;
 
     @Override
@@ -70,24 +69,27 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher {
             @Override
             public void onChanged(@Nullable Integer integer) {
                 switch (integer){
-                    case 1:
-                        Intent intent = new Intent(ctx,MainActivity.class);
+                    case RESPONSE_SUCCESSFUL_CODE:
+                        Intent intent = new Intent(LoginActivity.this,
+                                MainActivity.class);
                         Repository
                                 .getInstance()
-                                .addNewUserToDatabase(ctx,
+                                .addNewUserToDatabase(LoginActivity.this,
                                         loginTextInputEditText.getText().toString(),
                                         passwordEditText.getText().toString(),
                                         cityesSpinner.getSelectedItemPosition());
                         startActivity(intent);
                         break;
-                    case 0:
+                    case RESPONSE_BAD_RESULT_CODE:
                         passwordEditText.getText().clear();
                         passwordTextInputLayout.setError(getString(R.string.error_login));
                         passwordTextInputLayout.setErrorEnabled(true);
                         break;
                     case RESPONSE_FAILTURE_CODE:
                         passwordEditText.getText().clear();
-                        Toast.makeText(ctx,getString(R.string.error_no_internet),Toast.LENGTH_SHORT).show();
+                        Toast.makeText(LoginActivity.this,
+                                getString(R.string.error_no_internet),
+                                Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -95,7 +97,8 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher {
         passwordEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-                if ((keyEvent != null && (keyEvent.getKeyCode() == KeyEvent.KEYCODE_ENTER)) || (i == EditorInfo.IME_ACTION_DONE)) {
+                if ((keyEvent != null && (keyEvent.getKeyCode() == KeyEvent.KEYCODE_ENTER)) ||
+                        (i == EditorInfo.IME_ACTION_DONE)) {
                     login();
                 }
                 return false;
@@ -105,10 +108,6 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher {
 
     @OnClick(R.id.login_activity_button_sign_in)
     public void logInButtonClick(){
-
-        viewModel.login(loginTextInputEditText.getText().toString(),
-                        passwordEditText.getText().toString(),
-                        cityesSpinner.getSelectedItemPosition());
         login();
     }
 
@@ -128,7 +127,7 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher {
             error = true;
         }
         if(!error) {
-            viewModel.login(login, password, city);
+            viewModel.login(this, login, password, city);
         }
 
     }
