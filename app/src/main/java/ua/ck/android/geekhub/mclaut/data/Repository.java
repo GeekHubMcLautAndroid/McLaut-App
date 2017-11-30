@@ -210,7 +210,7 @@ public class Repository {
                     if (userInfoEntity.getLocalResCode() == NetworkDataSource.RESPONSE_SUCCESSFUL_CODE) {
                         putUserInfoToDatabase(userInfoEntity);
                         insertUserConnectionInfoToDatabase(userInfoEntity.getUserConnectionsInfoList());
-                        putAllUserDataToDatabase(userInfoEntity.getId());
+                        refreshUserCashTransactions();
                     }
                 }
             });
