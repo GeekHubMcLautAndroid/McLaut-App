@@ -16,9 +16,6 @@ import butterknife.ButterKnife;
 import ua.ck.android.geekhub.mclaut.R;
 import ua.ck.android.geekhub.mclaut.data.entities.UserConnectionsInfo;
 
-/**
- * Created by bogda on 25.11.2017.
- */
 
 public class ConnectionsRecyclerAdapter extends RecyclerView.Adapter<ConnectionsViewHolder> {
     private List<UserConnectionsInfo> userConnectionsInfoList = new ArrayList<>();
@@ -32,7 +29,8 @@ public class ConnectionsRecyclerAdapter extends RecyclerView.Adapter<Connections
     @Override
     public ConnectionsViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         ConnectionsViewHolder holder;
-        View layoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_user_connections_info_recycler, parent, false);
+        View layoutView = LayoutInflater.from(parent.getContext()).
+                inflate(R.layout.item_user_connections_info_recycler, parent, false);
         holder = new ConnectionsViewHolder(layoutView,context);
         return holder;
     }
@@ -56,6 +54,8 @@ public class ConnectionsRecyclerAdapter extends RecyclerView.Adapter<Connections
     }
 }
 class ConnectionsViewHolder extends RecyclerView.ViewHolder{
+    public static final String CONNECTION_IS_ACTIVE = "1";
+
     @BindView(R.id.connections_item_login_textview)
     TextView loginTextView;
     @BindView(R.id.connections_item_is_active_textview)
@@ -72,7 +72,7 @@ class ConnectionsViewHolder extends RecyclerView.ViewHolder{
     }
     void bind(UserConnectionsInfo info){
         loginTextView.setText(info.getLogin());
-        if(info.getIsActive().equals("1")){
+        if(info.getIsActive().equals(CONNECTION_IS_ACTIVE)){
             isActiveTextView.setText(context.getString(R.string.active_label));
             isActiveTextView.setTextColor(ContextCompat.getColor(context,android.R.color.holo_green_dark));
         }
@@ -83,7 +83,7 @@ class ConnectionsViewHolder extends RecyclerView.ViewHolder{
         String tariff = context.getString(R.string.tariff_label) + " " + info.getTariff();
         tariffTextView.setText(tariff);
 
-        String payAtDay = context.getString(R.string.pay_at_day_label) + " " + info.getPayAtDay() + "₴";
+        String payAtDay = context.getString(R.string.pay_at_day_label) + " " + info.getPayAtDay() + context.getString(R.string.uah_symbol);
         payAtDayTextView.setText(payAtDay);
 
     }

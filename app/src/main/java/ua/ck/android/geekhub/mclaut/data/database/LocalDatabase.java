@@ -23,7 +23,7 @@ import ua.ck.android.geekhub.mclaut.data.entities.UserInfoEntity;
 @Database(entities = {UserInfoEntity.class,
                       UserConnectionsInfo.class,
                       CashTransactionsEntity.class,
-                      CardInfoEntity.class}, version = 1)
+                      CardInfoEntity.class}, version = 1, exportSchema = false)
 
 public abstract class LocalDatabase extends RoomDatabase {
 
@@ -46,7 +46,7 @@ public abstract class LocalDatabase extends RoomDatabase {
                     instance = Room.databaseBuilder(context.getApplicationContext(),
                             LocalDatabase.class,
                             LocalDatabase.DATABASE_NAME)
-                            .addMigrations(MIGRATION)
+                           // .addMigrations(MIGRATION)
                             .build();
                 }
             }

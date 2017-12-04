@@ -31,7 +31,7 @@ public interface Dao {
 
     @Query("SELECT * FROM userInfo" +
             "        WHERE id = :userId")
-    UserInfoEntity getUserInfoEntityById(String userId);
+    UserInfoEntity findUserInfoEntityById(String userId);
 
     @Query("SELECT name FROM userInfo" +
             "           WHERE id = :userId")
@@ -53,7 +53,7 @@ public interface Dao {
 
     @Query("SELECT * FROM userConnectionsInfo" +
             "        WHERE idClient = :userId")
-    UserConnectionsInfo findUserConnectionInfoEntityById(String userId);
+    List<UserConnectionsInfo> findUserConnectionInfoEntityById(String userId);
 
 ////
 

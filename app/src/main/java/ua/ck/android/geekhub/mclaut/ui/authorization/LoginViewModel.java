@@ -3,6 +3,7 @@ package ua.ck.android.geekhub.mclaut.ui.authorization;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModel;
+import android.content.Context;
 import android.support.annotation.Nullable;
 
 import ua.ck.android.geekhub.mclaut.data.Repository;
@@ -14,10 +15,9 @@ public class LoginViewModel extends ViewModel implements Observer<LoginResultInf
     private MutableLiveData<Integer> resultStatus = new MutableLiveData<>();
     private Repository repo = Repository.getInstance();
 
-    public void login(String login, String password, int city){
+    public void login(Context context, String login, String password, int city){
         showProgressStatus.postValue(true);
-
-        repo.getLoginInfo(login,password,city).observeForever(this);
+        repo.addNewUserToDatabase(context,login,password,city).observeForever(this);
     }
 
     @Override
