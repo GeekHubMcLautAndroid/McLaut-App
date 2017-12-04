@@ -464,7 +464,6 @@ public class Repository {
                  }
              }
         });
-
     }
 
     private void refreshWithdrawals(){

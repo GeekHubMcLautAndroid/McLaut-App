@@ -86,6 +86,35 @@ public class UserInfoFragment extends Fragment {
                             new ConnectionsRecyclerAdapter(currUserConnectionsInfo, getActivity());
                     connectionsRecycler.setAdapter(recyclerAdapter);
                 }
+                String balance = userInfoEntity.getBalance() + getString(R.string.uah_symbol);
+                balanceTextView.setText(balance);
+                usernameTextView.setText(userInfoEntity.getName());
+
+                if(userInfoEntity.getIsActive() != null &&
+                        userInfoEntity.getIsActive().equals(USER_IS_ACTIVE)){
+                    isActiveTextView.setText(getString(R.string.active_label));
+                    isActiveTextView.setTextColor(ContextCompat.getColor(getActivity(),
+                            android.R.color.holo_green_dark));
+                }
+                else{
+                    isActiveTextView.setText(getString(R.string.no_active_label));
+                    isActiveTextView.setTextColor(ContextCompat.getColor(getActivity(),
+                            android.R.color.holo_red_dark));
+                }
+                String accountNumber = getString(R.string.account_number_label) +" " + userInfoEntity.getAccount();
+                accountNumberTextView.setText(accountNumber);
+                List<UserConnectionsInfo> currUserConnectionsInfo = userInfoEntity.getUserConnectionsInfoList();
+                double dayCounter = 0;
+                for(UserConnectionsInfo info : currUserConnectionsInfo){
+                    dayCounter += (Double.parseDouble(userInfoEntity.getBalance())/
+                            Double.parseDouble(info.getPayAtDay()));
+                }
+                String days = getString(R.string.its_left_label) + " " + (int)Math.ceil(dayCounter) +
+                        " " + getString(R.string.days_of_service_label);
+                periodFinishTextView.setText(days);
+                recyclerAdapter =
+                        new ConnectionsRecyclerAdapter(currUserConnectionsInfo,getActivity());
+                connectionsRecycler.setAdapter(recyclerAdapter);
             }
         });
 
