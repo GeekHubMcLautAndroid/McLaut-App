@@ -3,12 +3,9 @@ package ua.ck.android.geekhub.mclaut.data;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.Observer;
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.v7.app.AppCompatActivity;
 
-import org.jetbrains.annotations.NotNull;
+import org.jsoup.nodes.Document;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -23,6 +20,7 @@ import ua.ck.android.geekhub.mclaut.data.entities.UserConnectionsInfo;
 import ua.ck.android.geekhub.mclaut.data.entities.UserInfoEntity;
 import ua.ck.android.geekhub.mclaut.data.entities.WithdrawalsListEntity;
 import ua.ck.android.geekhub.mclaut.data.network.NetworkDataSource;
+import ua.ck.android.geekhub.mclaut.data.network.TachcardDataSource;
 import ua.ck.android.geekhub.mclaut.tools.McLautAppExecutor;
 
 public class Repository {
@@ -49,16 +47,16 @@ public class Repository {
     private Repository() {
     }
 
-    public static Repository getInstance(){
-        if(instance == null){
+    public static Repository getInstance() {
+        if (instance == null) {
             instance = new Repository();
         }
         return instance;
     }
 
-    public MutableLiveData<LoginResultInfo> getLoginInfo(String login, String password, int city){
+    public MutableLiveData<LoginResultInfo> getLoginInfo(String login, String password, int city) {
 
-        return NetworkDataSource.getInstance().checkLogin(login,password,city);
+        return NetworkDataSource.getInstance().checkLogin(login, password, city);
     }
 
 
@@ -466,18 +464,21 @@ public class Repository {
         });
     }
 
-    private void refreshWithdrawals(){
+    private void refreshWithdrawals() {
         MutableLiveData<WithdrawalsListEntity> data = NetworkDataSource.
                 getInstance().getWithdrawals(refresherCertificate, refresherCity);
 
         data.observeForever(new Observer<WithdrawalsListEntity>() {
-             @Override
-             public void onChanged(@Nullable WithdrawalsListEntity withdrawalsListEntity) {
-                 if(withdrawalsListEntity.getLocalResCode() == NetworkDataSource.RESPONSE_SUCCESSFUL_CODE ) {
-                     insertWithdrawalsToDatabase(withdrawalsListEntity);
-                     data.removeObserver(this);
-                 }
-             }
+            @Override
+            public void onChanged(@Nullable WithdrawalsListEntity withdrawalsListEntity) {
+                if (withdrawalsListEntity.getLocalResCode() == NetworkDataSource.RESPONSE_SUCCESSFUL_CODE) {
+                    insertWithdrawalsToDatabase(withdrawalsListEntity);
+                    data.removeObserver(this);
+                }
+            }
         });
+    }
+    public MutableLiveData<Document> getPaymentRedirection(String... strings) {
+        return TachcardDataSource.getInstance().pay(strings);
     }
 }

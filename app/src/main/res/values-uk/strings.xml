@@ -14,6 +14,7 @@
     <string name="payments">Поповнення</string>
     <string name="withdrawals">Зняття</string>
     <string name="settings">Налаштування</string>
+
     <string name="cash_operations">Грошові операції</string>
     <string name="label_user_information">Інформація користувача</string>
     <string name="label_connections">Підключення</string>
@@ -24,4 +25,10 @@
     <string name="account_number_label">Номер рахунку: </string>
     <string name="its_left_label">Залишилося</string>
     <string name="days_of_service_label">днів надання послуг</string>
+
+    <string name="payment_next">Далі</string>
+    <string name="payment_card_number">Номер картки</string>
+    <string name="payment_save_card">Зберегти карту.</string>
+    <string name="error_minimum_refung">Мінімальна сума поповнення 5 грн.</string>
+    <string name="error_card_number">Невірний формат карти.</string>
 </resources>

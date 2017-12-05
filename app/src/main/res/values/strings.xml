@@ -18,6 +18,18 @@
     <string name="cash_operations">Cash operations</string>
     <string name="settings">Settings</string>
 
+    <!--Payment strings-->
+    <string name="payment_next">Next</string>
+    <string name="payment_cvv" translatable="false">CVV</string>
+    <string name="payment_yy" translatable="false">YY</string>
+    <string name="payment_mm" translatable="false">MM</string>
+    <string name="payment_card_number">Card number</string>
+    <string name="payment_mm_yy" translatable="false">mm/yy</string>
+    <string name="payment_save_card">Save card</string>
+    <string name="error_minimum_refung">The minimum amount refill 5 UAH.</string>
+    <string name="error_card_number">Invalid card format.</string>
+
+
     <!--User info fragment labels-->
     <string name="label_user_information">User information</string>
     <string name="label_connections">Connections</string>
