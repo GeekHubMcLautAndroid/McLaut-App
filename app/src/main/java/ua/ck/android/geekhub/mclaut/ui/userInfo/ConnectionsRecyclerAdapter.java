@@ -14,7 +14,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ua.ck.android.geekhub.mclaut.R;
-import ua.ck.android.geekhub.mclaut.data.entities.UserConnectionsInfo;
+import ua.ck.android.geekhub.mclaut.data.model.UserConnectionsInfo;
 
 
 public class ConnectionsRecyclerAdapter extends RecyclerView.Adapter<ConnectionsViewHolder> {

@@ -1,10 +1,9 @@
-package ua.ck.android.geekhub.mclaut.data.entities;
+package ua.ck.android.geekhub.mclaut.data.model;
 
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 import android.content.Context;
 
-import ua.ck.android.geekhub.mclaut.data.Repository;
 import ua.ck.android.geekhub.mclaut.data.database.LocalDatabase;
 import ua.ck.android.geekhub.mclaut.tools.McLautAppExecutor;
 

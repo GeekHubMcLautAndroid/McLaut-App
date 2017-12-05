@@ -18,9 +18,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ua.ck.android.geekhub.mclaut.R;
-import ua.ck.android.geekhub.mclaut.data.Repository;
-import ua.ck.android.geekhub.mclaut.data.entities.UserConnectionsInfo;
-import ua.ck.android.geekhub.mclaut.data.entities.UserInfoEntity;
+import ua.ck.android.geekhub.mclaut.data.model.UserConnectionsInfo;
+import ua.ck.android.geekhub.mclaut.data.model.UserInfoEntity;
 
 public class UserInfoFragment extends Fragment {
 
