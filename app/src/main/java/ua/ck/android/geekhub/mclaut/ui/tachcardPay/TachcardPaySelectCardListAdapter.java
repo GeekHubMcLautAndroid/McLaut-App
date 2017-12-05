@@ -7,7 +7,7 @@ import android.widget.BaseAdapter;
 import java.util.List;
 
 public class TachcardPaySelectCardListAdapter extends BaseAdapter {
-    
+
     @Override
     public int getCount() {
         return 0;
