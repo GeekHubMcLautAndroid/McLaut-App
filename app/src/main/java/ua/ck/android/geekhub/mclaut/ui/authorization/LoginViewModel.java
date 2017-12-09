@@ -17,7 +17,7 @@ public class LoginViewModel extends ViewModel implements Observer<LoginResultInf
 
     public void login(Context context, String login, String password, int city){
         showProgressStatus.postValue(true);
-        repo.addNewUserToDatabase(context,login,password,city).observeForever(this);
+        repo.addNewUserToDatabase(login,password,city).observeForever(this);
     }
 
     @Override
