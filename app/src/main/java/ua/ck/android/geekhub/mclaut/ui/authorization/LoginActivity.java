@@ -23,6 +23,7 @@ import butterknife.OnClick;
 import ua.ck.android.geekhub.mclaut.R;
 import ua.ck.android.geekhub.mclaut.data.Repository;
 import ua.ck.android.geekhub.mclaut.ui.MainActivity;
+import ua.ck.android.geekhub.mclaut.ui.McLautApplication;
 
 public class LoginActivity extends AppCompatActivity implements TextWatcher {
 
@@ -50,6 +51,12 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
+
+        if(!McLautApplication.getSelectedUser().equals("NULL")){
+            Intent intent = new Intent(LoginActivity.this,
+                    MainActivity.class);
+            startActivity(intent);
+        }
 
         viewModel = ViewModelProviders.of(this).get(LoginViewModel.class);
         viewModel.getProgressStatusData().observe(this, new Observer<Boolean>() {

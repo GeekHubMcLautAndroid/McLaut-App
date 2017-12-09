@@ -27,6 +27,7 @@ public class TachcardPayActivity extends AppCompatActivity implements TachcardPa
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_tachcard_pay);
         ButterKnife.bind(this);
         Fragment fragment = null;
         try {

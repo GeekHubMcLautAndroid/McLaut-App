@@ -10,7 +10,7 @@ import android.content.SharedPreferences;
 
 public class McLautApplication extends Application{
 
-    private static final String USER_ID = "_user_id";
+    public static final String USER_ID = "_user_id";
     private static final String MCLAUT_PREFERENCES = "_mclaut_preferences";
 
     private static McLautApplication instance;
@@ -25,12 +25,16 @@ public class McLautApplication extends Application{
         return instance.getBaseContext();
     }
 
+    public static SharedPreferences getPreferences(){
+        return  preferences;
+    }
+
     public static void selectUser(String userId){
         editor.putString(USER_ID, userId).commit();
     }
 
-    public static void getSelectedUser(String userId){
-        preferences.getString(USER_ID, "NULL");
+    public static String getSelectedUser(){
+       return preferences.getString(USER_ID, "NULL");
     }
 
     @Override

@@ -10,12 +10,10 @@
 
     <!--Drawer items names-->
     <string name="general_information">Главная Информация</string>
-    <string name="payments_group_name">Денежные операции</string>
-    <string name="payments">Пополнения</string>
-    <string name="withdrawals">Снятия</string>
-    <string name="settings">Настройки</string>
-
     <string name="cash_operations">Денежные операции</string>
+    <string name="settings">Настройки</string>
+    <string name="payment">Пополнениe</string>
+
     <string name="label_user_information">Информация пользователя</string>
     <string name="label_connections">Подключения</string>
     <string name="active_label">Активный</string>

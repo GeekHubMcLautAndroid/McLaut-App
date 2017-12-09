@@ -1,6 +1,10 @@
 package ua.ck.android.geekhub.mclaut.ui;
 
+import android.arch.lifecycle.Observer;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -11,11 +15,18 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.TextureView;
+import android.widget.TextView;
+
+import java.util.HashMap;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ua.ck.android.geekhub.mclaut.R;
+import ua.ck.android.geekhub.mclaut.data.Repository;
+import ua.ck.android.geekhub.mclaut.data.model.UserCharacteristic;
 import ua.ck.android.geekhub.mclaut.ui.settings.SettingsFragment;
+import ua.ck.android.geekhub.mclaut.ui.tachcardPay.TachcardPayActivity;
 import ua.ck.android.geekhub.mclaut.ui.userInfo.UserInfoFragment;
 import ua.ck.android.geekhub.mclaut.ui.withdrawalsInfo.WithdrawalsInfoFragment;
 
@@ -27,6 +38,8 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.drawer_navigation_view)
     NavigationView mNavigationView;
 
+    private TextView drawerUserId;
+    private TextView drawerUserName;
     private ActionBarDrawerToggle mDrawerToggle;
     private FragmentManager fragmentManager;
     private int idActiveFragment = R.id.general_information_fragment;
@@ -35,12 +48,25 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         ButterKnife.bind(this);
+
         setupDrawerNavigationView(mNavigationView);
         setSupportActionBar(toolbar);
 
         mDrawerToggle = setupDrawerToggle();
         mDrawerLayout.addDrawerListener(mDrawerToggle);
+
+        setSharedPreferencesListener();
+
+        Repository.mapUsersCharacteristic.observe(this, new Observer<HashMap<String, UserCharacteristic>>() {
+            @Override
+            public void onChanged(@Nullable HashMap<String, UserCharacteristic> userCharacteristicMap) {
+                if(!userCharacteristicMap.isEmpty()){
+                    setNameAndId();
+                }
+            }
+        });
 
         setToolbarTitle();
 
@@ -91,6 +117,12 @@ public class MainActivity extends AppCompatActivity {
             case R.id.settings_fragment:
                 fragmentClass = SettingsFragment.class;
                 break;
+            case R.id.payment_activity:
+
+                Intent intent = new Intent(getBaseContext(), TachcardPayActivity.class);
+                startActivity(intent);
+                return;
+
             default:
                 fragmentClass = UserInfoFragment.class;
         }
@@ -130,5 +162,44 @@ public class MainActivity extends AppCompatActivity {
                 toolbar,
                 R.string.drawer_toggle_open,
                 R.string.drawer_toggle_close);
+    }
+
+    private void setSharedPreferencesListener(){
+        drawerUserId = mNavigationView.getHeaderView(0)
+                .findViewById(R.id.tv_header_user_id);
+        drawerUserName = mNavigationView.getHeaderView(0)
+                .findViewById(R.id.tv_header_user_name);
+
+        McLautApplication.getPreferences().registerOnSharedPreferenceChangeListener(
+                new SharedPreferences.OnSharedPreferenceChangeListener() {
+
+                    @Override
+                    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+                        if (sharedPreferences.equals(McLautApplication.getPreferences())
+                                && key.equals(McLautApplication.getSelectedUser())) {
+                            setNameAndId();
+                        }
+                    }
+                }
+        );
+    }
+
+    private void setNameAndId(){
+        HashMap<String, UserCharacteristic> userCharacteristicMap =
+                Repository.mapUsersCharacteristic.getValue();
+
+        if ((userCharacteristicMap != null)
+                &&(userCharacteristicMap.get(McLautApplication.getSelectedUser()) != null)) {
+            drawerUserId.setText(
+                    userCharacteristicMap
+                            .get(McLautApplication.getSelectedUser())
+                            .getInfo().getId()
+            );
+            drawerUserName.setText(
+                    userCharacteristicMap
+                            .get(McLautApplication.getSelectedUser())
+                            .getInfo().getName()
+            );
+        }
     }
 }

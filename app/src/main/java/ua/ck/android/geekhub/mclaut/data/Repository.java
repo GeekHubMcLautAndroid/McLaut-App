@@ -26,7 +26,7 @@ import ua.ck.android.geekhub.mclaut.ui.McLautApplication;
 public class Repository {
 
     private static Repository instance;
-    private static final MutableLiveData< HashMap <String, UserCharacteristic>>
+    public static final MutableLiveData< HashMap <String, UserCharacteristic>>
             mapUsersCharacteristic = new MutableLiveData<>();
 
     private static McLautAppExecutor executor = McLautAppExecutor.getInstance();

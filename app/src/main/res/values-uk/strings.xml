@@ -10,12 +10,10 @@
 
     <!--Drawer items names-->
     <string name="general_information">Загальна інформація</string>
-    <string name="payments_group_name">Грошові операції</string>
-    <string name="payments">Поповнення</string>
-    <string name="withdrawals">Зняття</string>
-    <string name="settings">Налаштування</string>
-
     <string name="cash_operations">Грошові операції</string>
+    <string name="settings">Налаштування</string>
+    <string name="payment">Поповнення</string>
+
     <string name="label_user_information">Інформація користувача</string>
     <string name="label_connections">Підключення</string>
     <string name="active_label">Активний</string>
