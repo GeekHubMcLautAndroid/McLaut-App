@@ -3,6 +3,7 @@ package ua.ck.android.geekhub.mclaut.data;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.Observer;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
@@ -38,6 +39,8 @@ public class Repository {
     private static int refresherCity;
 
     private static String tempUserId;
+
+    public  static final String  USER_ID = "_user_id";
     private static final Integer ALL_FIELDS_UPDATED = 4;
     private static final Integer NON_FIELDS_UPDATED = 0;
     private static final Integer ADD_NEW_FIELD = 1;
@@ -278,6 +281,8 @@ public class Repository {
     }
 
     private void insertUserInfoToDatabase(final UserInfoEntity userInfoEntity){
+
+        if (refresherContext.getSharedPreferences(USER_ID))
 
         tempUserCharacteristic.setInfo(userInfoEntity);
         iObserver.setValue(ADD_NEW_FIELD);
