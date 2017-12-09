@@ -74,7 +74,7 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher {
                                 MainActivity.class);
                         Repository
                                 .getInstance()
-                                .addNewUserToDatabase(LoginActivity.this,
+                                .addNewUserToDatabase(
                                         loginTextInputEditText.getText().toString(),
                                         passwordEditText.getText().toString(),
                                         cityesSpinner.getSelectedItemPosition());
