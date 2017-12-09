@@ -1,4 +1,4 @@
-package ua.ck.android.geekhub.mclaut.data.entities;
+package ua.ck.android.geekhub.mclaut.data.model;
 
 import com.google.gson.annotations.SerializedName;
 

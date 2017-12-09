@@ -1,10 +1,6 @@
-package ua.ck.android.geekhub.mclaut.data;
+package ua.ck.android.geekhub.mclaut.data.model;
 
 import java.util.List;
-
-import ua.ck.android.geekhub.mclaut.data.entities.CashTransactionsEntity;
-import ua.ck.android.geekhub.mclaut.data.entities.UserConnectionsInfo;
-import ua.ck.android.geekhub.mclaut.data.entities.UserInfoEntity;
 
 /**
  * Created by Sergo on 12/2/17.

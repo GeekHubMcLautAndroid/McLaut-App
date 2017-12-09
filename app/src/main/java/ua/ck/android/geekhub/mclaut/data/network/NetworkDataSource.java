@@ -7,11 +7,10 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-import ua.ck.android.geekhub.mclaut.data.Repository;
-import ua.ck.android.geekhub.mclaut.data.entities.LoginResultInfo;
-import ua.ck.android.geekhub.mclaut.data.entities.PaymentsListEntity;
-import ua.ck.android.geekhub.mclaut.data.entities.UserInfoEntity;
-import ua.ck.android.geekhub.mclaut.data.entities.WithdrawalsListEntity;
+import ua.ck.android.geekhub.mclaut.data.model.LoginResultInfo;
+import ua.ck.android.geekhub.mclaut.data.model.PaymentsListEntity;
+import ua.ck.android.geekhub.mclaut.data.model.UserInfoEntity;
+import ua.ck.android.geekhub.mclaut.data.model.WithdrawalsListEntity;
 import ua.ck.android.geekhub.mclaut.tools.McLautHashGenerator;
 
 

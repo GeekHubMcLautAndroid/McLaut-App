@@ -3,13 +3,13 @@ package ua.ck.android.geekhub.mclaut.data;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.Observer;
 import android.content.Context;
+<<<<<<< HEAD
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
+=======
+>>>>>>> 9fb2959d56139cfc7646adaf717d0b5fd5aad6a9
 import android.support.annotation.Nullable;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.v7.app.AppCompatActivity;
 
-import org.jetbrains.annotations.NotNull;
 import org.jsoup.nodes.Document;
 
 import java.util.HashMap;
@@ -55,16 +55,16 @@ public class Repository {
     private Repository() {
     }
 
-    public static Repository getInstance(){
-        if(instance == null){
+    public static Repository getInstance() {
+        if (instance == null) {
             instance = new Repository();
         }
         return instance;
     }
 
-    public MutableLiveData<LoginResultInfo> getLoginInfo(String login, String password, int city){
+    public MutableLiveData<LoginResultInfo> getLoginInfo(String login, String password, int city) {
 
-        return NetworkDataSource.getInstance().checkLogin(login,password,city);
+        return NetworkDataSource.getInstance().checkLogin(login, password, city);
     }
 
 
@@ -474,18 +474,18 @@ public class Repository {
         });
     }
 
-    private void refreshWithdrawals(){
+    private void refreshWithdrawals() {
         MutableLiveData<WithdrawalsListEntity> data = NetworkDataSource.
                 getInstance().getWithdrawals(refresherCertificate, refresherCity);
 
         data.observeForever(new Observer<WithdrawalsListEntity>() {
-             @Override
-             public void onChanged(@Nullable WithdrawalsListEntity withdrawalsListEntity) {
-                 if(withdrawalsListEntity.getLocalResCode() == NetworkDataSource.RESPONSE_SUCCESSFUL_CODE ) {
-                     insertWithdrawalsToDatabase(withdrawalsListEntity);
-                     data.removeObserver(this);
-                 }
-             }
+            @Override
+            public void onChanged(@Nullable WithdrawalsListEntity withdrawalsListEntity) {
+                if (withdrawalsListEntity.getLocalResCode() == NetworkDataSource.RESPONSE_SUCCESSFUL_CODE) {
+                    insertWithdrawalsToDatabase(withdrawalsListEntity);
+                    data.removeObserver(this);
+                }
+            }
         });
     }
     public MutableLiveData<Document> getPaymentRedirection(String... strings) {

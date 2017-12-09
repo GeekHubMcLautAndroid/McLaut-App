@@ -7,7 +7,7 @@ import android.content.Context;
 import android.support.annotation.Nullable;
 
 import ua.ck.android.geekhub.mclaut.data.Repository;
-import ua.ck.android.geekhub.mclaut.data.entities.LoginResultInfo;
+import ua.ck.android.geekhub.mclaut.data.model.LoginResultInfo;
 
 
 public class LoginViewModel extends ViewModel implements Observer<LoginResultInfo> {
