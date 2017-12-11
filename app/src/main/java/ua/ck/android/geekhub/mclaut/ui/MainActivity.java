@@ -1,6 +1,7 @@
 package ua.ck.android.geekhub.mclaut.ui;
 
 import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
@@ -15,7 +16,6 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.TextureView;
 import android.widget.TextView;
 
 import java.util.HashMap;
@@ -23,6 +23,7 @@ import java.util.HashMap;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ua.ck.android.geekhub.mclaut.R;
+import ua.ck.android.geekhub.mclaut.app.McLautApplication;
 import ua.ck.android.geekhub.mclaut.data.Repository;
 import ua.ck.android.geekhub.mclaut.data.model.UserCharacteristic;
 import ua.ck.android.geekhub.mclaut.ui.settings.SettingsFragment;
@@ -30,7 +31,7 @@ import ua.ck.android.geekhub.mclaut.ui.tachcardPay.TachcardPayActivity;
 import ua.ck.android.geekhub.mclaut.ui.userInfo.UserInfoFragment;
 import ua.ck.android.geekhub.mclaut.ui.withdrawalsInfo.WithdrawalsInfoFragment;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements Observer<HashMap<String,String>> {
     @BindView(R.id.drawer_layout)
     DrawerLayout mDrawerLayout;
     @BindView(R.id.toolBar)
@@ -44,6 +45,8 @@ public class MainActivity extends AppCompatActivity {
     private FragmentManager fragmentManager;
     private int idActiveFragment = R.id.general_information_fragment;
 
+    private MainViewModel viewModel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,22 +54,20 @@ public class MainActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
+        drawerUserId = mNavigationView.getHeaderView(0)
+                .findViewById(R.id.tv_header_user_id);
+        drawerUserName = mNavigationView.getHeaderView(0)
+                .findViewById(R.id.tv_header_user_name);
+
         setupDrawerNavigationView(mNavigationView);
         setSupportActionBar(toolbar);
 
         mDrawerToggle = setupDrawerToggle();
         mDrawerLayout.addDrawerListener(mDrawerToggle);
 
-        setSharedPreferencesListener();
+        viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
 
-        Repository.mapUsersCharacteristic.observe(this, new Observer<HashMap<String, UserCharacteristic>>() {
-            @Override
-            public void onChanged(@Nullable HashMap<String, UserCharacteristic> userCharacteristicMap) {
-                if(!userCharacteristicMap.isEmpty()){
-                    setNameAndId();
-                }
-            }
-        });
+        viewModel.getUserIdAndName().observe(this,this);
 
         setToolbarTitle();
 
@@ -75,6 +76,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         mDrawerToggle.syncState();
+
     }
 
     private final String _idDrawerItem = "fragmentId";
@@ -103,6 +105,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
         );
+
     }
 
     private void selectDrawerItem() {
@@ -164,42 +167,12 @@ public class MainActivity extends AppCompatActivity {
                 R.string.drawer_toggle_close);
     }
 
-    private void setSharedPreferencesListener(){
-        drawerUserId = mNavigationView.getHeaderView(0)
-                .findViewById(R.id.tv_header_user_id);
-        drawerUserName = mNavigationView.getHeaderView(0)
-                .findViewById(R.id.tv_header_user_name);
-
-        McLautApplication.getPreferences().registerOnSharedPreferenceChangeListener(
-                new SharedPreferences.OnSharedPreferenceChangeListener() {
-
-                    @Override
-                    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-                        if (sharedPreferences.equals(McLautApplication.getPreferences())
-                                && key.equals(McLautApplication.getSelectedUser())) {
-                            setNameAndId();
-                        }
-                    }
-                }
-        );
-    }
-
-    private void setNameAndId(){
-        HashMap<String, UserCharacteristic> userCharacteristicMap =
-                Repository.mapUsersCharacteristic.getValue();
-
-        if ((userCharacteristicMap != null)
-                &&(userCharacteristicMap.get(McLautApplication.getSelectedUser()) != null)) {
-            drawerUserId.setText(
-                    userCharacteristicMap
-                            .get(McLautApplication.getSelectedUser())
-                            .getInfo().getId()
-            );
-            drawerUserName.setText(
-                    userCharacteristicMap
-                            .get(McLautApplication.getSelectedUser())
-                            .getInfo().getName()
-            );
+    //ViewModel LiveData observer
+    @Override
+    public void onChanged(@Nullable HashMap<String, String> stringStringHashMap) {
+        if (stringStringHashMap != null) {
+            drawerUserId.setText(stringStringHashMap.get("id"));
+            drawerUserName.setText(stringStringHashMap.get("name"));
         }
     }
 }

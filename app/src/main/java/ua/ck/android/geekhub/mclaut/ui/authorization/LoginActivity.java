@@ -23,7 +23,7 @@ import butterknife.OnClick;
 import ua.ck.android.geekhub.mclaut.R;
 import ua.ck.android.geekhub.mclaut.data.Repository;
 import ua.ck.android.geekhub.mclaut.ui.MainActivity;
-import ua.ck.android.geekhub.mclaut.ui.McLautApplication;
+import ua.ck.android.geekhub.mclaut.app.McLautApplication;
 
 public class LoginActivity extends AppCompatActivity implements TextWatcher {
 
@@ -77,26 +77,29 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher {
             public void onChanged(@Nullable Integer integer) {
                 switch (integer){
                     case RESPONSE_SUCCESSFUL_CODE:
-                        Intent intent = new Intent(LoginActivity.this,
-                                MainActivity.class);
-                        Repository
-                                .getInstance()
-                                .addNewUserToDatabase(
-                                        loginTextInputEditText.getText().toString(),
-                                        passwordEditText.getText().toString(),
-                                        cityesSpinner.getSelectedItemPosition());
-                        startActivity(intent);
+                        viewModel.getResultLoadDataAboutUserFromInternet().observe(LoginActivity.this, new Observer<Boolean>() {
+                            @Override
+                            public void onChanged(@Nullable Boolean aBoolean) {
+                                if(aBoolean){
+                                    Intent intent = new Intent(LoginActivity.this,
+                                            MainActivity.class);
+                                    startActivity(intent);
+                                }
+                            }
+                        });
                         break;
                     case RESPONSE_BAD_RESULT_CODE:
                         passwordEditText.getText().clear();
                         passwordTextInputLayout.setError(getString(R.string.error_login));
                         passwordTextInputLayout.setErrorEnabled(true);
+                        hideProgress();
                         break;
                     case RESPONSE_FAILTURE_CODE:
                         passwordEditText.getText().clear();
                         Toast.makeText(LoginActivity.this,
                                 getString(R.string.error_no_internet),
                                 Toast.LENGTH_SHORT).show();
+                        hideProgress();
                 }
             }
         });
@@ -134,7 +137,7 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher {
             error = true;
         }
         if(!error) {
-            viewModel.login(this, login, password, city);
+            viewModel.login(login, password, city);
         }
 
     }

@@ -1,4 +1,4 @@
-package ua.ck.android.geekhub.mclaut.ui;
+package ua.ck.android.geekhub.mclaut.app;
 
 import android.app.Application;
 import android.content.Context;

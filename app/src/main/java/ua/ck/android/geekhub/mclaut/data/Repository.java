@@ -21,28 +21,27 @@ import ua.ck.android.geekhub.mclaut.data.model.WithdrawalsListEntity;
 import ua.ck.android.geekhub.mclaut.data.network.NetworkDataSource;
 import ua.ck.android.geekhub.mclaut.data.network.TachcardDataSource;
 import ua.ck.android.geekhub.mclaut.tools.McLautAppExecutor;
-import ua.ck.android.geekhub.mclaut.ui.McLautApplication;
+import ua.ck.android.geekhub.mclaut.app.McLautApplication;
 
 public class Repository {
 
     private static Repository instance;
-    public static final MutableLiveData< HashMap <String, UserCharacteristic>>
+    private final MutableLiveData< HashMap <String, UserCharacteristic>>
             mapUsersCharacteristic = new MutableLiveData<>();
 
-    private static McLautAppExecutor executor = McLautAppExecutor.getInstance();
+    private McLautAppExecutor executor = McLautAppExecutor.getInstance();
 
-    private static String refresherCertificate;
-    private static int refresherCity;
+    private String refresherCertificate;
+    private int refresherCity;
 
-    private static String userIdForPuttingToMap;
+    private String userIdForPuttingToMap;
+
+    private UserCharacteristic userCharacteristicForMap = new UserCharacteristic();
+    private MutableLiveData<Integer> iObserver = new MutableLiveData<>();
 
     private static final Integer ALL_FIELDS_UPDATED = 4;
     private static final Integer NON_FIELDS_UPDATED = 0;
     private static final Integer ADD_NEW_FIELD = 1;
-
-    private static UserCharacteristic userCharacteristicForMap = new UserCharacteristic();
-    private static MutableLiveData<Integer> iObserver = new MutableLiveData<>();
-
 
     private Repository() {
     }
@@ -50,18 +49,16 @@ public class Repository {
     public static Repository getInstance(){
         if(instance == null){
             instance = new Repository();
-            initUserCharacteristics();
+            instance.initUserCharacteristics();
         }
         return instance;
     }
 
-    public MutableLiveData<LoginResultInfo> getLoginInfo(String login, String password, int city){
-
-        return NetworkDataSource.getInstance().checkLogin(login,password,city);
+    public MutableLiveData<HashMap<String, UserCharacteristic>> getMapUsersCharacteristic() {
+        return mapUsersCharacteristic;
     }
 
-
-    public static void initUserCharacteristics(){
+    private void initUserCharacteristics(){
 
         executor.databaseExecutor().execute(() ->{
             getAllUsersId().observeForever(new Observer<List<String>>() {
@@ -102,7 +99,7 @@ public class Repository {
 
     }
 
-    private static MutableLiveData<UserCharacteristic> getUserCharacteristics(String userId) {
+    private MutableLiveData<UserCharacteristic> getUserCharacteristics(String userId) {
 
         UserCharacteristic userCharacteristic = new UserCharacteristic();
 
@@ -169,13 +166,13 @@ public class Repository {
         return request;
     }
 
-    private static void putOrReplaceUserCharacteristics(String userId, UserCharacteristic userCharacteristic) {
+    private void putOrReplaceUserCharacteristics(String userId, UserCharacteristic userCharacteristic) {
         userIdForPuttingToMap = userId;
         userCharacteristicForMap = userCharacteristic;
         putOrReplaceUserCharacteristics();
     }
 
-    private static void putOrReplaceUserCharacteristics(){
+    private void putOrReplaceUserCharacteristics(){
 
         iObserver.observeForever(new Observer<Integer>() {
             @Override
@@ -195,7 +192,7 @@ public class Repository {
 
     }
 
-    public static MutableLiveData<UserInfoEntity> getUserInfo(String userId){
+    private MutableLiveData<UserInfoEntity> getUserInfo(String userId){
 
         final MutableLiveData<UserInfoEntity> request = new MutableLiveData<>();
 
@@ -210,7 +207,7 @@ public class Repository {
         return request;
     }
 
-    public static MutableLiveData<List<UserConnectionsInfo>> getUserConnectionInfo(String userId){
+    private MutableLiveData<List<UserConnectionsInfo>> getUserConnectionInfo(String userId){
 
         final MutableLiveData<List<UserConnectionsInfo>> request = new MutableLiveData<>();
 
@@ -225,7 +222,7 @@ public class Repository {
         return request;
     }
 
-    public static MutableLiveData<WithdrawalsListEntity> getWithdrawalsInfo(String userId){
+    private MutableLiveData<WithdrawalsListEntity> getWithdrawalsInfo(String userId){
 
         final MutableLiveData<WithdrawalsListEntity> request = new MutableLiveData<>();
 
@@ -241,7 +238,7 @@ public class Repository {
         return request;
     }
 
-    public static MutableLiveData<PaymentsListEntity> getPaymentsInfo(String userId){
+    private MutableLiveData<PaymentsListEntity> getPaymentsInfo(String userId){
         final MutableLiveData<PaymentsListEntity> request = new MutableLiveData<>();
 
         executor.databaseExecutor().execute(() ->{
@@ -255,7 +252,7 @@ public class Repository {
         return request;
     }
 
-    public static MutableLiveData<List<String>> getAllUsersId(){
+    private MutableLiveData<List<String>> getAllUsersId(){
         final MutableLiveData<List<String>> request = new MutableLiveData<>();
 
         executor.databaseExecutor().execute(() ->{
@@ -267,7 +264,7 @@ public class Repository {
         return request;
     }
 
-    public static MutableLiveData<List<CardInfoEntity>> getAllCardList() {
+    private MutableLiveData<List<CardInfoEntity>> getAllCardList() {
         final MutableLiveData<List<CardInfoEntity>> request = new MutableLiveData<>();
 
         executor.databaseExecutor().execute(() ->{
@@ -280,7 +277,7 @@ public class Repository {
         return request;
     }
 
-    private static void insertUserInfoToDatabase(final UserInfoEntity userInfoEntity){
+    private void insertUserInfoToDatabase(final UserInfoEntity userInfoEntity){
 
         userCharacteristicForMap.setInfo(userInfoEntity);
         iObserver.setValue(ADD_NEW_FIELD);
@@ -294,7 +291,7 @@ public class Repository {
                 );
     }
 
-    private static void insertUserConnectionInfoToDatabase(final List<UserConnectionsInfo> userConnectionsInfoList){
+    private void insertUserConnectionInfoToDatabase(final List<UserConnectionsInfo> userConnectionsInfoList){
 
         userCharacteristicForMap.setConnections(userConnectionsInfoList);
 
@@ -318,7 +315,7 @@ public class Repository {
     }
 
 
-    private static void insertPaymentsToDatabase(final PaymentsListEntity paymentsList){
+    private void insertPaymentsToDatabase(final PaymentsListEntity paymentsList){
 
         userCharacteristicForMap.setPaymentsTransactions(paymentsList.getPayments());
 
@@ -342,7 +339,7 @@ public class Repository {
         }
     }
 
-    private static void insertWithdrawalsToDatabase(final WithdrawalsListEntity withdrawalsList){
+    private void insertWithdrawalsToDatabase(final WithdrawalsListEntity withdrawalsList){
 
         userCharacteristicForMap.setWithdrawalsTransactions(withdrawalsList.getWithdrawals());
 
@@ -366,7 +363,7 @@ public class Repository {
         }
     }
 
-    public static void deleteUserFromDatabase(UserInfoEntity userInfoEntity){
+    public void deleteUserFromDatabase(UserInfoEntity userInfoEntity){
         executor.databaseExecutor().execute(() ->{
             LocalDatabase.getInstance(
                     McLautApplication.getContext()).dao()
@@ -374,7 +371,7 @@ public class Repository {
         });
     }
 
-    public static void deleteUserFromDatabase(String userId){
+    public void deleteUserFromDatabase(String userId){
         executor.databaseExecutor().execute(() ->{
             LocalDatabase.getInstance(
                     McLautApplication.getContext()).dao()
@@ -382,7 +379,7 @@ public class Repository {
         });
     }
 
-    public static void deleteCardFromDatabase(CardInfoEntity cardInfoEntity){
+    public void deleteCardFromDatabase(CardInfoEntity cardInfoEntity){
         executor.databaseExecutor().execute(() ->{
             LocalDatabase.getInstance(
                     McLautApplication.getContext()).dao().
@@ -390,7 +387,7 @@ public class Repository {
         });
     }
 
-    public static MutableLiveData<LoginResultInfo> addNewUserToDatabase(String login, String password, int city){
+    public MutableLiveData<LoginResultInfo> addNewUserToDatabase(String login, String password, int city){
         
         refresherCity = city;
         putOrReplaceUserCharacteristics();
@@ -411,7 +408,7 @@ public class Repository {
         return data;
     }
 
-    private static void findUserInfoInInternet() {
+    private void findUserInfoInInternet() {
         MutableLiveData<UserInfoEntity> data = NetworkDataSource.
                 getInstance().getUserInfo(refresherCertificate, refresherCity);
         data.observeForever(new Observer<UserInfoEntity>() {
@@ -432,21 +429,21 @@ public class Repository {
             });
     }
 
-    private static void putUserInfoToDatabase(UserInfoEntity userInfoEntity){
+    private void putUserInfoToDatabase(UserInfoEntity userInfoEntity){
         userInfoEntity.setCertificate(Repository.getInstance().refresherCertificate);
         userInfoEntity.setCity(Repository.getInstance().refresherCity);
         insertUserInfoToDatabase(userInfoEntity);
     }
 
 
-    public static void refreshUserDataInDatabase(String userId){
+    public void refreshUserDataInDatabase(String userId){
         userIdForPuttingToMap = userId;
         refreshUserInfo(userId);
         refreshUserCashTransactions();
         putOrReplaceUserCharacteristics();
     }
 
-    private static void refreshUserInfo(String userId){
+    private void refreshUserInfo(String userId){
 
         executor.databaseExecutor()
                 .execute(() -> {
@@ -461,12 +458,12 @@ public class Repository {
                 });
     }
 
-    private static void refreshUserCashTransactions(){
+    private void refreshUserCashTransactions(){
         refreshPayments();
         refreshWithdrawals();
     }
 
-    private static void refreshPayments(){
+    private void refreshPayments(){
         MutableLiveData<PaymentsListEntity> data = NetworkDataSource.getInstance().
                 getPayments(refresherCertificate, refresherCity);
 
@@ -481,7 +478,7 @@ public class Repository {
         });
     }
 
-    private static void refreshWithdrawals(){
+    private void refreshWithdrawals(){
         MutableLiveData<WithdrawalsListEntity> data = NetworkDataSource.
                 getInstance().getWithdrawals(refresherCertificate, refresherCity);
 

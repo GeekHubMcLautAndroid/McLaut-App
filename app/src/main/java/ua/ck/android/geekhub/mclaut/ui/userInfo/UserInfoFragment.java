@@ -52,7 +52,7 @@ public class UserInfoFragment extends Fragment {
         layoutManager = new LinearLayoutManager(getActivity());
         connectionsRecycler.setLayoutManager(layoutManager);
 
-        viewModel.getUserData(getActivity()).observe(this, new Observer<UserInfoEntity>() {
+        viewModel.getUserData().observe(this, new Observer<UserInfoEntity>() {
             @Override
             public void onChanged(@Nullable UserInfoEntity userInfoEntity) {
                 if (userInfoEntity != null) {
