@@ -56,6 +56,7 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher {
             Intent intent = new Intent(LoginActivity.this,
                     MainActivity.class);
             startActivity(intent);
+            finish();
         }
 
         viewModel = ViewModelProviders.of(this).get(LoginViewModel.class);
@@ -84,6 +85,7 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher {
                                     Intent intent = new Intent(LoginActivity.this,
                                             MainActivity.class);
                                     startActivity(intent);
+                                    finish();
                                 }
                             }
                         });

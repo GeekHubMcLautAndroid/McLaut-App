@@ -180,18 +180,15 @@ public class Repository {
                 if (integer >= ALL_FIELDS_UPDATED) {
 
                     HashMap currentMap = mapUsersCharacteristic.getValue();
-                    if (currentMap != null) {
-                        currentMap.put(userIdForPuttingToMap, userCharacteristicForMap);
-                        mapUsersCharacteristic.postValue(currentMap);
-                        iObserver.removeObserver(this);
-                        iObserver.postValue(NON_FIELDS_UPDATED);
-                    } else {
+
+                    if (currentMap == null) {
                         currentMap = new HashMap<String, UserCharacteristic>();
-                        currentMap.put(userIdForPuttingToMap, userCharacteristicForMap);
-                        mapUsersCharacteristic.postValue(currentMap);
-                        iObserver.removeObserver(this);
-                        iObserver.postValue(NON_FIELDS_UPDATED);
                     }
+
+                    currentMap.put(userIdForPuttingToMap, userCharacteristicForMap);
+                    mapUsersCharacteristic.postValue(currentMap);
+                    iObserver.removeObserver(this);
+                    iObserver.postValue(NON_FIELDS_UPDATED);
                 }
             }
         });
