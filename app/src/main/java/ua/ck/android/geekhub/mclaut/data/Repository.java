@@ -81,11 +81,11 @@ public class Repository {
                                         if(mapUsersCharacteristic.getValue() == null) {
                                             currentMap = new HashMap<String, UserCharacteristic>();
                                             currentMap.put(userId, userCharacteristic);
-                                            mapUsersCharacteristic.setValue(currentMap);
+                                            mapUsersCharacteristic.postValue(currentMap);
                                         } else {
                                             currentMap = mapUsersCharacteristic.getValue();
                                             currentMap.put(userId, userCharacteristic);
-                                            mapUsersCharacteristic.setValue(currentMap);
+                                            mapUsersCharacteristic.postValue(currentMap);
                                         }
                                         mutableLiveData.removeObserver(this);
                                     }
@@ -184,7 +184,13 @@ public class Repository {
                         currentMap.put(userIdForPuttingToMap, userCharacteristicForMap);
                         mapUsersCharacteristic.postValue(currentMap);
                         iObserver.removeObserver(this);
-                        iObserver.setValue(NON_FIELDS_UPDATED);
+                        iObserver.postValue(NON_FIELDS_UPDATED);
+                    } else {
+                        currentMap = new HashMap<String, UserCharacteristic>();
+                        currentMap.put(userIdForPuttingToMap, userCharacteristicForMap);
+                        mapUsersCharacteristic.postValue(currentMap);
+                        iObserver.removeObserver(this);
+                        iObserver.postValue(NON_FIELDS_UPDATED);
                     }
                 }
             }
@@ -280,7 +286,12 @@ public class Repository {
     private void insertUserInfoToDatabase(final UserInfoEntity userInfoEntity){
 
         userCharacteristicForMap.setInfo(userInfoEntity);
-        iObserver.setValue(ADD_NEW_FIELD);
+
+        if(iObserver.getValue() == null) {
+            iObserver.setValue(ADD_NEW_FIELD);
+        } else {
+            iObserver.setValue(iObserver.getValue() + ADD_NEW_FIELD);
+        }
 
         executor.databaseExecutor()
                 .execute(() -> {
@@ -411,6 +422,7 @@ public class Repository {
     private void findUserInfoInInternet() {
         MutableLiveData<UserInfoEntity> data = NetworkDataSource.
                 getInstance().getUserInfo(refresherCertificate, refresherCity);
+
         data.observeForever(new Observer<UserInfoEntity>() {
                 @Override
                 public void onChanged(@Nullable UserInfoEntity userInfoEntity) {
