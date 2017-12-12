@@ -71,6 +71,8 @@ public class MainActivity extends AppCompatActivity implements Observer<HashMap<
 
         setToolbarTitle();
 
+        selectDrawerItem();
+
     }
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
@@ -121,7 +123,6 @@ public class MainActivity extends AppCompatActivity implements Observer<HashMap<
                 fragmentClass = SettingsFragment.class;
                 break;
             case R.id.payment_activity:
-
                 Intent intent = new Intent(getBaseContext(), TachcardPayActivity.class);
                 startActivity(intent);
                 return;
