@@ -22,6 +22,7 @@ import ua.ck.android.geekhub.mclaut.data.network.NetworkDataSource;
 import ua.ck.android.geekhub.mclaut.data.network.TachcardDataSource;
 import ua.ck.android.geekhub.mclaut.tools.McLautAppExecutor;
 import ua.ck.android.geekhub.mclaut.app.McLautApplication;
+import ua.ck.android.geekhub.mclaut.ui.tachcardPay.TachcardPayViewModel;
 
 public class Repository {
 
@@ -500,7 +501,11 @@ public class Repository {
              }
         });
     }
-    public MutableLiveData<Document> getPaymentRedirection(String... strings) {
-        return TachcardDataSource.getInstance().pay(strings);
+    public void getPaymentRedirection(String... strings) {
+        TachcardDataSource.getInstance().pay(strings);
+    }
+
+    public void returnPaymentRedirection(MutableLiveData<Document> resultMLD){
+        TachcardPayViewModel.getInstance().redirect(resultMLD);
     }
 }

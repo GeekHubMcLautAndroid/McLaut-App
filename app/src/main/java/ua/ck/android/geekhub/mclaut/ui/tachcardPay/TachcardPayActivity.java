@@ -19,10 +19,18 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import ua.ck.android.geekhub.mclaut.R;
 
-public class TachcardPayActivity extends AppCompatActivity implements TachcardPayStep1Fragment.OnPaymentRedirect {
+public class TachcardPayActivity extends AppCompatActivity{
     @BindView(R.id.flPaymentContent)
     FrameLayout mFrameLayout;
     private FragmentManager fragmentManager;
+    private static TachcardPayActivity instance;
+
+    public static TachcardPayActivity getInstance() {
+        if (instance == null) {
+            instance = new TachcardPayActivity();
+        }
+        return instance;
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -41,7 +49,6 @@ public class TachcardPayActivity extends AppCompatActivity implements TachcardPa
                 .commit();
     }
 
-    @Override
     public void redirect(String location, String html) {
         Fragment fragment = null;
         try {

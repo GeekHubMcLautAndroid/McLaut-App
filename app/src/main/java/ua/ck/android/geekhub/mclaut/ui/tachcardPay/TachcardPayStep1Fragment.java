@@ -48,14 +48,6 @@ public class TachcardPayStep1Fragment extends Fragment {
     CircularProgressButton confirmCPB;
     private TachcardPayViewModel viewModel;
 
-
-    OnPaymentRedirect paymentRedirectListener;
-
-
-    public interface OnPaymentRedirect {
-        void redirect(String location, String html);
-    }
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -99,11 +91,9 @@ public class TachcardPayStep1Fragment extends Fragment {
         String mm = mmTIEL.getText().toString();
         String yy = yyTIEL.getText().toString();
         String cvv = cvvTIEL.getText().toString();
-        Document result = viewModel.pay(getContext(),summ, cardNumber, mm, yy, cvv);
-        if (result != null) {
-            paymentRedirectListener.redirect(result.location(), result.html());
-        }
+        viewModel.pay(getContext(),summ, cardNumber, mm, yy, cvv);
     }
+
 
     public void showProgress() {
         confirmCPB.startAnimation();

@@ -15,9 +15,10 @@ import ua.ck.android.geekhub.mclaut.app.McLautApplication;
 import ua.ck.android.geekhub.mclaut.data.Repository;
 import ua.ck.android.geekhub.mclaut.data.model.UserCharacteristic;
 import ua.ck.android.geekhub.mclaut.data.model.UserInfoEntity;
+import ua.ck.android.geekhub.mclaut.data.network.TachcardDataSource;
 
 public class TachcardPayViewModel extends ViewModel implements Observer<HashMap<String, UserCharacteristic>> {
-
+    private static TachcardPayViewModel instance;
     private UserInfoEntity userData;
     private MutableLiveData<Boolean> showProgressStatus = new MutableLiveData<>();
     private MutableLiveData<Integer> setError = new MutableLiveData<>();
@@ -27,6 +28,12 @@ public class TachcardPayViewModel extends ViewModel implements Observer<HashMap<
     int errorMM_YYCode = 2;
     int errorCVVCode = 3;
 
+    public static TachcardPayViewModel getInstance() {
+        if (instance == null) {
+            instance = new TachcardPayViewModel();
+        }
+        return instance;
+    }
 
     MutableLiveData<Boolean> getProgressStatusData() {
         return showProgressStatus;
@@ -46,13 +53,13 @@ public class TachcardPayViewModel extends ViewModel implements Observer<HashMap<
         userData = characteristic.getInfo();
     }
 
-    Document pay(Context context, String summ, String cardNumber, String mm, String yy, String cvv) {
+    void pay(Context context, String summ, String cardNumber, String mm, String yy, String cvv) {
         showProgressStatus.postValue(true);
         int[] digits = new int[cardNumber.length()];
         if (Double.parseDouble(summ) < 5) {
             setError.postValue(errorMinimumRefungCode);
             showProgressStatus.postValue(false);
-            return null;
+            return;
         }
         for (int i = 0; i < digits.length; i++) {
             digits[i] = Integer.parseInt(String.valueOf(cardNumber.charAt(i)));
@@ -60,24 +67,31 @@ public class TachcardPayViewModel extends ViewModel implements Observer<HashMap<
         if (cardNumber.length() < 16 || !checkLuhn(digits)) {
             setError.postValue(errorCardNumberCode);
             showProgressStatus.postValue(false);
-            return null;
+            return;
         }
         if (Integer.parseInt(mm) < 1 || Integer.parseInt(mm) > 12 || mm.length() != 2) {
             setError.postValue(errorMM_YYCode);
             showProgressStatus.postValue(false);
-            return null;
+            return;
         }
         if (cvv.length() != 3) {
             setError.postValue(errorCVVCode);
             showProgressStatus.postValue(false);
-            return null;
+            return;
         }
         String[] regions = new String[]{"cherkasy", "smela", "kanev", "zoloto", "ph", "vatutino", "zven"};
         String baseUrl = context.getString(R.string.payment_baseUrl);
         baseUrl += regions[userData.getCity()];
         baseUrl += "?&amount=" + summ + "&account=" + userData.getAccount();
-        return repo.getPaymentRedirection(baseUrl, cardNumber, mm, yy, cvv).getValue();
+        repo.getPaymentRedirection(baseUrl, cardNumber, mm, yy, cvv);
+        Repository.getInstance().getMapUsersCharacteristic().removeObserver(this);
     }
+
+    public void redirect(MutableLiveData<Document> resultMLD) {
+        Document result = resultMLD.getValue();
+        TachcardPayActivity.getInstance().redirect(result.location(), result.html());
+    }
+
 
     private boolean checkLuhn(int[] digits) {
         int sum = 0;
