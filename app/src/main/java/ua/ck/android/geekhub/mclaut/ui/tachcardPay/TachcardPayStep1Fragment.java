@@ -11,7 +11,9 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import org.jsoup.nodes.Document;
 
@@ -44,6 +46,10 @@ public class TachcardPayStep1Fragment extends Fragment {
     TextInputLayout yyTIL;
     @BindView(R.id.fragment_tachcard_pay_select_card_image_button)
     ImageButton selectCardButton;
+    @BindView(R.id.fragment_tachcard_pay_save_card_checkbox)
+    CheckBox saveCardCB;
+    @BindView(R.id.fragment_tachcard_pay_save_card_text)
+    TextView saveCardT;
     @BindView(R.id.tachcard_pay_confirm)
     CircularProgressButton confirmCPB;
     private TachcardPayViewModel viewModel;
@@ -100,6 +106,11 @@ public class TachcardPayStep1Fragment extends Fragment {
         String yy = yyTIEL.getText().toString();
         String cvv = cvvTIEL.getText().toString();
         viewModel.pay(getContext(), summ, cardNumber, mm, yy, cvv);
+    }
+
+    @OnClick(R.id.fragment_tachcard_pay_save_card_text)
+    public void changeCheckBox() {
+        saveCardCB.setChecked(!saveCardCB.isChecked());
     }
 
     public void showProgress() {
