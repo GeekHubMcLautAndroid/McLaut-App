@@ -74,19 +74,18 @@ public class Repository {
                                 @Override
                                 public void onChanged(@Nullable UserCharacteristic userCharacteristic) {
                                     if((   userCharacteristic.getInfo() != null)
-                                        &&(userCharacteristic.getConnections() != null)
                                         &&(userCharacteristic.getPaymentsTransactions() != null)
                                         &&(userCharacteristic.getWithdrawalsTransactions() != null)) {
                                         HashMap currentMap;
+
                                         if(mapUsersCharacteristic.getValue() == null) {
                                             currentMap = new HashMap<String, UserCharacteristic>();
-                                            currentMap.put(userId, userCharacteristic);
-                                            mapUsersCharacteristic.postValue(currentMap);
                                         } else {
                                             currentMap = mapUsersCharacteristic.getValue();
-                                            currentMap.put(userId, userCharacteristic);
-                                            mapUsersCharacteristic.postValue(currentMap);
                                         }
+
+                                        currentMap.put(userId, userCharacteristic);
+                                        mapUsersCharacteristic.postValue(currentMap);
                                         mutableLiveData.removeObserver(this);
                                     }
                                 }
@@ -134,7 +133,7 @@ public class Repository {
             @Override
             public void onChanged(@Nullable List<UserConnectionsInfo> userConnectionsInfo) {
                 if (userConnectionInfo != null) {
-                    userCharacteristic.setConnections(userConnectionsInfo);
+                    userCharacteristic.getInfo().setUserConnectionsInfoList(userConnectionsInfo);
                     request.postValue(userCharacteristic);
                     userConnectionInfo.removeObserver(this);
                 }
@@ -177,7 +176,7 @@ public class Repository {
         iObserver.observeForever(new Observer<Integer>() {
             @Override
             public void onChanged(@Nullable Integer integer) {
-                if (integer >= ALL_FIELDS_UPDATED) {
+                if (integer == ALL_FIELDS_UPDATED) {
 
                     HashMap currentMap = mapUsersCharacteristic.getValue();
 
@@ -301,7 +300,7 @@ public class Repository {
 
     private void insertUserConnectionInfoToDatabase(final List<UserConnectionsInfo> userConnectionsInfoList){
 
-        userCharacteristicForMap.setConnections(userConnectionsInfoList);
+        userCharacteristicForMap.getInfo().setUserConnectionsInfoList(userConnectionsInfoList);
 
         if(iObserver.getValue() == null) {
             iObserver.setValue(ADD_NEW_FIELD);

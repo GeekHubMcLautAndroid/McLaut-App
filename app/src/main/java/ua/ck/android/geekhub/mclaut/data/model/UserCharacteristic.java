@@ -10,8 +10,6 @@ public class UserCharacteristic {
 
     private UserInfoEntity info;
 
-    private List<UserConnectionsInfo> connections;
-
     private List<CashTransactionsEntity> paymentsTransactions;
     private List<CashTransactionsEntity> withdrawalsTransactions;
 
@@ -20,12 +18,10 @@ public class UserCharacteristic {
     }
 
     public UserCharacteristic(UserInfoEntity info,
-                              List<UserConnectionsInfo> connections,
                               List<CashTransactionsEntity> paymentsTransactions,
                               List<CashTransactionsEntity> withdrawalsTransactions) {
 
         this.info = info;
-        this.connections = connections;
         this.paymentsTransactions = paymentsTransactions;
         this.withdrawalsTransactions = withdrawalsTransactions;
     }
@@ -36,13 +32,6 @@ public class UserCharacteristic {
     }
     public UserInfoEntity getInfo() {
         return info;
-    }
-
-    public void setConnections(List<UserConnectionsInfo> connections) {
-        this.connections = connections;
-    }
-    public List<UserConnectionsInfo> getConnections() {
-        return connections;
     }
 
     public void setPaymentsTransactions(List<CashTransactionsEntity> paymentsTransactions) {
