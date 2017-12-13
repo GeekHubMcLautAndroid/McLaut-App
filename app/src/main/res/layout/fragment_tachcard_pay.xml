@@ -12,7 +12,7 @@
         android:id="@+id/fragment_tachcard_pay_summ_text_input_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/payment_card_number">
+        android:hint="@string/payment_replenishment_amount">
 
         <android.support.design.widget.TextInputEditText
             android:id="@+id/fragment_tachcard_pay_summ_text_input_edit_text"

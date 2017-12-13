@@ -22,6 +22,7 @@ public class TachcardPayViewModel extends ViewModel implements Observer<HashMap<
     private UserInfoEntity userData;
     private MutableLiveData<Boolean> showProgressStatus = new MutableLiveData<>();
     private MutableLiveData<Integer> setError = new MutableLiveData<>();
+    private MutableLiveData<Document> redirectDocument = new MutableLiveData<>();
     private Repository repo = Repository.getInstance();
     int errorMinimumRefungCode = 0;
     int errorCardNumberCode = 1;
@@ -41,6 +42,10 @@ public class TachcardPayViewModel extends ViewModel implements Observer<HashMap<
 
     MutableLiveData<Integer> getSetError() {
         return setError;
+    }
+
+    public MutableLiveData<Document> getRedirectDocument() {
+        return redirectDocument;
     }
 
     public TachcardPayViewModel() {
@@ -83,13 +88,12 @@ public class TachcardPayViewModel extends ViewModel implements Observer<HashMap<
         String baseUrl = context.getString(R.string.payment_baseUrl);
         baseUrl += regions[userData.getCity()];
         baseUrl += "?&amount=" + summ + "&account=" + userData.getAccount();
-        repo.getPaymentRedirection(baseUrl, cardNumber, mm, yy, cvv);
+        repo.getPaymentRedirection(redirectDocument,baseUrl, cardNumber, mm, yy, cvv);
         Repository.getInstance().getMapUsersCharacteristic().removeObserver(this);
     }
 
-    public void redirect(MutableLiveData<Document> resultMLD) {
-        Document result = resultMLD.getValue();
-        TachcardPayActivity.getInstance().redirect(result.location(), result.html());
+    public void redirect(Document result) {
+        redirectDocument.postValue(result);
     }
 
 

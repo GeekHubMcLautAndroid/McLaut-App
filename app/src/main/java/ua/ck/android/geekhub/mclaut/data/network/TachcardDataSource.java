@@ -19,7 +19,7 @@ import ua.ck.android.geekhub.mclaut.data.Repository;
  * Created by Nimolee on 26-Nov-17.
  */
 
-public class TachcardDataSource implements Observer<Document> {
+public class TachcardDataSource {
     private static TachcardDataSource instance;
     MutableLiveData<Document> resultMLD;
 
@@ -30,23 +30,10 @@ public class TachcardDataSource implements Observer<Document> {
         return instance;
     }
 
-    public TachcardDataSource() {
-        resultMLD = new MutableLiveData<>();
-        resultMLD.observeForever(this);
-    }
-
-    public void pay(String... strings) {
+    public void pay(MutableLiveData<Document> redirectDocument, String... strings) {
         NetworkThread network = new NetworkThread();
+        resultMLD = redirectDocument;
         network.execute(strings);
-    }
-
-    @Override
-    public void onChanged(@Nullable Document document) {
-        if (document != null) {
-            resultMLD.postValue(document);
-            Repository.getInstance().returnPaymentRedirection(resultMLD);
-            resultMLD.removeObserver(this);
-        }
     }
 
     class NetworkThread extends AsyncTask<String, Void, Void> {

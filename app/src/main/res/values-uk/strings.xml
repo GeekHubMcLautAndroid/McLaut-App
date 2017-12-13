@@ -29,4 +29,5 @@
     <string name="payment_save_card">Зберегти карту.</string>
     <string name="error_minimum_refung">Мінімальна сума поповнення 5 грн.</string>
     <string name="error_card_number">Невірний формат карти.</string>
+    <string name="payment_replenishment_amount">Сума поповнення</string>
 </resources>

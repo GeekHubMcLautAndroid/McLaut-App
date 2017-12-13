@@ -48,6 +48,10 @@ public class TachcardPayStep1Fragment extends Fragment {
     CircularProgressButton confirmCPB;
     private TachcardPayViewModel viewModel;
 
+    public interface OnPaymentRedirect {
+        void redirect(String location, String html);
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -81,6 +85,10 @@ public class TachcardPayStep1Fragment extends Fragment {
                     break;
             }
         });
+        viewModel.getRedirectDocument().observe(this, document -> {
+            OnPaymentRedirect paymentRedirectListener = (OnPaymentRedirect) getActivity();
+            paymentRedirectListener.redirect(document.location(), document.html());
+        });
         return rootView;
     }
 
@@ -91,12 +99,12 @@ public class TachcardPayStep1Fragment extends Fragment {
         String mm = mmTIEL.getText().toString();
         String yy = yyTIEL.getText().toString();
         String cvv = cvvTIEL.getText().toString();
-        viewModel.pay(getContext(),summ, cardNumber, mm, yy, cvv);
+        viewModel.pay(getContext(), summ, cardNumber, mm, yy, cvv);
     }
-
 
     public void showProgress() {
         confirmCPB.startAnimation();
+        summTIEL.setEnabled(false);
         selectCardButton.setEnabled(false);
         cardNumberTIET.setEnabled(false);
         mmTIEL.setEnabled(false);
@@ -106,12 +114,11 @@ public class TachcardPayStep1Fragment extends Fragment {
 
     public void hideProgress() {
         confirmCPB.revertAnimation();
+        summTIEL.setEnabled(true);
         selectCardButton.setEnabled(true);
         cardNumberTIET.setEnabled(true);
         mmTIEL.setEnabled(true);
         yyTIEL.setEnabled(true);
         cvvTIEL.setEnabled(true);
     }
-
-
 }
