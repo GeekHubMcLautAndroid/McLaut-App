@@ -308,17 +308,16 @@ public class Repository {
             iObserver.setValue(iObserver.getValue() + ADD_NEW_FIELD);
         }
 
-        for (Iterator<UserConnectionsInfo> iter = userConnectionsInfoList.iterator();
-                iter.hasNext(); ) {
-            UserConnectionsInfo userConnectionsInfo = iter.next();
-            executor.databaseExecutor()
-                    .execute(() -> {
-                                LocalDatabase.getInstance(
-                                        McLautApplication.getContext()).dao()
-                                        .insertUserConnectionsInfo(userConnectionsInfo);
-                            }
-                    );
-        }
+        executor.databaseExecutor()
+                .execute(() -> {
+                    for (Iterator<UserConnectionsInfo> iter = userConnectionsInfoList.iterator();
+                         iter.hasNext(); ) {
+                        UserConnectionsInfo userConnectionsInfo = iter.next();
+                        LocalDatabase.getInstance(
+                                McLautApplication.getContext()).dao()
+                                .insertUserConnectionsInfo(userConnectionsInfo);
+                    }
+                });
     }
 
 
@@ -332,18 +331,19 @@ public class Repository {
             iObserver.setValue(iObserver.getValue() + ADD_NEW_FIELD);
         }
 
-        for (Iterator<CashTransactionsEntity> iter = paymentsList.getPayments().iterator();
-                iter.hasNext(); ) {
+        executor.databaseExecutor().execute(() -> {
+            for (Iterator<CashTransactionsEntity> iter = paymentsList.getPayments().iterator();
+                 iter.hasNext(); ) {
 
-            CashTransactionsEntity payment = iter.next();
-            payment.setTypeOfTransaction(CashTransactionsEntity.PAYMENTS);
+                CashTransactionsEntity payment = iter.next();
+                payment.setTypeOfTransaction(CashTransactionsEntity.PAYMENTS);
 
-            executor.databaseExecutor().execute(() -> {
-                        LocalDatabase.getInstance(
-                                McLautApplication.getContext()).dao()
-                                .insertCashTransactionsEntities(payment);
-            });
-        }
+                LocalDatabase.getInstance(
+                        McLautApplication.getContext()).dao()
+                        .insertCashTransactionsEntities(payment);
+            }
+        });
+
     }
 
     private void insertWithdrawalsToDatabase(final WithdrawalsListEntity withdrawalsList){
@@ -356,18 +356,18 @@ public class Repository {
             iObserver.setValue(iObserver.getValue() + ADD_NEW_FIELD);
         }
 
-        for (Iterator<CashTransactionsEntity> iter = withdrawalsList.getWithdrawals().iterator();
-             iter.hasNext(); ){
+        executor.databaseExecutor().execute(() -> {
+            for (Iterator<CashTransactionsEntity> iter = withdrawalsList.getWithdrawals().iterator();
+                 iter.hasNext(); ) {
 
-            CashTransactionsEntity withdrawal = iter.next();
-            withdrawal.setTypeOfTransaction(CashTransactionsEntity.WITHDRAWALS);
+                CashTransactionsEntity withdrawal = iter.next();
+                withdrawal.setTypeOfTransaction(CashTransactionsEntity.WITHDRAWALS);
 
-            executor.databaseExecutor().execute(() -> {
                 LocalDatabase.getInstance(
                         McLautApplication.getContext()).dao()
                         .insertCashTransactionsEntities(withdrawal);
-            });
-        }
+            }
+        });
     }
 
     public void deleteUserFromDatabase(UserInfoEntity userInfoEntity){
@@ -479,8 +479,8 @@ public class Repository {
              @Override
              public void onChanged(@Nullable PaymentsListEntity paymentsListEntity) {
                  if(paymentsListEntity.getLocalResCode() == NetworkDataSource.RESPONSE_SUCCESSFUL_CODE ) {
-                     insertPaymentsToDatabase(paymentsListEntity);
                      data.removeObserver(this);
+                     insertPaymentsToDatabase(paymentsListEntity);
                  }
              }
         });
@@ -494,8 +494,8 @@ public class Repository {
              @Override
              public void onChanged(@Nullable WithdrawalsListEntity withdrawalsListEntity) {
                  if(withdrawalsListEntity.getLocalResCode() == NetworkDataSource.RESPONSE_SUCCESSFUL_CODE ) {
-                     insertWithdrawalsToDatabase(withdrawalsListEntity);
                      data.removeObserver(this);
+                     insertWithdrawalsToDatabase(withdrawalsListEntity);
                  }
              }
         });

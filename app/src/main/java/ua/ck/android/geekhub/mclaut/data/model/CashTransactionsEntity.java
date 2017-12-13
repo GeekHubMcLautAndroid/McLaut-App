@@ -16,7 +16,9 @@ import static android.arch.persistence.room.ForeignKey.CASCADE;
         foreignKeys = @ForeignKey(entity = UserInfoEntity.class,
                                         parentColumns = "id",
                                         childColumns = "idClient",
-                                        onDelete = CASCADE))
+                                        onDelete = CASCADE),
+        primaryKeys = {"date","idClient"}
+)
 public class CashTransactionsEntity {
 
     public static final int PAYMENTS = 1;
@@ -24,10 +26,10 @@ public class CashTransactionsEntity {
 
     private int type;
     private int typeOfTransaction;
+    @NonNull
     private Long date;
     private double sum;
     @SerializedName("id_client")
-    @PrimaryKey
     @NonNull
     private String idClient;
     private double sumBefore;

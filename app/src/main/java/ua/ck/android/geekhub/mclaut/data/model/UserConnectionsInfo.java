@@ -14,15 +14,18 @@ import static android.arch.persistence.room.ForeignKey.CASCADE;
  */
 
 @Entity(tableName = "userConnectionsInfo",
-        foreignKeys = @ForeignKey(onDelete = CASCADE,
-                                    entity = UserInfoEntity.class,
-                                             parentColumns = "id",
-                                             childColumns = "idClient"))
+        foreignKeys = @ForeignKey(entity = UserInfoEntity.class,
+                                            parentColumns = "id",
+                                            childColumns = "idClient",
+                                            onDelete = CASCADE),
+        primaryKeys = {"id", "idClient"}
+
+)
 public class UserConnectionsInfo{
 
+    @NonNull
     private String id;
     @SerializedName("id_client")
-    @PrimaryKey
     @NonNull
     private String idClient;
     @SerializedName("is_active")
