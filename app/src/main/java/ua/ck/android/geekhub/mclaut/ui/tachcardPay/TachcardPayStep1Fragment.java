@@ -63,36 +63,30 @@ public class TachcardPayStep1Fragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_tachcard_pay, container, false);
         ButterKnife.bind(this, rootView);
         viewModel = ViewModelProviders.of(this).get(TachcardPayViewModel.class);
-        viewModel.getProgressStatusData().observe(this, new Observer<Boolean>() {
-            @Override
-            public void onChanged(@Nullable Boolean aBoolean) {
-                if (aBoolean) {
-                    showProgress();
-                } else {
-                    hideProgress();
-                }
+        viewModel.getProgressStatusData().observe(this, aBoolean -> {
+            if (aBoolean) {
+                showProgress();
+            } else {
+                hideProgress();
             }
         });
-        viewModel.getSetError().observe(this, new Observer<Integer>() {
-            @Override
-            public void onChanged(@Nullable Integer integer) {
-                switch (integer) {
-                    case 0:
-                        summTIL.setError(getString(R.string.error_minimum_refung));
-                        break;
-                    case 1:
-                        cardNumberTIL.setError(getString(R.string.error_card_number));
-                        break;
-                    case 2:
-                        mmTIL.setErrorEnabled(true);
-                        yyTIL.setErrorEnabled(true);
-                        break;
-                    case 3:
-                        cvvTIL.setErrorEnabled(true);
-                        break;
-                    default:
-                        break;
-                }
+        viewModel.getSetError().observe(this, integer -> {
+            switch (integer) {
+                case 0:
+                    summTIL.setError(getString(R.string.error_minimum_refung));
+                    break;
+                case 1:
+                    cardNumberTIL.setError(getString(R.string.error_card_number));
+                    break;
+                case 2:
+                    mmTIL.setErrorEnabled(true);
+                    yyTIL.setErrorEnabled(true);
+                    break;
+                case 3:
+                    cvvTIL.setErrorEnabled(true);
+                    break;
+                default:
+                    break;
             }
         });
         return rootView;

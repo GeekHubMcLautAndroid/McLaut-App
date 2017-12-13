@@ -19,6 +19,22 @@ import ua.ck.android.geekhub.mclaut.data.model.UserInfoEntity;
 public class TachcardPayViewModel extends ViewModel implements Observer<HashMap<String, UserCharacteristic>> {
 
     private UserInfoEntity userData;
+    private MutableLiveData<Boolean> showProgressStatus = new MutableLiveData<>();
+    private MutableLiveData<Integer> setError = new MutableLiveData<>();
+    private Repository repo = Repository.getInstance();
+    int errorMinimumRefungCode = 0;
+    int errorCardNumberCode = 1;
+    int errorMM_YYCode = 2;
+    int errorCVVCode = 3;
+
+
+    MutableLiveData<Boolean> getProgressStatusData() {
+        return showProgressStatus;
+    }
+
+    MutableLiveData<Integer> getSetError() {
+        return setError;
+    }
 
     public TachcardPayViewModel() {
         Repository.getInstance().getMapUsersCharacteristic().observeForever(this);
@@ -30,23 +46,11 @@ public class TachcardPayViewModel extends ViewModel implements Observer<HashMap<
         userData = characteristic.getInfo();
     }
 
-    private MutableLiveData<Boolean> showProgressStatus = new MutableLiveData<>();
-    private MutableLiveData<Integer> setError = new MutableLiveData<>();
-    private Repository repo = Repository.getInstance();
-
-    public MutableLiveData<Boolean> getProgressStatusData() {
-        return showProgressStatus;
-    }
-
-    public MutableLiveData<Integer> getSetError() {
-        return setError;
-    }
-
-    public Document pay(Context context, String summ, String cardNumber, String mm, String yy, String cvv) {
+    Document pay(Context context, String summ, String cardNumber, String mm, String yy, String cvv) {
         showProgressStatus.postValue(true);
         int[] digits = new int[cardNumber.length()];
         if (Double.parseDouble(summ) < 5) {
-            setError.postValue(0);
+            setError.postValue(errorMinimumRefungCode);
             showProgressStatus.postValue(false);
             return null;
         }
@@ -54,17 +58,17 @@ public class TachcardPayViewModel extends ViewModel implements Observer<HashMap<
             digits[i] = Integer.parseInt(String.valueOf(cardNumber.charAt(i)));
         }
         if (cardNumber.length() < 16 || !checkLuhn(digits)) {
-            setError.postValue(1);
+            setError.postValue(errorCardNumberCode);
             showProgressStatus.postValue(false);
             return null;
         }
         if (Integer.parseInt(mm) < 1 || Integer.parseInt(mm) > 12 || mm.length() != 2) {
-            setError.postValue(2);
+            setError.postValue(errorMM_YYCode);
             showProgressStatus.postValue(false);
             return null;
         }
         if (cvv.length() != 3) {
-            setError.postValue(3);
+            setError.postValue(errorCVVCode);
             showProgressStatus.postValue(false);
             return null;
         }
