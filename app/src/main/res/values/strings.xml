@@ -42,4 +42,5 @@
     <string name="its_left_label">Its left</string>
     <string name="days_of_service_label">days of service provision</string>
     <string name="uah_symbol">₴</string>
+    <string name="payment_baseUrl">https://user.tachcard.com/uk/pay-mclaut</string>
 </resources>

@@ -1,13 +1,35 @@
 package ua.ck.android.geekhub.mclaut.ui.tachcardPay;
 
 import android.arch.lifecycle.MutableLiveData;
+import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModel;
+import android.content.Context;
+import android.support.annotation.Nullable;
 
 import org.jsoup.nodes.Document;
 
-import ua.ck.android.geekhub.mclaut.data.Repository;
+import java.util.HashMap;
 
-public class TachcardPayViewModel extends ViewModel {
+import ua.ck.android.geekhub.mclaut.R;
+import ua.ck.android.geekhub.mclaut.app.McLautApplication;
+import ua.ck.android.geekhub.mclaut.data.Repository;
+import ua.ck.android.geekhub.mclaut.data.model.UserCharacteristic;
+import ua.ck.android.geekhub.mclaut.data.model.UserInfoEntity;
+
+public class TachcardPayViewModel extends ViewModel implements Observer<HashMap<String, UserCharacteristic>> {
+
+    private UserInfoEntity userData;
+
+    public TachcardPayViewModel() {
+        Repository.getInstance().getMapUsersCharacteristic().observeForever(this);
+    }
+
+    @Override
+    public void onChanged(@Nullable HashMap<String, UserCharacteristic> stringUserCharacteristicHashMap) {
+        UserCharacteristic characteristic = stringUserCharacteristicHashMap.get(McLautApplication.getSelectedUser());
+        userData = characteristic.getInfo();
+    }
+
     private MutableLiveData<Boolean> showProgressStatus = new MutableLiveData<>();
     private MutableLiveData<Integer> setError = new MutableLiveData<>();
     private Repository repo = Repository.getInstance();
@@ -20,9 +42,8 @@ public class TachcardPayViewModel extends ViewModel {
         return setError;
     }
 
-    public Document pay(String summ, String cardNumber, String mm, String yy, String cvv) {
+    public Document pay(Context context, String summ, String cardNumber, String mm, String yy, String cvv) {
         showProgressStatus.postValue(true);
-        int userRegion = 0; //TODO:write get user region from bd;
         int[] digits = new int[cardNumber.length()];
         if (Double.parseDouble(summ) < 5) {
             setError.postValue(0);
@@ -32,7 +53,7 @@ public class TachcardPayViewModel extends ViewModel {
         for (int i = 0; i < digits.length; i++) {
             digits[i] = Integer.parseInt(String.valueOf(cardNumber.charAt(i)));
         }
-        if (cardNumber.length() < 16 || checkLuhn(digits)) {
+        if (cardNumber.length() < 16 || !checkLuhn(digits)) {
             setError.postValue(1);
             showProgressStatus.postValue(false);
             return null;
@@ -47,24 +68,10 @@ public class TachcardPayViewModel extends ViewModel {
             showProgressStatus.postValue(false);
             return null;
         }
-        String baseUrl = "https://user.tachcard.com/uk/pay-mclaut";
-        switch (userRegion) {
-            case 0:
-                baseUrl += "cherkasy";
-            case 1:
-                baseUrl += "smela";
-            case 2:
-                baseUrl += "kanev";
-            case 3:
-                baseUrl += "zoloto";
-            case 4:
-                baseUrl += "ph";
-            case 5:
-                baseUrl += "vatutino";
-            case 6:
-                baseUrl += "zven";
-        }
-        baseUrl += "?&amount=" + summ + "&account="; //TODO:write get account;
+        String[] regions = new String[]{"cherkasy", "smela", "kanev", "zoloto", "ph", "vatutino", "zven"};
+        String baseUrl = context.getString(R.string.payment_baseUrl);
+        baseUrl += regions[userData.getCity()];
+        baseUrl += "?&amount=" + summ + "&account=" + userData.getAccount();
         return repo.getPaymentRedirection(baseUrl, cardNumber, mm, yy, cvv).getValue();
     }
 

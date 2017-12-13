@@ -105,7 +105,7 @@ public class TachcardPayStep1Fragment extends Fragment {
         String mm = mmTIEL.getText().toString();
         String yy = yyTIEL.getText().toString();
         String cvv = cvvTIEL.getText().toString();
-        Document result = viewModel.pay(summ, cardNumber, mm, yy, cvv);
+        Document result = viewModel.pay(getContext(),summ, cardNumber, mm, yy, cvv);
         if (result != null) {
             paymentRedirectListener.redirect(result.location(), result.html());
         }
