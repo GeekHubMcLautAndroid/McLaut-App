@@ -3,7 +3,6 @@ package ua.ck.android.geekhub.mclaut.ui;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
@@ -23,13 +22,10 @@ import java.util.HashMap;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ua.ck.android.geekhub.mclaut.R;
-import ua.ck.android.geekhub.mclaut.app.McLautApplication;
-import ua.ck.android.geekhub.mclaut.data.Repository;
-import ua.ck.android.geekhub.mclaut.data.model.UserCharacteristic;
+import ua.ck.android.geekhub.mclaut.ui.cashTransactions.CashTransactionsFragment;
 import ua.ck.android.geekhub.mclaut.ui.settings.SettingsFragment;
 import ua.ck.android.geekhub.mclaut.ui.tachcardPay.TachcardPayActivity;
 import ua.ck.android.geekhub.mclaut.ui.userInfo.UserInfoFragment;
-import ua.ck.android.geekhub.mclaut.ui.withdrawalsInfo.WithdrawalsInfoFragment;
 
 public class MainActivity extends AppCompatActivity implements Observer<HashMap<String,String>> {
     @BindView(R.id.drawer_layout)
@@ -114,7 +110,7 @@ public class MainActivity extends AppCompatActivity implements Observer<HashMap<
         Class fragmentClass;
         switch (idActiveFragment) {
             case R.id.cash_operations:
-                fragmentClass = WithdrawalsInfoFragment.class;
+                fragmentClass = CashTransactionsFragment.class;
                 break;
             case R.id.general_information_fragment:
                 fragmentClass = UserInfoFragment.class;

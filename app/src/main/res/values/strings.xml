@@ -41,5 +41,11 @@
     <string name="account_number_label">Account number: </string>
     <string name="its_left_label">Its left</string>
     <string name="days_of_service_label">days of service provision</string>
-    <string name="uah_symbol">₴</string>
+    <string name="uah_symbol" translatable="false">₴</string>
+
+    <!--User transactions info fragment-->
+    <string name="label_tab_withdrawals">Withdrawals</string>
+    <string name="label_tab_payments">Payments</string>
+    <string name="label_tab_all">All</string>
+
 </resources>

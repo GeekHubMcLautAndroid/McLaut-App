@@ -1,5 +1,6 @@
 package ua.ck.android.geekhub.mclaut.ui.userInfo;
 
+import android.annotation.SuppressLint;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -45,6 +47,7 @@ public class UserInfoFragment extends Fragment implements SwipeRefreshLayout.OnR
     private RecyclerView.LayoutManager layoutManager;
     private UserInfoViewModel viewModel = new UserInfoViewModel();
 
+    @SuppressLint("ClickableViewAccessibility")
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -55,6 +58,9 @@ public class UserInfoFragment extends Fragment implements SwipeRefreshLayout.OnR
 
         layoutManager = new LinearLayoutManager(getActivity());
         connectionsRecycler.setLayoutManager(layoutManager);
+
+        //disable recyclerview scroll
+        connectionsRecycler.setOnTouchListener((view, motionEvent) -> true);
 
         viewModel.getUserData().observe(this, new Observer<UserInfoEntity>() {
             @Override
