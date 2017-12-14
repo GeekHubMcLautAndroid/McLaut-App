@@ -4,10 +4,12 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import butterknife.BindView;
 import ua.ck.android.geekhub.mclaut.R;
 
 public class TransactionsInfoFragment extends Fragment {
@@ -18,6 +20,8 @@ public class TransactionsInfoFragment extends Fragment {
 
     private TransactionsInfoViewModel viewModel;
 
+    @BindView(R.id.fragment_transactions_info_recycler_view)
+    RecyclerView mainRecyclerView;
 
     @Nullable
     @Override

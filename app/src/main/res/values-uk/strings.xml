@@ -32,6 +32,11 @@
     <string name="label_tab_withdrawals">Зняття</string>
     <string name="label_tab_payments">Поповнення</string>
     <string name="label_tab_all">Всі</string>
+    <string name="label_transaction_type_payment">Поповнення</string>
+    <string name="label_transaction_type_withdraw">Зняття</string>
+    <string name="label_pay_type_other">Інше</string>
+    <string name="label_pay_type_pay_at_day">Оплата за добу</string>
+    <string name="label_pay_type_terminal">Через термінал</string>
 
 
 </resources>
