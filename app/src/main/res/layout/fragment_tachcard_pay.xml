@@ -12,7 +12,8 @@
         android:id="@+id/fragment_tachcard_pay_summ_text_input_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/payment_replenishment_amount">
+        android:hint="@string/payment_replenishment_amount"
+        android:nextFocusDown="@id/fragment_tachcard_pay_card_number_text_input_edit_text">
 
         <android.support.design.widget.TextInputEditText
             android:id="@+id/fragment_tachcard_pay_summ_text_input_edit_text"
@@ -40,7 +41,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="number"
-                android:maxLength="16" />
+                android:maxLength="16"
+                android:nextFocusDown="@id/fragment_tachcard_pay_mm_text_input_edit_text"/>
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.VisibilityAwareImageButton
@@ -69,7 +71,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="number"
-                android:maxLength="2" />
+                android:maxLength="2"
+                android:nextFocusDown="@id/fragment_tachcard_pay_yy_text_input_edit_text"/>
         </android.support.design.widget.TextInputLayout>
 
         <TextView
@@ -90,7 +93,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="number"
-                android:maxLength="2" />
+                android:maxLength="2"
+                android:nextFocusDown="@id/fragment_tachcard_pay_cvv_text_input_edit_text" />
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
