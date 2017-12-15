@@ -18,6 +18,7 @@
     <string name="cash_operations">Cash operations</string>
     <string name="settings">Settings</string>
     <string name="payment">Payment</string>
+    <string name="add_new_user">Add Account</string>
 
     <!--Payment strings-->
     <string name="payment_next">Next</string>
@@ -48,4 +49,6 @@
     <string name="label_tab_payments">Payments</string>
     <string name="label_tab_all">All</string>
 
+    <string name="enable_user_list">_user_list</string>
+    <string name="enable_info">_user_info</string>
 </resources>

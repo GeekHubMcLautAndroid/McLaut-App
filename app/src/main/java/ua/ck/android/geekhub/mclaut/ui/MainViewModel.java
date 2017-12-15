@@ -5,6 +5,7 @@ import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModel;
 import android.content.SharedPreferences;
 import android.support.annotation.Nullable;
+import android.util.Pair;
 
 import java.util.HashMap;
 
@@ -13,7 +14,7 @@ import ua.ck.android.geekhub.mclaut.data.Repository;
 import ua.ck.android.geekhub.mclaut.data.model.UserCharacteristic;
 
 public class MainViewModel extends ViewModel implements SharedPreferences.OnSharedPreferenceChangeListener {
-    private MutableLiveData<HashMap<String,String>> userIdAndName = new MutableLiveData<>();
+    private MutableLiveData<Pair<String, String>> userIdAndName = new MutableLiveData<>();
 
     public MainViewModel() {
         Repository.getInstance().getMapUsersCharacteristic().observeForever(new Observer<HashMap<String, UserCharacteristic>>() {
@@ -28,7 +29,7 @@ public class MainViewModel extends ViewModel implements SharedPreferences.OnShar
         McLautApplication.getPreferences().registerOnSharedPreferenceChangeListener(this);
     }
 
-    public MutableLiveData<HashMap<String, String>> getUserIdAndName() {
+    public MutableLiveData<Pair<String, String>> getUserIdAndName() {
         return userIdAndName;
     }
 
@@ -45,12 +46,15 @@ public class MainViewModel extends ViewModel implements SharedPreferences.OnShar
             }
         }
     }
-    private void postCurrentUserLiveData(UserCharacteristic currUser){
-        HashMap<String,String> res = new HashMap<>();
-        res.put("id", McLautApplication.getSelectedUser());
-        res.put("name",currUser.
-                getInfo().
-                getName());
-        userIdAndName.postValue(res);
+
+    private void postCurrentUserLiveData(UserCharacteristic userCharacteristic){
+        if(userCharacteristic.getInfo() != null) {
+            Pair<String, String> res = new Pair<>(
+                    userCharacteristic.getInfo().getId(),
+                    userCharacteristic.getInfo().getName()
+
+            );
+            userIdAndName.postValue(res);
+        }
     }
 }

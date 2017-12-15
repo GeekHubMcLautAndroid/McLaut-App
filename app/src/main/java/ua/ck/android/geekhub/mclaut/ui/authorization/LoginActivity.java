@@ -30,6 +30,7 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher {
     public static final int RESPONSE_FAILTURE_CODE = -100;
     public static final int RESPONSE_SUCCESSFUL_CODE = 1;
     public static final int RESPONSE_BAD_RESULT_CODE = 0;
+    public static final String ADD_NEW_USER = "_add_new_user";
 
     @BindView(R.id.login_activity_city_spinner)
     Spinner cityesSpinner;
@@ -52,9 +53,11 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher {
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
 
-        if(!McLautApplication.getSelectedUser().equals("NULL")){
+        if(!McLautApplication.getSelectedUser().equals("NULL")
+                && !(this.getIntent().getBooleanExtra(ADD_NEW_USER, false))) {
             Intent intent = new Intent(LoginActivity.this,
                     MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
             finish();
         }
@@ -84,6 +87,7 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher {
                                 if(aBoolean){
                                     Intent intent = new Intent(LoginActivity.this,
                                             MainActivity.class);
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                     startActivity(intent);
                                     finish();
                                 }

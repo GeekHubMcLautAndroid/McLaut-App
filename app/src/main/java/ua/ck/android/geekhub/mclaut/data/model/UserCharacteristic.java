@@ -47,6 +47,4 @@ public class UserCharacteristic {
     public List<CashTransactionsEntity> getWithdrawalsTransactions() {
         return withdrawalsTransactions;
     }
-
-
 }

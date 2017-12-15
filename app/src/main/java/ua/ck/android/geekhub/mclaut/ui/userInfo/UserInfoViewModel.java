@@ -32,6 +32,6 @@ public class UserInfoViewModel extends ViewModel implements Observer<HashMap<Str
     }
 
     void refreshData(){
-        Repository.getInstance().refreshUserDataInDatabase(McLautApplication.getSelectedUser());
+        Repository.getInstance().refreshUserInfo(McLautApplication.getSelectedUser());
     }
 }

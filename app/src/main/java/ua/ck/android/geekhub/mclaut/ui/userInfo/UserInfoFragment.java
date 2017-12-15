@@ -65,8 +65,10 @@ public class UserInfoFragment extends Fragment implements SwipeRefreshLayout.OnR
         viewModel.getUserData().observe(this, new Observer<UserInfoEntity>() {
             @Override
             public void onChanged(@Nullable UserInfoEntity userInfoEntity) {
-                setUserData(userInfoEntity);
-                refreshLayout.setRefreshing(false);
+                if(userInfoEntity != null) {
+                    setUserData(userInfoEntity);
+                    refreshLayout.setRefreshing(false);
+                }
             }
         });
 

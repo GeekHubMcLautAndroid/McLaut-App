@@ -34,8 +34,6 @@ public class Repository {
     private String refresherCertificate;
     private int refresherCity;
 
-    private String userIdForPuttingToMap;
-
     private UserCharacteristic userCharacteristicForMap = new UserCharacteristic();
     private MutableLiveData<Integer> iObserver = new MutableLiveData<>();
 
@@ -65,28 +63,30 @@ public class Repository {
                 @Override
                 public void onChanged(@Nullable List<String> usersId) {
                     if(usersId != null) {
-                        for(Iterator<String> iter = usersId.iterator(); iter.hasNext(); ){
+                        HashMap currentMap;
 
-                            String userId = iter.next();
+                        if(mapUsersCharacteristic.getValue() == null) {
+                            currentMap = new HashMap<String, UserCharacteristic>();
+                        } else {
+                            currentMap = mapUsersCharacteristic.getValue();
+                        }
+                        for(Iterator<String> iter = usersId.iterator(); iter.hasNext(); ){
+                            String currentUserId = iter.next();
+
                             MutableLiveData<UserCharacteristic> mutableLiveData
-                                    = getUserCharacteristics(userId);
+                                    = findUserCharactistics(currentUserId);
                             mutableLiveData.observeForever(new Observer<UserCharacteristic>() {
                                 @Override
                                 public void onChanged(@Nullable UserCharacteristic userCharacteristic) {
-                                    if((   userCharacteristic.getInfo() != null)
-                                        &&(userCharacteristic.getPaymentsTransactions() != null)
-                                        &&(userCharacteristic.getWithdrawalsTransactions() != null)) {
-                                        HashMap currentMap;
-
-                                        if(mapUsersCharacteristic.getValue() == null) {
-                                            currentMap = new HashMap<String, UserCharacteristic>();
-                                        } else {
-                                            currentMap = mapUsersCharacteristic.getValue();
-                                        }
-
-                                        currentMap.put(userId, userCharacteristic);
-                                        mapUsersCharacteristic.postValue(currentMap);
+                                    if((userCharacteristic.getInfo() != null)
+                                            &&(userCharacteristic.getPaymentsTransactions() != null)
+                                            &&(userCharacteristic.getWithdrawalsTransactions() != null)) {
+                                        currentMap.put(currentUserId ,userCharacteristic);
                                         mutableLiveData.removeObserver(this);
+
+                                        if(currentMap.size() == usersId.size()){
+                                            mapUsersCharacteristic.postValue(currentMap);
+                                        }
                                     }
                                 }
                             });
@@ -98,7 +98,11 @@ public class Repository {
 
     }
 
-    private MutableLiveData<UserCharacteristic> getUserCharacteristics(String userId) {
+    private void getUserCharacteristics(String userId, int userIdListSize){
+
+    }
+
+    private MutableLiveData<UserCharacteristic> findUserCharactistics(String userId) {
 
         UserCharacteristic userCharacteristic = new UserCharacteristic();
 
@@ -163,35 +167,6 @@ public class Repository {
         });
 
         return request;
-    }
-
-    private void putOrReplaceUserCharacteristics(String userId, UserCharacteristic userCharacteristic) {
-        userIdForPuttingToMap = userId;
-        userCharacteristicForMap = userCharacteristic;
-        putOrReplaceUserCharacteristics();
-    }
-
-    private void putOrReplaceUserCharacteristics(){
-
-        iObserver.observeForever(new Observer<Integer>() {
-            @Override
-            public void onChanged(@Nullable Integer integer) {
-                if (integer == ALL_FIELDS_UPDATED) {
-
-                    HashMap currentMap = mapUsersCharacteristic.getValue();
-
-                    if (currentMap == null) {
-                        currentMap = new HashMap<String, UserCharacteristic>();
-                    }
-
-                    currentMap.put(userIdForPuttingToMap, userCharacteristicForMap);
-                    mapUsersCharacteristic.postValue(currentMap);
-                    iObserver.removeObserver(this);
-                    iObserver.postValue(NON_FIELDS_UPDATED);
-                }
-            }
-        });
-
     }
 
     private MutableLiveData<UserInfoEntity> getUserInfo(String userId){
@@ -310,12 +285,14 @@ public class Repository {
 
         executor.databaseExecutor()
                 .execute(() -> {
-                    for (Iterator<UserConnectionsInfo> iter = userConnectionsInfoList.iterator();
-                         iter.hasNext(); ) {
-                        UserConnectionsInfo userConnectionsInfo = iter.next();
-                        LocalDatabase.getInstance(
-                                McLautApplication.getContext()).dao()
-                                .insertUserConnectionsInfo(userConnectionsInfo);
+                    if (userConnectionsInfoList != null) {
+                        for (Iterator<UserConnectionsInfo> iter = userConnectionsInfoList.iterator();
+                             iter.hasNext(); ) {
+                            UserConnectionsInfo userConnectionsInfo = iter.next();
+                            LocalDatabase.getInstance(
+                                    McLautApplication.getContext()).dao()
+                                    .insertUserConnectionsInfo(userConnectionsInfo);
+                        }
                     }
                 });
     }
@@ -370,14 +347,6 @@ public class Repository {
         });
     }
 
-    public void deleteUserFromDatabase(UserInfoEntity userInfoEntity){
-        executor.databaseExecutor().execute(() ->{
-            LocalDatabase.getInstance(
-                    McLautApplication.getContext()).dao()
-                    .deleteUserInfo(userInfoEntity);
-        });
-    }
-
     public void deleteUserFromDatabase(String userId){
         executor.databaseExecutor().execute(() ->{
             LocalDatabase.getInstance(
@@ -397,7 +366,6 @@ public class Repository {
     public MutableLiveData<LoginResultInfo> addNewUserToDatabase(String login, String password, int city){
         
         refresherCity = city;
-        putOrReplaceUserCharacteristics();
 
         MutableLiveData<LoginResultInfo> data = NetworkDataSource.getInstance().checkLogin(login,password,city);
 
@@ -405,9 +373,10 @@ public class Repository {
             @Override
             public void onChanged(@Nullable LoginResultInfo loginResultInfo) {
                 if (loginResultInfo.getResultCode() == NetworkDataSource.RESPONSE_SUCCESSFUL_CODE) {
-
-                    Repository.getInstance().refresherCertificate = loginResultInfo.getCertificate();
-                    findUserInfoInInternet();
+                    if (!loginResultInfo.getCertificate().equals("0")) {
+                        refresherCertificate = loginResultInfo.getCertificate();
+                        findUserInfoInInternet();
+                    }
                     data.removeObserver(this);
                 }
             }
@@ -416,6 +385,7 @@ public class Repository {
     }
 
     private void findUserInfoInInternet() {
+
         MutableLiveData<UserInfoEntity> data = NetworkDataSource.
                 getInstance().getUserInfo(refresherCertificate, refresherCity);
 
@@ -423,13 +393,16 @@ public class Repository {
                 @Override
                 public void onChanged(@Nullable UserInfoEntity userInfoEntity) {
                     if (userInfoEntity.getLocalResCode() == NetworkDataSource.RESPONSE_SUCCESSFUL_CODE) {
-                        Repository.getInstance().userIdForPuttingToMap = userInfoEntity.getId();
 
-                        McLautApplication.selectUser(userInfoEntity.getId());
+                        userInfoEntity.setCertificate(refresherCertificate);
+                        userInfoEntity.setCity(refresherCity);
 
-                        putUserInfoToDatabase(userInfoEntity);
+                        iObserver.setValue(NON_FIELDS_UPDATED);
+                        putOrReplaceUserCharacteristics();
+
+                        insertUserInfoToDatabase(userInfoEntity);
                         insertUserConnectionInfoToDatabase(userInfoEntity.getUserConnectionsInfoList());
-                        refreshUserCashTransactions();
+                        findUserCashTransactions();
 
                         data.removeObserver(this);
                     }
@@ -437,21 +410,30 @@ public class Repository {
             });
     }
 
-    private void putUserInfoToDatabase(UserInfoEntity userInfoEntity){
-        userInfoEntity.setCertificate(Repository.getInstance().refresherCertificate);
-        userInfoEntity.setCity(Repository.getInstance().refresherCity);
-        insertUserInfoToDatabase(userInfoEntity);
+    private void putOrReplaceUserCharacteristics(){
+        iObserver.observeForever(new Observer<Integer>() {
+            @Override
+            public void onChanged(@Nullable Integer integer) {
+                if (integer == ALL_FIELDS_UPDATED) {
+
+                    McLautApplication.selectUser(userCharacteristicForMap.getInfo().getId());
+
+                    HashMap currentMap = mapUsersCharacteristic.getValue();
+                    if (currentMap == null) {
+                        currentMap = new HashMap<String, UserCharacteristic>();
+                    }
+                    currentMap.put(userCharacteristicForMap.getInfo().getId(), userCharacteristicForMap);
+                    userCharacteristicForMap = new UserCharacteristic();
+
+                    mapUsersCharacteristic.postValue(currentMap);
+
+                    iObserver.removeObserver(this);
+                }
+            }
+        });
     }
 
-
-    public void refreshUserDataInDatabase(String userId){
-        userIdForPuttingToMap = userId;
-        refreshUserInfo(userId);
-        refreshUserCashTransactions();
-        putOrReplaceUserCharacteristics();
-    }
-
-    private void refreshUserInfo(String userId){
+    public void refreshUserInfo(String userId){
 
         executor.databaseExecutor()
                 .execute(() -> {
@@ -466,12 +448,12 @@ public class Repository {
                 });
     }
 
-    private void refreshUserCashTransactions(){
-        refreshPayments();
-        refreshWithdrawals();
+    private void findUserCashTransactions(){
+        findPayments();
+        findWithdrawals();
     }
 
-    private void refreshPayments(){
+    private void findPayments(){
         MutableLiveData<PaymentsListEntity> data = NetworkDataSource.getInstance().
                 getPayments(refresherCertificate, refresherCity);
 
@@ -486,7 +468,7 @@ public class Repository {
         });
     }
 
-    private void refreshWithdrawals(){
+    private void findWithdrawals(){
         MutableLiveData<WithdrawalsListEntity> data = NetworkDataSource.
                 getInstance().getWithdrawals(refresherCertificate, refresherCity);
 

@@ -13,6 +13,7 @@
     <string name="cash_operations">Грошові операції</string>
     <string name="settings">Налаштування</string>
     <string name="payment">Поповнення</string>
+    <string name="add_new_user">Додати аккаунт</string>
 
     <string name="label_user_information">Інформація користувача</string>
     <string name="label_connections">Підключення</string>

@@ -1,0 +1,11 @@
+ <menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group
+        android:id="@+id/users_list"
+        android:orderInCategory="1">
+    </group>
+     <item
+         android:id="@+id/add_new_user"
+         android:title="@string/add_new_user"
+         android:orderInCategory="2">
+     </item>
+ </menu>
