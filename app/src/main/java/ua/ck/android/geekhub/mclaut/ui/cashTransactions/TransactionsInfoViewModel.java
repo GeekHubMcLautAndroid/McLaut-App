@@ -17,16 +17,12 @@ import ua.ck.android.geekhub.mclaut.data.model.UserCharacteristic;
 
 public class TransactionsInfoViewModel extends ViewModel implements Observer<HashMap<String, UserCharacteristic>> {
     private MutableLiveData<List<CashTransactionsEntity>> transactions = new MutableLiveData<>();
-    public static final int TRANSACTION_TYPE_PAYMENTS = 0;
-    public static final int TRANSACTION_TYPE_WITHDRAWALS = 1;
-    public static final int TRANSACTION_TYPE_ALL = 2;
+    private static final int TRANSACTION_TYPE_PAYMENTS = 0;
+    private static final int TRANSACTION_TYPE_WITHDRAWALS = 1;
+    private static final int TRANSACTION_TYPE_ALL = 2;
     private int transactionsType;
 
-    public TransactionsInfoViewModel() {
-        Repository.getInstance().getMapUsersCharacteristic().observeForever(this);
-    }
-
-    public MutableLiveData<List<CashTransactionsEntity>> getTransactions() {
+    MutableLiveData<List<CashTransactionsEntity>> getTransactions() {
         return transactions;
     }
 
@@ -54,5 +50,6 @@ public class TransactionsInfoViewModel extends ViewModel implements Observer<Has
 
     public void setTransactionsType(int transactionsType) {
         this.transactionsType = transactionsType;
+        Repository.getInstance().getMapUsersCharacteristic().observeForever(this);
     }
 }

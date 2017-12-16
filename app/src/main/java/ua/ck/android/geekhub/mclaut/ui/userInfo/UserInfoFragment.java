@@ -43,8 +43,6 @@ public class UserInfoFragment extends Fragment implements SwipeRefreshLayout.OnR
     @BindView(R.id.user_info_fragment_swipe_layout)
     SwipeRefreshLayout refreshLayout;
 
-    private ConnectionsRecyclerAdapter recyclerAdapter;
-    private RecyclerView.LayoutManager layoutManager;
     private UserInfoViewModel viewModel = new UserInfoViewModel();
 
     @SuppressLint("ClickableViewAccessibility")
@@ -56,7 +54,7 @@ public class UserInfoFragment extends Fragment implements SwipeRefreshLayout.OnR
 
         ButterKnife.bind(this,rootView);
 
-        layoutManager = new LinearLayoutManager(getActivity());
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         connectionsRecycler.setLayoutManager(layoutManager);
 
         //disable recyclerview scroll
@@ -106,7 +104,7 @@ public class UserInfoFragment extends Fragment implements SwipeRefreshLayout.OnR
                         " " + getString(R.string.days_of_service_label);
                 periodFinishTextView.setText(days);
             }
-            recyclerAdapter =
+            ConnectionsRecyclerAdapter recyclerAdapter =
                     new ConnectionsRecyclerAdapter(currUserConnectionsInfo, getActivity());
             connectionsRecycler.setAdapter(recyclerAdapter);
         }

@@ -1,24 +1,25 @@
 package ua.ck.android.geekhub.mclaut.ui.cashTransactions;
 
+import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.List;
+
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import ua.ck.android.geekhub.mclaut.R;
+import ua.ck.android.geekhub.mclaut.data.model.CashTransactionsEntity;
 
-public class TransactionsInfoFragment extends Fragment {
-    public static final int TRANSACTION_TYPE_PAYMENTS = 0;
-    public static final int TRANSACTION_TYPE_WITHDRAWALS = 1;
-    public static final int TRANSACTION_TYPE_ALL = 2;
-    private int transactionsType;
-
-    private TransactionsInfoViewModel viewModel;
+public class TransactionsInfoFragment extends Fragment implements Observer<List<CashTransactionsEntity>> {
 
     @BindView(R.id.fragment_transactions_info_recycler_view)
     RecyclerView mainRecyclerView;
@@ -26,13 +27,29 @@ public class TransactionsInfoFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_cash_transactions,container,false);
+        View rootView = inflater.inflate(R.layout.fragment_transactions_info,container,false);
+        ButterKnife.bind(this,rootView);
 
-        transactionsType = getArguments().getInt("transactionsType");
+        int transactionsType = getArguments().getInt("transactionsType");
 
-        viewModel = ViewModelProviders.of(this).get(TransactionsInfoViewModel.class);
+        TransactionsInfoViewModel viewModel = ViewModelProviders.of(this).get(TransactionsInfoViewModel.class);
         viewModel.setTransactionsType(transactionsType);
 
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        mainRecyclerView.setLayoutManager(layoutManager);
+        DividerItemDecoration decoration = new DividerItemDecoration(mainRecyclerView.getContext(),
+                DividerItemDecoration.VERTICAL);
+        mainRecyclerView.addItemDecoration(decoration);
+
+        viewModel.getTransactions().observe(this,this);
+
         return rootView;
+    }
+
+    @Override
+    public void onChanged(@Nullable List<CashTransactionsEntity> cashTransactionsEntities) {
+        CashTransactionsRecyclerAdapter adapter =
+                new CashTransactionsRecyclerAdapter(cashTransactionsEntities);
+        mainRecyclerView.setAdapter(adapter);
     }
 }

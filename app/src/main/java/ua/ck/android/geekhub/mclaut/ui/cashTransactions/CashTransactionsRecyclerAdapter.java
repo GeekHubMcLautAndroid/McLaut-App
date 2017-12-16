@@ -3,13 +3,19 @@ package ua.ck.android.geekhub.mclaut.ui.cashTransactions;
 import android.content.Context;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 
 import org.joda.time.DateTime;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import ua.ck.android.geekhub.mclaut.R;
 import ua.ck.android.geekhub.mclaut.data.model.CashTransactionsEntity;
 import ua.ck.android.geekhub.mclaut.tools.DateConverter;
@@ -18,13 +24,45 @@ import ua.ck.android.geekhub.mclaut.tools.DateConverter;
  * Created by bogda on 14.12.2017.
  */
 
-public class CashTransactionsRecyclerAdapter  {
+public class CashTransactionsRecyclerAdapter extends RecyclerView.Adapter<TransactionsViewHolder> {
+    private List<CashTransactionsEntity> cashTransactionsInfoList = new ArrayList<>();
+
+    public CashTransactionsRecyclerAdapter(List<CashTransactionsEntity> cashTransactionsInfoList) {
+        this.cashTransactionsInfoList = cashTransactionsInfoList;
+    }
+
+    @Override
+    public TransactionsViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        TransactionsViewHolder holder;
+        View layoutView = LayoutInflater.from(parent.getContext()).
+                inflate(R.layout.list_item_transaction_info,parent,false);
+        holder = new TransactionsViewHolder(parent.getContext(),layoutView);
+        return holder;
+    }
+
+    @Override
+    public void onBindViewHolder(TransactionsViewHolder holder, int position) {
+        holder.bind(cashTransactionsInfoList.get(position));
+    }
+
+    @Override
+    public int getItemCount() {
+        if(cashTransactionsInfoList != null){
+            return cashTransactionsInfoList.size();
+        }
+        return 0;
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
 }
 class TransactionsViewHolder extends RecyclerView.ViewHolder {
-    public static final int TRANSACTION_TYPE_PAYMENT = 1;
-    public static final int TRANSACTION_TYPE_WITHDRAW = 0;
-    public static final int PAYMENT_TYPE_TERMINAL = 1;
-    public static final int WITHDRAW_TYPE_PAY_AT_DAY = 1;
+    private static final int TRANSACTION_TYPE_PAYMENT = 1;
+    private static final int TRANSACTION_TYPE_WITHDRAW = 0;
+    private static final int PAYMENT_TYPE_TERMINAL = 1;
+    private static final int WITHDRAW_TYPE_PAY_AT_DAY = 1;
 
     private Context context;
 
@@ -39,9 +77,10 @@ class TransactionsViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.list_item_transactions_balance_after)
     TextView balanceAfterTextView;
 
-    public TransactionsViewHolder(Context context, View itemView) {
+    TransactionsViewHolder(Context context, View itemView) {
         super(itemView);
         this.context = context;
+        ButterKnife.bind(this,itemView);
     }
 
     void bind(CashTransactionsEntity transaction){
@@ -66,7 +105,7 @@ class TransactionsViewHolder extends RecyclerView.ViewHolder {
                 String summStringWithdraw = "-" + transaction.getSum() + context.getString(R.string.uah_symbol);
                 transactionSummTextView.setText(summStringWithdraw);
                 if(transaction.getType() == WITHDRAW_TYPE_PAY_AT_DAY){
-                    typeTextView.setText(context.getString(R.string.pay_at_day_label));
+                    typeTextView.setText(context.getString(R.string.label_pay_type_pay_at_day));
                 }
                 else{
                     typeTextView.setText(context.getString(R.string.label_pay_type_other));

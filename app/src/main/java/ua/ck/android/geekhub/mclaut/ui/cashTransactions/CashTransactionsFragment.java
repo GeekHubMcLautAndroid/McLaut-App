@@ -39,23 +39,18 @@ public class CashTransactionsFragment extends Fragment {
 
     private void setupViewPager(ViewPager viewPager){
         CashTransactionsViewPagerAdapter adapter = new CashTransactionsViewPagerAdapter(getChildFragmentManager());
+
+        addFragmentToAdapter(adapter,TRANSACTION_TYPE_PAYMENTS,getString(R.string.label_tab_payments));
+        addFragmentToAdapter(adapter,TRANSACTION_TYPE_WITHDRAWALS,getString(R.string.label_tab_withdrawals));
+        addFragmentToAdapter(adapter,TRANSACTION_TYPE_ALL,getString(R.string.label_tab_all));
+
+        viewPager.setAdapter(adapter);
+    }
+    private void addFragmentToAdapter(CashTransactionsViewPagerAdapter adapter, int transactionType, String label){
         TransactionsInfoFragment fragment = new TransactionsInfoFragment();
         Bundle bundle = new Bundle();
-        bundle.putInt("transactionsType", TRANSACTION_TYPE_PAYMENTS);
+        bundle.putInt("transactionsType", transactionType);
         fragment.setArguments(bundle);
-        adapter.addFragment(fragment,getString(R.string.label_tab_payments));
-
-        fragment = new TransactionsInfoFragment();
-        bundle = new Bundle();
-        bundle.putInt("transactionsType", TRANSACTION_TYPE_WITHDRAWALS);
-        fragment.setArguments(bundle);
-        adapter.addFragment(fragment,getString(R.string.label_tab_withdrawals));
-
-        fragment = new TransactionsInfoFragment();
-        bundle = new Bundle();
-        bundle.putInt("transactionsType", TRANSACTION_TYPE_ALL);
-        fragment.setArguments(bundle);
-        adapter.addFragment(fragment,getString(R.string.label_tab_all));
-        viewPager.setAdapter(adapter);
+        adapter.addFragment(fragment,label);
     }
 }
