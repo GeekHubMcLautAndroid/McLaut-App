@@ -105,7 +105,7 @@
             android:layout_marginLeft="124dp"
             android:layout_weight="2"
             android:hint="@string/payment_cvv"
-            app:passwordToggleDrawable="@drawable/ic_visibility_off_black_24dp"
+            app:passwordToggleDrawable="@drawable/password_toggle"
             app:passwordToggleEnabled="true">
 
             <android.support.design.widget.TextInputEditText
