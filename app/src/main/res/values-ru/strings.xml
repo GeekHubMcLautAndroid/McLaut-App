@@ -33,5 +33,10 @@
     <string name="label_tab_withdrawals">Снятия</string>
     <string name="label_tab_payments">Пополнения</string>
     <string name="label_tab_all">Все</string>
+    <string name="label_transaction_type_payment">Пополнение</string>
+    <string name="label_transaction_type_withdraw">Снятие</string>
+    <string name="label_pay_type_other">Другое</string>
+    <string name="label_pay_type_pay_at_day">Плата за сутки</string>
+    <string name="label_pay_type_terminal">Через терминал</string>
 
 </resources>

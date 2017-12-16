@@ -24,10 +24,7 @@ public class CashTransactionsViewPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        if (viewPagerFragmentList.size() > position) {
-            return viewPagerFragmentList.get(position);
-        }
-        return null;
+        return viewPagerFragmentList.get(position);
     }
 
 

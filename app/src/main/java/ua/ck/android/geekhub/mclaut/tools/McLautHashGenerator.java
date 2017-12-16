@@ -14,6 +14,9 @@ import ua.ck.android.geekhub.mclaut.BuildConfig;
 
 public class McLautHashGenerator {
 
+    private McLautHashGenerator() {
+    }
+
     public static String generateLoginHash(String login, String password, int city){
         String queryAction = "action=checkLogin&" +
                 "login=" + login +
