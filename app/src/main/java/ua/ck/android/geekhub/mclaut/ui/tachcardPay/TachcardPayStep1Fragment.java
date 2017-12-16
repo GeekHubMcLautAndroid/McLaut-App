@@ -1,7 +1,6 @@
 package ua.ck.android.geekhub.mclaut.ui.tachcardPay;
 
 
-import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -14,8 +13,6 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.TextView;
-
-import org.jsoup.nodes.Document;
 
 import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
 import butterknife.BindView;
@@ -73,12 +70,19 @@ public class TachcardPayStep1Fragment extends Fragment {
             }
         });
         viewModel.getSetError().observe(this, integer -> {
+            summTIL.setErrorEnabled(false);
+            cardNumberTIL.setErrorEnabled(false);
+            mmTIL.setErrorEnabled(false);
+            yyTIL.setErrorEnabled(false);
+            cvvTIL.setErrorEnabled(false);
             switch (integer) {
                 case 0:
                     summTIL.setError(getString(R.string.error_minimum_refung));
+                    summTIL.setErrorEnabled(true);
                     break;
                 case 1:
                     cardNumberTIL.setError(getString(R.string.error_card_number));
+                    cardNumberTIL.setErrorEnabled(true);
                     break;
                 case 2:
                     mmTIL.setErrorEnabled(true);

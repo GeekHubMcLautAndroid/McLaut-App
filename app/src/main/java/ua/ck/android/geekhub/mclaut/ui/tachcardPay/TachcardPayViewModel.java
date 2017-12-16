@@ -15,7 +15,6 @@ import ua.ck.android.geekhub.mclaut.app.McLautApplication;
 import ua.ck.android.geekhub.mclaut.data.Repository;
 import ua.ck.android.geekhub.mclaut.data.model.UserCharacteristic;
 import ua.ck.android.geekhub.mclaut.data.model.UserInfoEntity;
-import ua.ck.android.geekhub.mclaut.data.network.TachcardDataSource;
 
 public class TachcardPayViewModel extends ViewModel implements Observer<HashMap<String, UserCharacteristic>> {
     private static TachcardPayViewModel instance;
@@ -61,6 +60,11 @@ public class TachcardPayViewModel extends ViewModel implements Observer<HashMap<
     void pay(Context context, String summ, String cardNumber, String mm, String yy, String cvv) {
         showProgressStatus.postValue(true);
         int[] digits = new int[cardNumber.length()];
+        if (summ.length() < 1) {
+            setError.postValue(errorMinimumRefungCode);
+            showProgressStatus.postValue(false);
+            return;
+        }
         if (Double.parseDouble(summ) < 5) {
             setError.postValue(errorMinimumRefungCode);
             showProgressStatus.postValue(false);
@@ -74,7 +78,12 @@ public class TachcardPayViewModel extends ViewModel implements Observer<HashMap<
             showProgressStatus.postValue(false);
             return;
         }
-        if (Integer.parseInt(mm) < 1 || Integer.parseInt(mm) > 12 || mm.length() != 2) {
+        if (mm.length() < 2) {
+            setError.postValue(errorMM_YYCode);
+            showProgressStatus.postValue(false);
+            return;
+        }
+        if (Integer.parseInt(mm) < 1 || Integer.parseInt(mm) > 12) {
             setError.postValue(errorMM_YYCode);
             showProgressStatus.postValue(false);
             return;
@@ -88,7 +97,7 @@ public class TachcardPayViewModel extends ViewModel implements Observer<HashMap<
         String baseUrl = context.getString(R.string.payment_baseUrl);
         baseUrl += regions[userData.getCity()];
         baseUrl += "?&amount=" + summ + "&account=" + userData.getAccount();
-        repo.getPaymentRedirection(redirectDocument,baseUrl, cardNumber, mm, yy, cvv);
+        repo.getPaymentRedirection(redirectDocument, baseUrl, cardNumber, mm, yy, cvv);
         Repository.getInstance().getMapUsersCharacteristic().removeObserver(this);
     }
 
