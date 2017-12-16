@@ -6,7 +6,8 @@
     android:layout_marginHorizontal="@dimen/login_screen_sideways_margin"
     android:layout_marginVertical="@dimen/login_screen_image_top_margin"
     android:gravity="center"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:theme="@style/PaymentTheme">
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/fragment_tachcard_pay_summ_text_input_layout"
@@ -140,7 +141,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="24dp"
-        android:background="@color/colorAccent"
+        android:background="@color/colorPrimary"
         android:text="@string/payment_next"
         android:textColor="@android:color/white"
         app:spinning_bar_color="@android:color/white"
