@@ -1,9 +1,9 @@
 package ua.ck.android.geekhub.mclaut.ui;
 
+import android.app.DialogFragment;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
@@ -19,11 +19,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.util.HashMap;
-import java.util.Iterator;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -113,9 +111,10 @@ public class MainActivity extends AppCompatActivity implements Observer<Pair<Str
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
                         if(item.getActionView() != null){
-                            TextView userId = item.getActionView()
-                                    .findViewById(R.id.tv_id_custom_item);
-                                McLautApplication.selectUser(userId.getText().toString());
+                            ImageButton button = item.getActionView()
+                                    .findViewById(R.id.bt_remove_user);
+                                McLautApplication.selectUser(button.getTag(R.string.btn_tag_key_id).toString());
+                                mDrawerLayout.closeDrawers();
                         }
                         idActiveFragment = item.getItemId();
                         selectDrawerItem();
@@ -125,12 +124,26 @@ public class MainActivity extends AppCompatActivity implements Observer<Pair<Str
         );
     }
 
-    public void selectDrawerLayoutButtonClick(View view){
-        if(buttonSelectLayout.getTag().equals(getResources()
+    public void drawerLayoutButtonClick(View view){
+
+        if(view.getTag().equals(getResources()
                 .getString(R.string.enable_user_list))){
             selectUserListMenu();
-        } else {
+        } else if (view.getTag().equals(getResources()
+                .getString(R.string.enable_info))) {
             selectInfoMenu();
+        } else if (view.getId() == R.id.bt_remove_user){
+
+            DialogFragment dialogFragment = new RemoveUserDialogFragment();
+
+            Bundle bundle = new Bundle();
+            bundle.putInt(getResources().getString(R.string.btn_tag_key_item_index),
+                    (int) view.getTag(R.string.btn_tag_key_item_index));
+            bundle.putString(getResources().getString(R.string.btn_tag_key_id),
+                    (String) view.getTag(R.string.btn_tag_key_id));
+
+            dialogFragment.setArguments(bundle);
+            dialogFragment.show(getFragmentManager(), "millis");
         }
     }
 
@@ -143,14 +156,15 @@ public class MainActivity extends AppCompatActivity implements Observer<Pair<Str
     }
 
     private void selectUserListMenu() {
-        McLautAppExecutor.getInstance().mainThread().execute(()->{buttonSelectLayout.setTag(getResources()
+        McLautAppExecutor.getInstance().mainThread().execute(()->{
+            buttonSelectLayout.setTag(getResources()
                 .getString(R.string.enable_info));
             buttonSelectLayout.setImageDrawable(getDrawable(R.drawable.info));
             mNavigationView.getMenu().clear();
             mNavigationView.inflateMenu(R.menu.drawer_users_menu);
 
             TextView tvName;
-            TextView tvId;
+            ImageButton btRemove;
 
             int index = 0;
 
@@ -169,11 +183,13 @@ public class MainActivity extends AppCompatActivity implements Observer<Pair<Str
 
                 tvName = mNavigationView.getMenu().getItem(index)
                         .getActionView().findViewById(R.id.tv_name_custom_item);
-                tvId = mNavigationView.getMenu().getItem(index)
-                        .getActionView().findViewById(R.id.tv_id_custom_item);
+                btRemove = mNavigationView.getMenu().getItem(index)
+                        .getActionView().findViewById(R.id.bt_remove_user);
 
                 tvName.setText(name);
-                tvId.setText(id);
+                btRemove.setTag(R.string.remove_user);
+                btRemove.setTag(R.string.btn_tag_key_id, id);
+                btRemove.setTag(R.string.btn_tag_key_item_index, index);
                 index++;
             }
         });

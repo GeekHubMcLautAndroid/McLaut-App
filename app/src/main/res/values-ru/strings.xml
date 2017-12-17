@@ -15,6 +15,11 @@
     <string name="payment">Пополнениe</string>
     <string name="add_new_user">Добавить аккаунт</string>
 
+    <!--Dialog items info-->
+    <string name="dialog_text">Вы уверены ?</string>
+    <string name="dialog_button_cancel">ОТМЕНА</string>
+    <string name="dialog_button_delete">УДАЛИТЬ</string>
+
     <string name="label_user_information">Информация пользователя</string>
     <string name="label_connections">Подключения</string>
     <string name="active_label">Активный</string>

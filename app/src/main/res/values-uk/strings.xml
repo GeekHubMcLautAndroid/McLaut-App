@@ -15,6 +15,11 @@
     <string name="payment">Поповнення</string>
     <string name="add_new_user">Додати аккаунт</string>
 
+    <!--Dialog items info-->
+    <string name="dialog_text">Ви впевнені ?</string>
+    <string name="dialog_button_cancel">СКАСУВАТИ</string>
+    <string name="dialog_button_delete">ВИДАЛИТИ</string>
+
     <string name="label_user_information">Інформація користувача</string>
     <string name="label_connections">Підключення</string>
     <string name="active_label">Активний</string>

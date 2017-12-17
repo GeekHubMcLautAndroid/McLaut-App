@@ -28,7 +28,9 @@ public class UserInfoViewModel extends ViewModel implements Observer<HashMap<Str
     @Override
     public void onChanged(@Nullable HashMap<String, UserCharacteristic> stringUserCharacteristicHashMap) {
         UserCharacteristic characteristic = stringUserCharacteristicHashMap.get(McLautApplication.getSelectedUser());
-        userData.postValue(characteristic.getInfo());
+        if(characteristic != null) {
+            userData.postValue(characteristic.getInfo());
+        }
     }
 
     void refreshData(){

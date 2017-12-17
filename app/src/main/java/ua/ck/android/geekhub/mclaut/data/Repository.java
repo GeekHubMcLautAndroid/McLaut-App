@@ -41,6 +41,7 @@ public class Repository {
     private static final Integer ALL_FIELDS_UPDATED = 4;
     private static final Integer NON_FIELDS_UPDATED = 0;
     private static final Integer ADD_NEW_FIELD = 1;
+    public static final Integer ONE_USER = 1;
 
     private Repository() {
     }
@@ -425,7 +426,12 @@ public class Repository {
         return data;
     }
 
-    private void deleteUserFromDatabase(String userId){
+    public void deleteUserFromDatabase(String userId){
+        HashMap<String, UserCharacteristic>
+                currentCharacteristics = mapUsersCharacteristic.getValue();
+        currentCharacteristics.remove(userId);
+        mapUsersCharacteristic.setValue(currentCharacteristics);
+
         executor.databaseExecutor().execute(() ->{
             LocalDatabase.getInstance(
                     McLautApplication.getContext()).dao()
