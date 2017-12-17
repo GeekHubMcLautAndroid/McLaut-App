@@ -48,15 +48,15 @@
     <string name="label_tab_withdrawals">Withdrawals</string>
     <string name="label_tab_payments">Payments</string>
     <string name="label_tab_all">All</string>
-<<<<<<< HEAD
+
 
     <string name="enable_user_list">_user_list</string>
     <string name="enable_info">_user_info</string>
-=======
+
     <string name="label_transaction_type_payment">Payment</string>
     <string name="label_transaction_type_withdraw">Withdraw</string>
     <string name="label_pay_type_other">Other</string>
     <string name="label_pay_type_pay_at_day">Pay per day</string>
     <string name="label_pay_type_terminal">Terminal</string>
->>>>>>> 67c441c572b772b053a6e8ecb9240685db54b993
+
 </resources>

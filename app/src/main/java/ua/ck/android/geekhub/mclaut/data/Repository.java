@@ -36,6 +36,7 @@ public class Repository {
 
     private UserCharacteristic userCharacteristicForMap = new UserCharacteristic();
     private MutableLiveData<Integer> iObserver = new MutableLiveData<>();
+    private HashMap<String, CardInfoEntity> mapCardEntities;
 
     private static final Integer ALL_FIELDS_UPDATED = 4;
     private static final Integer NON_FIELDS_UPDATED = 0;
@@ -48,6 +49,7 @@ public class Repository {
         if(instance == null){
             instance = new Repository();
             instance.initUserCharacteristics();
+            instance.initMapCardEntities();
         }
         return instance;
     }
@@ -56,13 +58,20 @@ public class Repository {
         return mapUsersCharacteristic;
     }
 
+    public HashMap<String, CardInfoEntity> getMapCardEntities() {
+        return mapCardEntities;
+    }
+
     private void initUserCharacteristics(){
 
         executor.databaseExecutor().execute(() ->{
-            getAllUsersId().observeForever(new Observer<List<String>>() {
+            MutableLiveData<List<String>> userIds = getAllUsersId();
+            userIds.observeForever(new Observer<List<String>>() {
                 @Override
                 public void onChanged(@Nullable List<String> usersId) {
                     if(usersId != null) {
+                        userIds.removeObserver(this);
+
                         HashMap currentMap;
 
                         if(mapUsersCharacteristic.getValue() == null) {
@@ -81,6 +90,8 @@ public class Repository {
                                     if((userCharacteristic.getInfo() != null)
                                             &&(userCharacteristic.getPaymentsTransactions() != null)
                                             &&(userCharacteristic.getWithdrawalsTransactions() != null)) {
+                                        mutableLiveData.removeObserver(this);
+
                                         currentMap.put(currentUserId ,userCharacteristic);
                                         mutableLiveData.removeObserver(this);
 
@@ -98,8 +109,25 @@ public class Repository {
 
     }
 
-    private void getUserCharacteristics(String userId, int userIdListSize){
+    private void initMapCardEntities() {
+        executor.databaseExecutor().execute(() ->{
+            MutableLiveData<List<CardInfoEntity>> cardEntitiesList = getAllCardList();
+            cardEntitiesList.observeForever(new Observer<List<CardInfoEntity>>() {
+                @Override
+                public void onChanged(@Nullable List<CardInfoEntity> cardInfoEntities) {
+                    if(cardInfoEntities != null){
+                        cardEntitiesList.removeObserver(this);
+                        mapCardEntities = new HashMap<>();
 
+                        for(Iterator<CardInfoEntity> iter = cardInfoEntities.iterator();
+                            iter.hasNext(); ){
+                            CardInfoEntity currentCard = iter.next();
+                            mapCardEntities.put(currentCard.getCardNumber(), currentCard);
+                        }
+                    }
+                }
+            });
+        });
     }
 
     private MutableLiveData<UserCharacteristic> findUserCharactistics(String userId) {
@@ -347,15 +375,28 @@ public class Repository {
         });
     }
 
-    public void deleteUserFromDatabase(String userId){
-        executor.databaseExecutor().execute(() ->{
+    public void addNewCard(CardInfoEntity cardInfoEntity){
+
+        mapCardEntities.put(cardInfoEntity.getCardNumber(), cardInfoEntity);
+
+        insertCardToDatabase(cardInfoEntity);
+    }
+
+    private void insertCardToDatabase(final CardInfoEntity cardInfoEntity){
+        executor.databaseExecutor().execute(() -> {
             LocalDatabase.getInstance(
                     McLautApplication.getContext()).dao()
-                    .deleteUserInfoById(userId);
+                    .insertCardInfoEntity(cardInfoEntity);
         });
     }
 
-    public void deleteCardFromDatabase(CardInfoEntity cardInfoEntity){
+    public void deleteCard(String cardName){
+
+        deleteCardFromDatabase(mapCardEntities.get(cardName));
+        mapCardEntities.remove(cardName);
+    }
+
+    private void deleteCardFromDatabase(CardInfoEntity cardInfoEntity){
         executor.databaseExecutor().execute(() ->{
             LocalDatabase.getInstance(
                     McLautApplication.getContext()).dao().
@@ -382,6 +423,14 @@ public class Repository {
             }
         });
         return data;
+    }
+
+    private void deleteUserFromDatabase(String userId){
+        executor.databaseExecutor().execute(() ->{
+            LocalDatabase.getInstance(
+                    McLautApplication.getContext()).dao()
+                    .deleteUserInfoById(userId);
+        });
     }
 
     private void findUserInfoInInternet() {
@@ -482,7 +531,9 @@ public class Repository {
              }
         });
     }
+
     public MutableLiveData<Document> getPaymentRedirection(String... strings) {
         return TachcardDataSource.getInstance().pay(strings);
     }
+
 }
