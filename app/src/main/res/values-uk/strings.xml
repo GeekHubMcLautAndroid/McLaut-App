@@ -50,4 +50,6 @@
     <string name="payment_network_error">Помилка мережі</string>
     <string name="payment_amount_due_empty">Сума до сплати: _.__₴</string>
     <string name="payment_amount_due">Сума до сплати:</string>
+    <string name="payment_select_card">Оберіть картку</string>
+    <string name="payment_goto_card_settings">КЕРУВАННЯ КАРТКАМИ</string>
 </resources>

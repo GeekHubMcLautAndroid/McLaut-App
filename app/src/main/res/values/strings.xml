@@ -73,4 +73,6 @@
     <string name="payment_network_error">Network error.</string>
     <string name="payment_amount_due_empty">Amount due:__.__₴</string>
     <string name="payment_amount_due">Amount due: </string>
+    <string name="payment_select_card">Select card</string>
+    <string name="payment_goto_card_settings">MANAGE CARDS</string>
 </resources>

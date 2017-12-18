@@ -143,14 +143,14 @@ public class TachcardPayStep1Fragment extends Fragment {
         HashMap<String, CardInfoEntity> mapCardEntities = viewModel.getCards();
         String[] type = new String[]{};
         String[] keys = mapCardEntities.keySet().toArray(type);
-        builder.setTitle("Оберіть картку").setItems(keys, (dialogInterface, i) -> {
+        builder.setTitle(R.string.payment_select_card).setItems(keys, (dialogInterface, i) -> {
             cardNumberTIET.setText(mapCardEntities.get(keys[i]).getCardNumber());
             mmTIEL.setText(mapCardEntities.get(keys[i]).getEndMonth());
             yyTIEL.setText(mapCardEntities.get(keys[i]).getEndYear());
             mapCardEntities.get(keys[i]).incrementCounterOfUses(getContext());
-        }).setPositiveButton("Налаштування карток", (dialogInterface, i) -> {
+        }).setPositiveButton(getString(R.string.payment_goto_card_settings), (dialogInterface, i) -> {
             //TODO:Go to settings
-        }).setNegativeButton("Відмінити", (dialogInterface, i) -> {
+        }).setNegativeButton(getString(R.string.dialog_button_cancel), (dialogInterface, i) -> {
         });
         builder.create().show();
     }

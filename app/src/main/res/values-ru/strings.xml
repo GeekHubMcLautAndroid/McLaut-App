@@ -50,5 +50,7 @@
     <string name="payment_network_error">Сетевая ошибка</string>
     <string name="payment_amount_due_empty">Сумма к оплате: _.__₴</string>
     <string name="payment_amount_due">Сумма к оплате:</string>
+    <string name="payment_select_card">Оберите картку</string>
+    <string name="payment_goto_card_settings">УПРАВЛЕНИЕ КАРТКАМИ</string>
 
 </resources>
