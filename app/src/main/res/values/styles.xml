@@ -14,9 +14,14 @@
     <style name="SpinnerPopupTheme">
         <item name="android:textColor">@android:color/black</item>
     </style>
+
     <style name="LoginScreenEdittextStyle">
         <item name="android:textColorHint">@android:color/white</item>
         <item name="android:colorControlNormal">@android:color/white</item>
+    </style>
+
+    <style name="PaymentTheme" parent="McLautAppTheme">
+        <item name="colorAccent">@color/colorPrimary</item>
     </style>
 
 </resources>

@@ -3,6 +3,7 @@ package ua.ck.android.geekhub.mclaut.data;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.Observer;
 import android.support.annotation.Nullable;
+
 import org.jsoup.nodes.Document;
 
 import java.util.HashMap;
@@ -22,11 +23,13 @@ import ua.ck.android.geekhub.mclaut.data.network.NetworkDataSource;
 import ua.ck.android.geekhub.mclaut.data.network.TachcardDataSource;
 import ua.ck.android.geekhub.mclaut.tools.McLautAppExecutor;
 import ua.ck.android.geekhub.mclaut.app.McLautApplication;
+import ua.ck.android.geekhub.mclaut.ui.tachcardPay.TachcardPayStep1Fragment;
+import ua.ck.android.geekhub.mclaut.ui.tachcardPay.TachcardPayViewModel;
 
 public class Repository {
 
     private static Repository instance;
-    private final MutableLiveData< HashMap <String, UserCharacteristic>>
+    private final MutableLiveData<HashMap<String, UserCharacteristic>>
             mapUsersCharacteristic = new MutableLiveData<>();
 
     private McLautAppExecutor executor = McLautAppExecutor.getInstance();
@@ -46,8 +49,8 @@ public class Repository {
     private Repository() {
     }
 
-    public static Repository getInstance(){
-        if(instance == null){
+    public static Repository getInstance() {
+        if (instance == null) {
             instance = new Repository();
             instance.initUserCharacteristics();
             instance.initMapCardEntities();
@@ -92,7 +95,6 @@ public class Repository {
                                             &&(userCharacteristic.getPaymentsTransactions() != null)
                                             &&(userCharacteristic.getWithdrawalsTransactions() != null)) {
                                         mutableLiveData.removeObserver(this);
-
                                         currentMap.put(currentUserId ,userCharacteristic);
                                         mutableLiveData.removeObserver(this);
 
@@ -202,10 +204,10 @@ public class Repository {
 
         final MutableLiveData<UserInfoEntity> request = new MutableLiveData<>();
 
-        executor.databaseExecutor().execute(() ->{
+        executor.databaseExecutor().execute(() -> {
             UserInfoEntity userInfoEntity = LocalDatabase.getInstance(
                     McLautApplication.getContext()).dao()
-                            .findUserInfoEntityById(userId);
+                    .findUserInfoEntityById(userId);
 
             request.postValue(userInfoEntity);
         });
@@ -213,11 +215,11 @@ public class Repository {
         return request;
     }
 
-    private MutableLiveData<List<UserConnectionsInfo>> getUserConnectionInfo(String userId){
+    private MutableLiveData<List<UserConnectionsInfo>> getUserConnectionInfo(String userId) {
 
         final MutableLiveData<List<UserConnectionsInfo>> request = new MutableLiveData<>();
 
-        executor.databaseExecutor().execute(() ->{
+        executor.databaseExecutor().execute(() -> {
             List<UserConnectionsInfo> userConnectionInfo = LocalDatabase.getInstance(
                     McLautApplication.getContext()).dao()
                     .findUserConnectionInfoEntityById(userId);
@@ -228,15 +230,15 @@ public class Repository {
         return request;
     }
 
-    private MutableLiveData<WithdrawalsListEntity> getWithdrawalsInfo(String userId){
+    private MutableLiveData<WithdrawalsListEntity> getWithdrawalsInfo(String userId) {
 
         final MutableLiveData<WithdrawalsListEntity> request = new MutableLiveData<>();
 
-        executor.databaseExecutor().execute(() ->{
+        executor.databaseExecutor().execute(() -> {
             WithdrawalsListEntity withdrawalsList = new WithdrawalsListEntity(
-                LocalDatabase.getInstance(
-                        McLautApplication.getContext()).dao()
-                        .findAllWithdrawalsEntities(userId));
+                    LocalDatabase.getInstance(
+                            McLautApplication.getContext()).dao()
+                            .findAllWithdrawalsEntities(userId));
 
             request.postValue(withdrawalsList);
         });
@@ -244,10 +246,10 @@ public class Repository {
         return request;
     }
 
-    private MutableLiveData<PaymentsListEntity> getPaymentsInfo(String userId){
+    private MutableLiveData<PaymentsListEntity> getPaymentsInfo(String userId) {
         final MutableLiveData<PaymentsListEntity> request = new MutableLiveData<>();
 
-        executor.databaseExecutor().execute(() ->{
+        executor.databaseExecutor().execute(() -> {
             PaymentsListEntity paymentsList = new PaymentsListEntity(
                     LocalDatabase.getInstance(
                             McLautApplication.getContext()).dao()
@@ -258,10 +260,10 @@ public class Repository {
         return request;
     }
 
-    private MutableLiveData<List<String>> getAllUsersId(){
+    private MutableLiveData<List<String>> getAllUsersId() {
         final MutableLiveData<List<String>> request = new MutableLiveData<>();
 
-        executor.databaseExecutor().execute(() ->{
+        executor.databaseExecutor().execute(() -> {
             List<String> usersIdList = LocalDatabase.getInstance(
                     McLautApplication.getContext()).dao().getAllUsersId();
             request.postValue(usersIdList);
@@ -273,7 +275,7 @@ public class Repository {
     private MutableLiveData<List<CardInfoEntity>> getAllCardList() {
         final MutableLiveData<List<CardInfoEntity>> request = new MutableLiveData<>();
 
-        executor.databaseExecutor().execute(() ->{
+        executor.databaseExecutor().execute(() -> {
             List<CardInfoEntity> cardInfoList = LocalDatabase.getInstance(
                     McLautApplication.getContext()).dao()
                     .getAllCardsInfo();
@@ -283,11 +285,11 @@ public class Repository {
         return request;
     }
 
-    private void insertUserInfoToDatabase(final UserInfoEntity userInfoEntity){
+    private void insertUserInfoToDatabase(final UserInfoEntity userInfoEntity) {
 
         userCharacteristicForMap.setInfo(userInfoEntity);
 
-        if(iObserver.getValue() == null) {
+        if (iObserver.getValue() == null) {
             iObserver.setValue(ADD_NEW_FIELD);
         } else {
             iObserver.setValue(iObserver.getValue() + ADD_NEW_FIELD);
@@ -295,18 +297,18 @@ public class Repository {
 
         executor.databaseExecutor()
                 .execute(() -> {
-                    LocalDatabase.getInstance(
-                            McLautApplication.getContext()).dao()
-                                            .insertUserInfo(userInfoEntity);
-                            }
+                            LocalDatabase.getInstance(
+                                    McLautApplication.getContext()).dao()
+                                    .insertUserInfo(userInfoEntity);
+                        }
                 );
     }
 
-    private void insertUserConnectionInfoToDatabase(final List<UserConnectionsInfo> userConnectionsInfoList){
+    private void insertUserConnectionInfoToDatabase(final List<UserConnectionsInfo> userConnectionsInfoList) {
 
         userCharacteristicForMap.getInfo().setUserConnectionsInfoList(userConnectionsInfoList);
 
-        if(iObserver.getValue() == null) {
+        if (iObserver.getValue() == null) {
             iObserver.setValue(ADD_NEW_FIELD);
         } else {
             iObserver.setValue(iObserver.getValue() + ADD_NEW_FIELD);
@@ -327,11 +329,11 @@ public class Repository {
     }
 
 
-    private void insertPaymentsToDatabase(final PaymentsListEntity paymentsList){
+    private void insertPaymentsToDatabase(final PaymentsListEntity paymentsList) {
 
         userCharacteristicForMap.setPaymentsTransactions(paymentsList.getPayments());
 
-        if(iObserver.getValue() == null) {
+        if (iObserver.getValue() == null) {
             iObserver.setValue(ADD_NEW_FIELD);
         } else {
             iObserver.setValue(iObserver.getValue() + ADD_NEW_FIELD);
@@ -352,11 +354,11 @@ public class Repository {
 
     }
 
-    private void insertWithdrawalsToDatabase(final WithdrawalsListEntity withdrawalsList){
+    private void insertWithdrawalsToDatabase(final WithdrawalsListEntity withdrawalsList) {
 
         userCharacteristicForMap.setWithdrawalsTransactions(withdrawalsList.getWithdrawals());
 
-        if(iObserver.getValue() == null) {
+        if (iObserver.getValue() == null) {
             iObserver.setValue(ADD_NEW_FIELD);
         } else {
             iObserver.setValue(iObserver.getValue() + ADD_NEW_FIELD);
@@ -405,11 +407,11 @@ public class Repository {
         });
     }
 
-    public MutableLiveData<LoginResultInfo> addNewUserToDatabase(String login, String password, int city){
-        
+    public MutableLiveData<LoginResultInfo> addNewUserToDatabase(String login, String password, int city) {
+
         refresherCity = city;
 
-        MutableLiveData<LoginResultInfo> data = NetworkDataSource.getInstance().checkLogin(login,password,city);
+        MutableLiveData<LoginResultInfo> data = NetworkDataSource.getInstance().checkLogin(login, password, city);
 
         data.observeForever(new Observer<LoginResultInfo>() {
             @Override
@@ -459,10 +461,10 @@ public class Repository {
                         insertUserConnectionInfoToDatabase(userInfoEntity.getUserConnectionsInfoList());
                         findUserCashTransactions();
 
-                        data.removeObserver(this);
-                    }
+                    data.removeObserver(this);
                 }
-            });
+            }
+        });
     }
 
     private void putOrReplaceUserCharacteristics(){
@@ -538,8 +540,8 @@ public class Repository {
         });
     }
 
-    public MutableLiveData<Document> getPaymentRedirection(String... strings) {
-        return TachcardDataSource.getInstance().pay(strings);
+    public void getPaymentRedirection(MutableLiveData<Document> redirectDocument,String... strings) {
+        TachcardDataSource.getInstance().pay(redirectDocument,strings);
     }
 
 }

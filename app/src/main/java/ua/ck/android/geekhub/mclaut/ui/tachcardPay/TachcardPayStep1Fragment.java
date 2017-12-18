@@ -1,7 +1,6 @@
 package ua.ck.android.geekhub.mclaut.ui.tachcardPay;
 
 
-import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,14 +10,18 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.ImageButton;
+import android.widget.TextView;
+import android.widget.Toast;
 
-import org.jsoup.nodes.Document;
+import java.util.Locale;
 
 import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnTextChanged;
 import ua.ck.android.geekhub.mclaut.R;
 
 public class TachcardPayStep1Fragment extends Fragment {
@@ -44,17 +47,21 @@ public class TachcardPayStep1Fragment extends Fragment {
     TextInputLayout yyTIL;
     @BindView(R.id.fragment_tachcard_pay_select_card_image_button)
     ImageButton selectCardButton;
+    @BindView(R.id.fragment_tachcard_pay_save_card_checkbox)
+    CheckBox saveCardCB;
+    @BindView(R.id.fragment_tachcard_pay_save_card_text)
+    TextView saveCardT;
     @BindView(R.id.tachcard_pay_confirm)
     CircularProgressButton confirmCPB;
+    @BindView(R.id.fragment_tachcard_pay_result_summ_text)
+    TextView resultSummTV;
+
     private TachcardPayViewModel viewModel;
-
-
-    OnPaymentRedirect paymentRedirectListener;
-
 
     public interface OnPaymentRedirect {
         void redirect(String location, String html);
     }
+
 
     @Nullable
     @Override
@@ -63,40 +70,70 @@ public class TachcardPayStep1Fragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_tachcard_pay, container, false);
         ButterKnife.bind(this, rootView);
         viewModel = ViewModelProviders.of(this).get(TachcardPayViewModel.class);
-        viewModel.getProgressStatusData().observe(this, new Observer<Boolean>() {
-            @Override
-            public void onChanged(@Nullable Boolean aBoolean) {
-                if (aBoolean) {
-                    showProgress();
-                } else {
-                    hideProgress();
-                }
+        viewModel.getProgressStatusData().observe(this, aBoolean -> {
+            if (aBoolean) {
+                showProgress();
+            } else {
+                hideProgress();
             }
         });
-        viewModel.getSetError().observe(this, new Observer<Integer>() {
-            @Override
-            public void onChanged(@Nullable Integer integer) {
-                switch (integer) {
-                    case 0:
-                        summTIL.setError(getString(R.string.error_minimum_refung));
-                        break;
-                    case 1:
-                        cardNumberTIL.setError(getString(R.string.error_card_number));
-                        break;
-                    case 2:
-                        mmTIL.setErrorEnabled(true);
-                        yyTIL.setErrorEnabled(true);
-                        break;
-                    case 3:
-                        cvvTIL.setErrorEnabled(true);
-                        break;
-                    default:
-                        break;
-                }
+        viewModel.getSetError().observe(this, integer -> {
+            switch (integer) {
+                case 0:
+                    summTIL.setError(getString(R.string.error_minimum_refung));
+                    summTIL.setErrorEnabled(true);
+                    break;
+                case 1:
+                    cardNumberTIL.setError(getString(R.string.error_card_number));
+                    cardNumberTIL.setErrorEnabled(true);
+                    break;
+                case 2:
+                    mmTIL.setErrorEnabled(true);
+                    yyTIL.setErrorEnabled(true);
+                    break;
+                case 3:
+                    cvvTIL.setErrorEnabled(true);
+                    break;
+                default:
+                    break;
+            }
+        });
+        viewModel.getRedirectDocument().observe(this, document -> {
+            if (document != null) {
+                OnPaymentRedirect paymentRedirectListener = (OnPaymentRedirect) getActivity();
+                paymentRedirectListener.redirect(document.location(), document.html());
+            } else {
+                hideProgress();
+                Toast.makeText(getActivity(), getString(R.string.payment_network_error), Toast.LENGTH_LONG).show();
             }
         });
         return rootView;
     }
+
+    @OnTextChanged(R.id.fragment_tachcard_pay_summ_text_input_edit_text)
+    public void showFinalSumm() {
+        String summString = summTIEL.getText().toString();
+        if (summString.length() < 1) {
+            resultSummTV.setText(R.string.payment_amount_due_empty);
+        } else {
+            double summDouble = Double.parseDouble(summString);
+            if (summDouble < 5) {
+                resultSummTV.setText(R.string.payment_amount_due_empty);
+                return;
+            }
+            double tax = summDouble * 0.025;
+            if (tax > 1) {
+                double result = summDouble + tax;
+                String outStr = getString(R.string.payment_amount_due) + String.format(Locale.ENGLISH, "%.2f", result) + getString(R.string.uah_symbol);
+                resultSummTV.setText(outStr);
+            } else {
+                double result = summDouble + 1.;
+                String outStr = getString(R.string.payment_amount_due) + String.format(Locale.ENGLISH, "%.2f", result) + getString(R.string.uah_symbol);
+                resultSummTV.setText(outStr);
+            }
+        }
+    }
+
 
     @OnClick(R.id.tachcard_pay_confirm)
     public void confirmPayment() {
@@ -105,14 +142,22 @@ public class TachcardPayStep1Fragment extends Fragment {
         String mm = mmTIEL.getText().toString();
         String yy = yyTIEL.getText().toString();
         String cvv = cvvTIEL.getText().toString();
-        Document result = viewModel.pay(summ, cardNumber, mm, yy, cvv);
-        if (result != null) {
-            paymentRedirectListener.redirect(result.location(), result.html());
-        }
+        summTIL.setErrorEnabled(false);
+        cardNumberTIL.setErrorEnabled(false);
+        mmTIL.setErrorEnabled(false);
+        yyTIL.setErrorEnabled(false);
+        cvvTIL.setErrorEnabled(false);
+        viewModel.pay(getContext(), summ, cardNumber, mm, yy, cvv);
+    }
+
+    @OnClick(R.id.fragment_tachcard_pay_save_card_text)
+    public void changeCheckBox() {
+        saveCardCB.setChecked(!saveCardCB.isChecked());
     }
 
     public void showProgress() {
         confirmCPB.startAnimation();
+        summTIEL.setEnabled(false);
         selectCardButton.setEnabled(false);
         cardNumberTIET.setEnabled(false);
         mmTIEL.setEnabled(false);
@@ -122,12 +167,11 @@ public class TachcardPayStep1Fragment extends Fragment {
 
     public void hideProgress() {
         confirmCPB.revertAnimation();
+        summTIEL.setEnabled(true);
         selectCardButton.setEnabled(true);
         cardNumberTIET.setEnabled(true);
         mmTIEL.setEnabled(true);
         yyTIEL.setEnabled(true);
         cvvTIEL.setEnabled(true);
     }
-
-
 }

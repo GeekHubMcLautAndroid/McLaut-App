@@ -33,8 +33,9 @@
     <string name="payment_next">Далее</string>
     <string name="payment_card_number">Номер карты</string>
     <string name="payment_save_card">Сохранить карту.</string>
-    <string name="error_minimum_refung">Мінімальна сума поповнення 5 грн.</string>
+    <string name="error_minimum_refung">Минимальная сумма пополнения 5 грн.</string>
     <string name="error_card_number">Неверный формат карты.</string>
+
     <string name="label_tab_withdrawals">Снятия</string>
     <string name="label_tab_payments">Пополнения</string>
     <string name="label_tab_all">Все</string>
@@ -43,5 +44,10 @@
     <string name="label_pay_type_other">Другое</string>
     <string name="label_pay_type_pay_at_day">Плата за сутки</string>
     <string name="label_pay_type_terminal">Через терминал</string>
+
+    <string name="payment_replenishment_amount">Сумма пополнения</string>
+    <string name="payment_network_error">Сетевая ошибка</string>
+    <string name="payment_amount_due_empty">Сумма к оплате: _.__₴</string>
+    <string name="payment_amount_due">Сумма к оплате:</string>
 
 </resources>

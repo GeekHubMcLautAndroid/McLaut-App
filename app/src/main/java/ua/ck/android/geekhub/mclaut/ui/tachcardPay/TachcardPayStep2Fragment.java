@@ -13,16 +13,12 @@ public class TachcardPayStep2Fragment extends Fragment {
     String location;
     String html;
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        location = savedInstanceState.getString("location");
-        html = savedInstanceState.getString("html");
-    }
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+        Bundle argument = getArguments();
+        location = argument.getString("location");
+        html = argument.getString("html");
         WebView outWebView = new WebView(inflater.getContext());
         outWebView.getSettings().setJavaScriptEnabled(true);
         String mine = "text/html";

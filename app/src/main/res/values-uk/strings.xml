@@ -45,4 +45,8 @@
     <string name="label_pay_type_terminal">Через термінал</string>
 
 
+    <string name="payment_replenishment_amount">Сума поповнення</string>
+    <string name="payment_network_error">Помилка мережі</string>
+    <string name="payment_amount_due_empty">Сума до сплати: _.__₴</string>
+    <string name="payment_amount_due">Сума до сплати:</string>
 </resources>

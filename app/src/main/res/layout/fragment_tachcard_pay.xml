@@ -6,19 +6,21 @@
     android:layout_marginHorizontal="@dimen/login_screen_sideways_margin"
     android:layout_marginVertical="@dimen/login_screen_image_top_margin"
     android:gravity="center"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:theme="@style/PaymentTheme">
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/fragment_tachcard_pay_summ_text_input_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/payment_card_number">
+        android:hint="@string/payment_replenishment_amount"
+        android:nextFocusDown="@id/fragment_tachcard_pay_card_number_text_input_edit_text">
 
         <android.support.design.widget.TextInputEditText
             android:id="@+id/fragment_tachcard_pay_summ_text_input_edit_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="number"
+            android:inputType="numberDecimal"
             android:maxLength="16" />
     </android.support.design.widget.TextInputLayout>
 
@@ -40,7 +42,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="number"
-                android:maxLength="16" />
+                android:maxLength="16"
+                android:nextFocusDown="@id/fragment_tachcard_pay_mm_text_input_edit_text" />
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.VisibilityAwareImageButton
@@ -69,7 +72,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="number"
-                android:maxLength="2" />
+                android:maxLength="2"
+                android:nextFocusDown="@id/fragment_tachcard_pay_yy_text_input_edit_text" />
         </android.support.design.widget.TextInputLayout>
 
         <TextView
@@ -90,7 +94,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="number"
-                android:maxLength="2" />
+                android:maxLength="2"
+                android:nextFocusDown="@id/fragment_tachcard_pay_cvv_text_input_edit_text" />
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
@@ -100,8 +105,7 @@
             android:layout_marginLeft="124dp"
             android:layout_weight="2"
             android:hint="@string/payment_cvv"
-            app:passwordToggleContentDescription=""
-            app:passwordToggleDrawable="@drawable/help_circle_outline"
+            app:passwordToggleDrawable="@drawable/password_toggle"
             app:passwordToggleEnabled="true">
 
             <android.support.design.widget.TextInputEditText
@@ -125,10 +129,19 @@
             android:layout_height="wrap_content" />
 
         <TextView
+            android:id="@+id/fragment_tachcard_pay_save_card_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/payment_save_card" />
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/fragment_tachcard_pay_result_summ_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:textColor="@color/colorPrimary"
+        android:textSize="24sp" />
 
     <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
         android:id="@+id/tachcard_pay_confirm"
@@ -136,7 +149,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="24dp"
-        android:background="@color/colorAccent"
+        android:background="@color/colorPrimary"
         android:text="@string/payment_next"
         android:textColor="@android:color/white"
         app:spinning_bar_color="@android:color/white"

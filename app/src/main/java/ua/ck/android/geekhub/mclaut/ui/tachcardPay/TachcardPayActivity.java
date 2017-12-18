@@ -9,7 +9,9 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import org.jsoup.nodes.Document;
 
@@ -23,35 +25,37 @@ public class TachcardPayActivity extends AppCompatActivity implements TachcardPa
     @BindView(R.id.flPaymentContent)
     FrameLayout mFrameLayout;
     private FragmentManager fragmentManager;
+    @BindView(R.id.toolBar)
+    Toolbar toolbar;
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        finish();
+        return false;
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tachcard_pay);
         ButterKnife.bind(this);
-        Fragment fragment = null;
-        try {
-            fragment = TachcardPayStep1Fragment.class.newInstance();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Fragment fragment = new TachcardPayStep1Fragment();
         fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.flPaymentContent, fragment)
                 .commit();
+
     }
 
     @Override
     public void redirect(String location, String html) {
-        Fragment fragment = null;
-        try {
-            fragment = TachcardPayStep2Fragment.class.newInstance();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        Fragment fragment = new TachcardPayStep2Fragment();
         Bundle arg = new Bundle();
         arg.putString("location", location);
         arg.putString("html", html);
+        fragment.setArguments(arg);
         fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.flPaymentContent, fragment)
