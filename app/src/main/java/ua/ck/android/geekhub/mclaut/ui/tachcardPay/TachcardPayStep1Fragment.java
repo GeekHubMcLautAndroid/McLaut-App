@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
 import butterknife.BindView;
@@ -55,6 +56,7 @@ public class TachcardPayStep1Fragment extends Fragment {
         void redirect(String location, String html);
     }
 
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -70,11 +72,6 @@ public class TachcardPayStep1Fragment extends Fragment {
             }
         });
         viewModel.getSetError().observe(this, integer -> {
-            summTIL.setErrorEnabled(false);
-            cardNumberTIL.setErrorEnabled(false);
-            mmTIL.setErrorEnabled(false);
-            yyTIL.setErrorEnabled(false);
-            cvvTIL.setErrorEnabled(false);
             switch (integer) {
                 case 0:
                     summTIL.setError(getString(R.string.error_minimum_refung));
@@ -96,8 +93,13 @@ public class TachcardPayStep1Fragment extends Fragment {
             }
         });
         viewModel.getRedirectDocument().observe(this, document -> {
-            OnPaymentRedirect paymentRedirectListener = (OnPaymentRedirect) getActivity();
-            paymentRedirectListener.redirect(document.location(), document.html());
+            if (document != null) {
+                OnPaymentRedirect paymentRedirectListener = (OnPaymentRedirect) getActivity();
+                paymentRedirectListener.redirect(document.location(), document.html());
+            } else {
+                hideProgress();
+                Toast.makeText(getActivity(), getString(R.string.payment_network_error),Toast.LENGTH_LONG).show();
+            }
         });
         return rootView;
     }
@@ -109,6 +111,11 @@ public class TachcardPayStep1Fragment extends Fragment {
         String mm = mmTIEL.getText().toString();
         String yy = yyTIEL.getText().toString();
         String cvv = cvvTIEL.getText().toString();
+        summTIL.setErrorEnabled(false);
+        cardNumberTIL.setErrorEnabled(false);
+        mmTIL.setErrorEnabled(false);
+        yyTIL.setErrorEnabled(false);
+        cvvTIL.setErrorEnabled(false);
         viewModel.pay(getContext(), summ, cardNumber, mm, yy, cvv);
     }
 

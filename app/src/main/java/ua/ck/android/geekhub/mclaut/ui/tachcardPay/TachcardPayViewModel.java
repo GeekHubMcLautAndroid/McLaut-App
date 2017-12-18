@@ -17,23 +17,11 @@ import ua.ck.android.geekhub.mclaut.data.model.UserCharacteristic;
 import ua.ck.android.geekhub.mclaut.data.model.UserInfoEntity;
 
 public class TachcardPayViewModel extends ViewModel implements Observer<HashMap<String, UserCharacteristic>> {
-    private static TachcardPayViewModel instance;
     private UserInfoEntity userData;
     private MutableLiveData<Boolean> showProgressStatus = new MutableLiveData<>();
     private MutableLiveData<Integer> setError = new MutableLiveData<>();
     private MutableLiveData<Document> redirectDocument = new MutableLiveData<>();
     private Repository repo = Repository.getInstance();
-    int errorMinimumRefungCode = 0;
-    int errorCardNumberCode = 1;
-    int errorMM_YYCode = 2;
-    int errorCVVCode = 3;
-
-    public static TachcardPayViewModel getInstance() {
-        if (instance == null) {
-            instance = new TachcardPayViewModel();
-        }
-        return instance;
-    }
 
     MutableLiveData<Boolean> getProgressStatusData() {
         return showProgressStatus;
@@ -43,7 +31,7 @@ public class TachcardPayViewModel extends ViewModel implements Observer<HashMap<
         return setError;
     }
 
-    public MutableLiveData<Document> getRedirectDocument() {
+    MutableLiveData<Document> getRedirectDocument() {
         return redirectDocument;
     }
 
@@ -60,6 +48,7 @@ public class TachcardPayViewModel extends ViewModel implements Observer<HashMap<
     void pay(Context context, String summ, String cardNumber, String mm, String yy, String cvv) {
         showProgressStatus.postValue(true);
         int[] digits = new int[cardNumber.length()];
+        int errorMinimumRefungCode = 0;
         if (summ.length() < 1) {
             setError.postValue(errorMinimumRefungCode);
             showProgressStatus.postValue(false);
@@ -74,10 +63,12 @@ public class TachcardPayViewModel extends ViewModel implements Observer<HashMap<
             digits[i] = Integer.parseInt(String.valueOf(cardNumber.charAt(i)));
         }
         if (cardNumber.length() < 16 || !checkLuhn(digits)) {
+            int errorCardNumberCode = 1;
             setError.postValue(errorCardNumberCode);
             showProgressStatus.postValue(false);
             return;
         }
+        int errorMM_YYCode = 2;
         if (mm.length() < 2) {
             setError.postValue(errorMM_YYCode);
             showProgressStatus.postValue(false);
@@ -89,6 +80,7 @@ public class TachcardPayViewModel extends ViewModel implements Observer<HashMap<
             return;
         }
         if (cvv.length() != 3) {
+            int errorCVVCode = 3;
             setError.postValue(errorCVVCode);
             showProgressStatus.postValue(false);
             return;
@@ -100,11 +92,6 @@ public class TachcardPayViewModel extends ViewModel implements Observer<HashMap<
         repo.getPaymentRedirection(redirectDocument, baseUrl, cardNumber, mm, yy, cvv);
         Repository.getInstance().getMapUsersCharacteristic().removeObserver(this);
     }
-
-    public void redirect(Document result) {
-        redirectDocument.postValue(result);
-    }
-
 
     private boolean checkLuhn(int[] digits) {
         int sum = 0;

@@ -1,9 +1,7 @@
 package ua.ck.android.geekhub.mclaut.data.network;
 
 import android.arch.lifecycle.MutableLiveData;
-import android.arch.lifecycle.Observer;
 import android.os.AsyncTask;
-import android.support.annotation.Nullable;
 
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
@@ -13,15 +11,13 @@ import org.jsoup.select.Elements;
 
 import java.io.IOException;
 
-import ua.ck.android.geekhub.mclaut.data.Repository;
-
 /**
  * Created by Nimolee on 26-Nov-17.
  */
 
 public class TachcardDataSource {
     private static TachcardDataSource instance;
-    MutableLiveData<Document> resultMLD;
+    private MutableLiveData<Document> resultMLD;
 
     public static TachcardDataSource getInstance() {
         if (instance == null) {
@@ -47,6 +43,7 @@ public class TachcardDataSource {
                 secondStage = main.parse().getElementById("secondStage");
                 tc_user_session = main.cookie("tc_user_session");
             } catch (IOException e) {
+                resultMLD.postValue(null);
                 return null;
             }
             Elements hiddenInputs = secondStage.select("input[type=hidden]");
@@ -70,6 +67,7 @@ public class TachcardDataSource {
                         .followRedirects(true)
                         .post();
             } catch (IOException e) {
+                resultMLD.postValue(null);
                 return null;
             }
             resultMLD.postValue(result);

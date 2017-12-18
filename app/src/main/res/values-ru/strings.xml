@@ -30,5 +30,6 @@
     <string name="error_minimum_refung">Минимальная сумма пополнения 5 грн.</string>
     <string name="error_card_number">Неверный формат карты.</string>
     <string name="payment_replenishment_amount">Сумма пополнения</string>
+    <string name="payment_network_error">Сетевая ошибка</string>
 
 </resources>
