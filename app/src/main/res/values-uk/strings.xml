@@ -14,6 +14,7 @@
     <string name="settings">Налаштування</string>
     <string name="payment">Поповнення</string>
     <string name="add_new_user">Додати аккаунт</string>
+    <string name="personal_account">o/p: </string>
 
     <!--Dialog items info-->
     <string name="dialog_text">Ви впевнені ?</string>

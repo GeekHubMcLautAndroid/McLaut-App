@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity implements Observer<Pair<Str
     @BindView(R.id.drawer_navigation_view)
     NavigationView mNavigationView;
 
-    private TextView drawerUserId;
+    private TextView drawerUserPersonalAccount;
     private TextView drawerUserName;
     private ImageButton buttonSelectLayout;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -60,8 +60,8 @@ public class MainActivity extends AppCompatActivity implements Observer<Pair<Str
 
         ButterKnife.bind(this);
 
-        drawerUserId = mNavigationView.getHeaderView(0)
-                .findViewById(R.id.tv_header_user_id);
+        drawerUserPersonalAccount = mNavigationView.getHeaderView(0)
+                .findViewById(R.id.tv_header_user_personal_number);
         drawerUserName = mNavigationView.getHeaderView(0)
                 .findViewById(R.id.tv_header_user_name);
         buttonSelectLayout = mNavigationView.getHeaderView(0)
@@ -277,7 +277,7 @@ public class MainActivity extends AppCompatActivity implements Observer<Pair<Str
     @Override
     public void onChanged(@Nullable Pair<String, String> stringStringHashMap) {
         if (stringStringHashMap != null) {
-            drawerUserId.setText(stringStringHashMap.first);
+            drawerUserPersonalAccount.setText(getResources().getString(R.string.personal_account) + " " + stringStringHashMap.first);
             drawerUserName.setText(stringStringHashMap.second);
         }
     }

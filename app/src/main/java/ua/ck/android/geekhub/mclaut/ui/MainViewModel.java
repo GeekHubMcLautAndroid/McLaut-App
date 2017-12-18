@@ -50,7 +50,7 @@ public class MainViewModel extends ViewModel implements SharedPreferences.OnShar
     private void postCurrentUserLiveData(UserCharacteristic userCharacteristic){
         if(userCharacteristic.getInfo() != null) {
             Pair<String, String> res = new Pair<>(
-                    userCharacteristic.getInfo().getId(),
+                    userCharacteristic.getInfo().getAccount(),
                     userCharacteristic.getInfo().getName()
 
             );
