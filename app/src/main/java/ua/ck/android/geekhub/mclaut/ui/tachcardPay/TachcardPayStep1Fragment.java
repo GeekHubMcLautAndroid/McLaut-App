@@ -1,6 +1,7 @@
 package ua.ck.android.geekhub.mclaut.ui.tachcardPay;
 
 
+import android.app.AlertDialog;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -15,6 +16,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.HashMap;
 import java.util.Locale;
 
 import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
@@ -23,6 +25,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
 import ua.ck.android.geekhub.mclaut.R;
+import ua.ck.android.geekhub.mclaut.data.model.CardInfoEntity;
 
 public class TachcardPayStep1Fragment extends Fragment {
     @BindView(R.id.fragment_tachcard_pay_summ_text_input_edit_text)
@@ -134,6 +137,23 @@ public class TachcardPayStep1Fragment extends Fragment {
         }
     }
 
+    @OnClick(R.id.fragment_tachcard_pay_select_card_image_button)
+    public void openSelectCardDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        HashMap<String, CardInfoEntity> mapCardEntities = viewModel.getCards();
+        String[] type = new String[]{};
+        String[] keys = mapCardEntities.keySet().toArray(type);
+        builder.setTitle("Оберіть картку").setItems(keys, (dialogInterface, i) -> {
+            cardNumberTIET.setText(mapCardEntities.get(keys[i]).getCardNumber());
+            mmTIEL.setText(mapCardEntities.get(keys[i]).getEndMonth());
+            yyTIEL.setText(mapCardEntities.get(keys[i]).getEndYear());
+            mapCardEntities.get(keys[i]).incrementCounterOfUses(getContext());
+        }).setPositiveButton("Налаштування карток", (dialogInterface, i) -> {
+            //TODO:Go to settings
+        }).setNegativeButton("Відмінити", (dialogInterface, i) -> {
+        });
+        builder.create().show();
+    }
 
     @OnClick(R.id.tachcard_pay_confirm)
     public void confirmPayment() {
@@ -147,7 +167,7 @@ public class TachcardPayStep1Fragment extends Fragment {
         mmTIL.setErrorEnabled(false);
         yyTIL.setErrorEnabled(false);
         cvvTIL.setErrorEnabled(false);
-        viewModel.pay(getContext(), summ, cardNumber, mm, yy, cvv);
+        viewModel.pay(getContext(), summ, cardNumber, mm, yy, cvv, saveCardCB.isChecked());
     }
 
     @OnClick(R.id.fragment_tachcard_pay_save_card_text)
