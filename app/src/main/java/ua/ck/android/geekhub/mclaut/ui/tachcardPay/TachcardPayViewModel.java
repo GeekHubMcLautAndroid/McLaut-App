@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import org.jsoup.nodes.Document;
 
 import java.util.HashMap;
+import java.util.Locale;
 
 import ua.ck.android.geekhub.mclaut.R;
 import ua.ck.android.geekhub.mclaut.app.McLautApplication;
@@ -54,7 +55,8 @@ public class TachcardPayViewModel extends ViewModel implements Observer<HashMap<
             showProgressStatus.postValue(false);
             return;
         }
-        if (Double.parseDouble(summ) < 5) {
+        double summDouble = Double.parseDouble(summ);
+        if (summDouble < 5) {
             setError.postValue(errorMinimumRefungCode);
             showProgressStatus.postValue(false);
             return;
@@ -88,7 +90,7 @@ public class TachcardPayViewModel extends ViewModel implements Observer<HashMap<
         String[] regions = new String[]{"cherkasy", "smela", "kanev", "zoloto", "ph", "vatutino", "zven"};
         String baseUrl = context.getString(R.string.payment_baseUrl);
         baseUrl += regions[userData.getCity()];
-        baseUrl += "?&amount=" + summ + "&account=" + userData.getAccount();
+        baseUrl += "?&amount=" + String.format(Locale.ENGLISH,"%.2f",summDouble) + "&account=" + userData.getAccount();
         repo.getPaymentRedirection(redirectDocument, baseUrl, cardNumber, mm, yy, cvv);
         Repository.getInstance().getMapUsersCharacteristic().removeObserver(this);
     }

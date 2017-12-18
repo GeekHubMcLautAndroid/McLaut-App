@@ -31,4 +31,6 @@
     <string name="error_card_number">Невірний формат карти.</string>
     <string name="payment_replenishment_amount">Сума поповнення</string>
     <string name="payment_network_error">Помилка мережі</string>
+    <string name="payment_amount_due_empty">Сума до оплати: _.__₴</string>
+    <string name="payment_amount_due">Сума до оплати:</string>
 </resources>

@@ -1,5 +1,6 @@
 package ua.ck.android.geekhub.mclaut.data.network;
 
+import android.annotation.SuppressLint;
 import android.arch.lifecycle.MutableLiveData;
 import android.os.AsyncTask;
 
@@ -32,6 +33,7 @@ public class TachcardDataSource {
         network.execute(strings);
     }
 
+    @SuppressLint("StaticFieldLeak")
     class NetworkThread extends AsyncTask<String, Void, Void> {
         @Override
         protected Void doInBackground(String... strings) {

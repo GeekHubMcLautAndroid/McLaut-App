@@ -15,10 +15,13 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Locale;
+
 import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnTextChanged;
 import ua.ck.android.geekhub.mclaut.R;
 
 public class TachcardPayStep1Fragment extends Fragment {
@@ -50,6 +53,9 @@ public class TachcardPayStep1Fragment extends Fragment {
     TextView saveCardT;
     @BindView(R.id.tachcard_pay_confirm)
     CircularProgressButton confirmCPB;
+    @BindView(R.id.fragment_tachcard_pay_result_summ_text)
+    TextView resultSummTV;
+
     private TachcardPayViewModel viewModel;
 
     public interface OnPaymentRedirect {
@@ -98,11 +104,36 @@ public class TachcardPayStep1Fragment extends Fragment {
                 paymentRedirectListener.redirect(document.location(), document.html());
             } else {
                 hideProgress();
-                Toast.makeText(getActivity(), getString(R.string.payment_network_error),Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), getString(R.string.payment_network_error), Toast.LENGTH_LONG).show();
             }
         });
         return rootView;
     }
+
+    @OnTextChanged(R.id.fragment_tachcard_pay_summ_text_input_edit_text)
+    public void showFinalSumm() {
+        String summString = summTIEL.getText().toString();
+        if (summString.length() < 1) {
+            resultSummTV.setText(R.string.payment_amount_due_empty);
+        } else {
+            double summDouble = Double.parseDouble(summString);
+            if (summDouble < 5) {
+                resultSummTV.setText(R.string.payment_amount_due_empty);
+                return;
+            }
+            double tax = summDouble * 0.025;
+            if (tax > 1) {
+                double result = summDouble + tax;
+                String outStr = getString(R.string.payment_amount_due) + String.format(Locale.ENGLISH, "%.2f", result) + getString(R.string.uah_symbol);
+                resultSummTV.setText(outStr);
+            } else {
+                double result = summDouble + 1.;
+                String outStr = getString(R.string.payment_amount_due) + String.format(Locale.ENGLISH, "%.2f", result) + getString(R.string.uah_symbol);
+                resultSummTV.setText(outStr);
+            }
+        }
+    }
+
 
     @OnClick(R.id.tachcard_pay_confirm)
     public void confirmPayment() {

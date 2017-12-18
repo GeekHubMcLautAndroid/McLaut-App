@@ -20,7 +20,7 @@
             android:id="@+id/fragment_tachcard_pay_summ_text_input_edit_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="number"
+            android:inputType="numberDecimal"
             android:maxLength="16" />
     </android.support.design.widget.TextInputLayout>
 
@@ -134,6 +134,14 @@
             android:layout_height="wrap_content"
             android:text="@string/payment_save_card" />
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/fragment_tachcard_pay_result_summ_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:textColor="@color/colorPrimary"
+        android:textSize="24sp" />
 
     <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
         android:id="@+id/tachcard_pay_confirm"
