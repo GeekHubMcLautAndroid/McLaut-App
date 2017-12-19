@@ -11,7 +11,9 @@
         android:supportsRtl="true"
         android:theme="@style/McLautAppTheme">
         <activity android:name=".ui.MainActivity"/>
-        <activity android:name=".ui.tachcardPay.TachcardPayActivity"/>
+        <activity android:name=".ui.tachcardPay.TachcardPayActivity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
+            android:theme="@style/PaymentTheme"/>
         <activity android:name=".ui.authorization.LoginActivity"
             android:theme="@style/McLautAppTheme"
             android:screenOrientation="portrait">
