@@ -14,6 +14,7 @@ import java.util.Locale;
 import ua.ck.android.geekhub.mclaut.R;
 import ua.ck.android.geekhub.mclaut.app.McLautApplication;
 import ua.ck.android.geekhub.mclaut.data.Repository;
+import ua.ck.android.geekhub.mclaut.data.model.CardInfoEntity;
 import ua.ck.android.geekhub.mclaut.data.model.UserCharacteristic;
 import ua.ck.android.geekhub.mclaut.data.model.UserInfoEntity;
 
@@ -46,7 +47,7 @@ public class TachcardPayViewModel extends ViewModel implements Observer<HashMap<
         userData = characteristic.getInfo();
     }
 
-    void pay(Context context, String summ, String cardNumber, String mm, String yy, String cvv) {
+    void pay(Context context, String summ, String cardNumber, String mm, String yy, String cvv, boolean saveCard) {
         showProgressStatus.postValue(true);
         int[] digits = new int[cardNumber.length()];
         int errorMinimumRefungCode = 0;
@@ -87,10 +88,15 @@ public class TachcardPayViewModel extends ViewModel implements Observer<HashMap<
             showProgressStatus.postValue(false);
             return;
         }
+        if (saveCard) {
+            if (!repo.getMapCardEntities().containsKey(cardNumber)) {
+                repo.addNewCard(new CardInfoEntity(cardNumber, mm, yy));
+            }
+        }
         String[] regions = new String[]{"cherkasy", "smela", "kanev", "zoloto", "ph", "vatutino", "zven"};
         String baseUrl = context.getString(R.string.payment_baseUrl);
         baseUrl += regions[userData.getCity()];
-        baseUrl += "?&amount=" + String.format(Locale.ENGLISH,"%.2f",summDouble) + "&account=" + userData.getAccount();
+        baseUrl += "?&amount=" + String.format(Locale.ENGLISH, "%.2f", summDouble) + "&account=" + userData.getAccount();
         repo.getPaymentRedirection(redirectDocument, baseUrl, cardNumber, mm, yy, cvv);
         Repository.getInstance().getMapUsersCharacteristic().removeObserver(this);
     }
@@ -106,5 +112,9 @@ public class TachcardPayViewModel extends ViewModel implements Observer<HashMap<
             sum += digit > 9 ? digit - 9 : digit;
         }
         return sum % 10 == 0;
+    }
+
+    HashMap<String, CardInfoEntity> getCards() {
+        return repo.getMapCardEntities();
     }
 }
