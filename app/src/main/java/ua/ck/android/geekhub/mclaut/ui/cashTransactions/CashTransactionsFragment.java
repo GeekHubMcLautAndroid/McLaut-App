@@ -40,9 +40,9 @@ public class CashTransactionsFragment extends Fragment {
     private void setupViewPager(ViewPager viewPager){
         CashTransactionsViewPagerAdapter adapter = new CashTransactionsViewPagerAdapter(getChildFragmentManager());
 
+        addFragmentToAdapter(adapter,TRANSACTION_TYPE_ALL,getString(R.string.label_tab_all));
         addFragmentToAdapter(adapter,TRANSACTION_TYPE_PAYMENTS,getString(R.string.label_tab_payments));
         addFragmentToAdapter(adapter,TRANSACTION_TYPE_WITHDRAWALS,getString(R.string.label_tab_withdrawals));
-        addFragmentToAdapter(adapter,TRANSACTION_TYPE_ALL,getString(R.string.label_tab_all));
 
         viewPager.setAdapter(adapter);
 
