@@ -32,6 +32,7 @@ public class CashTransactionsEntity {
     @SerializedName("id_client")
     @NonNull
     private String idClient;
+    @SerializedName("sum_before")
     private double sumBefore;
 
     public CashTransactionsEntity(int type, String idClient, Long date, double sum, double sumBefore) {
@@ -74,4 +75,5 @@ public class CashTransactionsEntity {
         }
         this.typeOfTransaction = WITHDRAWALS;
     }
+    
 }

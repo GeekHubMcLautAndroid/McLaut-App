@@ -45,6 +45,9 @@ public class CashTransactionsFragment extends Fragment {
         addFragmentToAdapter(adapter,TRANSACTION_TYPE_ALL,getString(R.string.label_tab_all));
 
         viewPager.setAdapter(adapter);
+
+        //load all fragments to memory
+        viewPager.setOffscreenPageLimit(3);
     }
     private void addFragmentToAdapter(CashTransactionsViewPagerAdapter adapter, int transactionType, String label){
         TransactionsInfoFragment fragment = new TransactionsInfoFragment();

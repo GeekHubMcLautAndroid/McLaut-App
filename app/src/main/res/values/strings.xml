@@ -10,11 +10,11 @@
     <string name="error_empty_field">Empty field</string>
 
     <!--Drawer Toggle strings-->
-    <string name="drawer_toggle_open">open_drawer</string>
-    <string name="drawer_toggle_close">close_drawer</string>
+    <string name="drawer_toggle_open" translatable="false">open_drawer</string>
+    <string name="drawer_toggle_close" translatable="false">close_drawer</string>
 
-    <string name="btn_tag_key_id">user_id</string>
-    <string name="btn_tag_key_item_index">item_index</string>
+    <string name="btn_tag_key_id" translatable="false">user_id</string>
+    <string name="btn_tag_key_item_index" translatable="false">item_index</string>
 
     <!--Drawer items names-->
     <string name="general_information">General information</string>
@@ -56,11 +56,12 @@
     <string name="label_tab_withdrawals">Withdrawals</string>
     <string name="label_tab_payments">Payments</string>
     <string name="label_tab_all">All</string>
+    <string name="label_text_after_transaction">Balance after transaction: %1$.2f₴</string>
 
 
-    <string name="enable_user_list">_user_list</string>
-    <string name="enable_info">_user_info</string>
-    <string name="remove_user">_remove_user</string>
+    <string name="enable_user_list" translatable="false">_user_list</string>
+    <string name="enable_info" translatable="false">_user_info</string>
+    <string name="remove_user" translatable="false">_remove_user</string>
 
     <string name="label_transaction_type_payment">Payment</string>
     <string name="label_transaction_type_withdraw">Withdraw</string>
@@ -68,7 +69,7 @@
     <string name="label_pay_type_pay_at_day">Pay per day</string>
     <string name="label_pay_type_terminal">Terminal</string>
 
-    <string name="payment_baseUrl">https://user.tachcard.com/uk/pay-mclaut</string>
+    <string name="payment_baseUrl" translatable="false">https://user.tachcard.com/uk/pay-mclaut</string>
     <string name="payment_replenishment_amount">Replenishment amount</string>
     <string name="payment_network_error">Network error.</string>
     <string name="payment_amount_due_empty">Amount due:__.__₴</string>

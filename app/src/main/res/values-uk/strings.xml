@@ -50,4 +50,5 @@
     <string name="payment_network_error">Помилка мережі</string>
     <string name="payment_amount_due_empty">Сума до сплати: _.__₴</string>
     <string name="payment_amount_due">Сума до сплати:</string>
+    <string name="label_text_after_transaction">Баланс після операції: %1$.2f₴</string>
 </resources>

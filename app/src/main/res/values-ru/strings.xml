@@ -50,5 +50,6 @@
     <string name="payment_network_error">Сетевая ошибка</string>
     <string name="payment_amount_due_empty">Сумма к оплате: _.__₴</string>
     <string name="payment_amount_due">Сумма к оплате:</string>
+    <string name="label_text_after_transaction">Баланс после операции: %1$.2f₴</string>
 
 </resources>

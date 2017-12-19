@@ -97,6 +97,9 @@ class TransactionsViewHolder extends RecyclerView.ViewHolder {
                 else{
                     typeTextView.setText(context.getString(R.string.label_pay_type_other));
                 }
+                double balanceAfter = transaction.getSumBefore() + transaction.getSum();
+                balanceAfterTextView.setText(context.getString(R.string.label_text_after_transaction,
+                        balanceAfter));
                 break;
             case TRANSACTION_TYPE_WITHDRAW:
                 transactionTypeTextView.setText(context.getString(R.string.label_transaction_type_withdraw));
@@ -110,6 +113,8 @@ class TransactionsViewHolder extends RecyclerView.ViewHolder {
                 else{
                     typeTextView.setText(context.getString(R.string.label_pay_type_other));
                 }
+                balanceAfterTextView.setText(context.getString(R.string.label_text_after_transaction,
+                        (transaction.getSumBefore() - transaction.getSum())));
                 break;
         }
         DateTime transactionDate = DateConverter.fromTimestampToDateTime(transaction.getDate());
@@ -119,5 +124,6 @@ class TransactionsViewHolder extends RecyclerView.ViewHolder {
                 transactionDate.getHourOfDay() + ":" +
                 transactionDate.getMinuteOfHour();
         transactionDateTextView.setText(dateTime);
+
     }
 }

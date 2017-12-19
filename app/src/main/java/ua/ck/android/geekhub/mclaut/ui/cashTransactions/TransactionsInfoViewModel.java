@@ -6,6 +6,8 @@ import android.arch.lifecycle.ViewModel;
 import android.support.annotation.Nullable;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
@@ -29,23 +31,26 @@ public class TransactionsInfoViewModel extends ViewModel implements Observer<Has
 
     @Override
     public void onChanged(@Nullable HashMap<String, UserCharacteristic> stringUserCharacteristicHashMap) {
+        List<CashTransactionsEntity> transactionsList = new ArrayList<>();
         switch (transactionsType){
             case TRANSACTION_TYPE_PAYMENTS:
-                transactions.postValue(stringUserCharacteristicHashMap.
-                        get(McLautApplication.getSelectedUser()).getPaymentsTransactions());
+                transactionsList = stringUserCharacteristicHashMap.
+                        get(McLautApplication.getSelectedUser()).getPaymentsTransactions();
                 break;
             case TRANSACTION_TYPE_WITHDRAWALS:
-                transactions.postValue(stringUserCharacteristicHashMap.
-                        get(McLautApplication.getSelectedUser()).getWithdrawalsTransactions());
+                transactionsList = stringUserCharacteristicHashMap.
+                        get(McLautApplication.getSelectedUser()).getWithdrawalsTransactions();
                 break;
             case TRANSACTION_TYPE_ALL:
-                List<CashTransactionsEntity> allTransactions = new ArrayList<>(stringUserCharacteristicHashMap
+                transactionsList = new ArrayList<>(stringUserCharacteristicHashMap
                 .get(McLautApplication.getSelectedUser()).getPaymentsTransactions());
-                allTransactions.addAll(stringUserCharacteristicHashMap.get(McLautApplication.getSelectedUser()).
+                transactionsList.addAll(stringUserCharacteristicHashMap.get(McLautApplication.getSelectedUser()).
                         getWithdrawalsTransactions());
-                transactions.postValue(allTransactions);
                 break;
         }
+        Collections.sort(transactionsList, (cashTransactionsEntity, t1) ->
+                cashTransactionsEntity.getDate() > t1.getDate() ? -1 : 1);
+        transactions.postValue(transactionsList);
     }
 
     public void setTransactionsType(int transactionsType) {
