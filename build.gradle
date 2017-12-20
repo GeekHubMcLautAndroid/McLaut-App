@@ -1,7 +1,16 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
-    
+    ext {
+        supportLibVersion = "26.1.0"
+        architectureComponentsLibrary = "1.0.0"
+        butterknifeVersion = "8.8.1"
+        retrofitVersion = "2.3.0"
+        jsoupVersion = "1.11.1"
+        jobDispatcherVersion = "0.8.5"
+        loadingButtonVersion = "1.8.4"
+        jodaTimeVersion = "2.9.9.1"
+    }
     repositories {
         google()
         jcenter()

@@ -34,22 +34,38 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'com.android.support:appcompat-v7:26.1.0'
+
+    //Tests
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
-    compile 'android.arch.persistence.room:runtime:1.0.0'
-    annotationProcessor "android.arch.persistence.room:compiler:1.0.0"
-    compile 'android.arch.lifecycle:runtime:1.0.3'
-    compile 'android.arch.lifecycle:extensions:1.0.0'
-    annotationProcessor "android.arch.lifecycle:compiler:1.0.0"
-    compile 'com.android.support:design:26.1.0'
-    compile 'com.jakewharton:butterknife:8.8.1'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
-    compile 'br.com.simplepass:loading-button-android:1.8.4'
-    compile 'com.squareup.retrofit2:retrofit:2.3.0'
-    compile 'com.squareup.retrofit2:converter-gson:2.3.0'
-    compile 'com.android.support:cardview-v7:26.1.0'
-    compile 'org.jsoup:jsoup:1.11.1'
-    compile 'net.danlew:android.joda:2.9.9.1'
+
+    //support library
+    implementation "com.android.support:appcompat-v7:$supportLibVersion"
+    implementation "com.android.support:design:$supportLibVersion"
+    implementation "com.android.support:cardview-v7:$supportLibVersion"
+
+    //Architecture components
+    implementation "android.arch.lifecycle:runtime:1.0.3"
+    implementation "android.arch.lifecycle:extensions:$architectureComponentsLibrary"
+    annotationProcessor "android.arch.lifecycle:compiler:$architectureComponentsLibrary"
+    implementation "android.arch.persistence.room:runtime:$architectureComponentsLibrary"
+    annotationProcessor "android.arch.persistence.room:compiler:$architectureComponentsLibrary"
+
+    //Binding
+    implementation "com.jakewharton:butterknife:$butterknifeVersion"
+    annotationProcessor "com.jakewharton:butterknife-compiler:$butterknifeVersion"
+
+    //Networking
+    implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
+    implementation "org.jsoup:jsoup:$jsoupVersion"
+
+    //Sync
+    implementation "com.firebase:firebase-jobdispatcher:$jobDispatcherVersion"
+
+    //Other
+    implementation "br.com.simplepass:loading-button-android:$loadingButtonVersion"
+    implementation "net.danlew:android.joda:$jodaTimeVersion"
+
 }
