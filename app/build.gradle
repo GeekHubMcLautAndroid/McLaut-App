@@ -40,6 +40,9 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
 
+    //Play services
+    implementation "com.google.android.gms:play-services-gcm:$playServicesVersion"
+
     //support library
     implementation "com.android.support:appcompat-v7:$supportLibVersion"
     implementation "com.android.support:design:$supportLibVersion"
@@ -61,8 +64,6 @@ dependencies {
     implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
     implementation "org.jsoup:jsoup:$jsoupVersion"
 
-    //Sync
-    implementation "com.firebase:firebase-jobdispatcher:$jobDispatcherVersion"
 
     //Other
     implementation "br.com.simplepass:loading-button-android:$loadingButtonVersion"

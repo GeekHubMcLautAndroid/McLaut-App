@@ -7,9 +7,9 @@ buildscript {
         butterknifeVersion = "8.8.1"
         retrofitVersion = "2.3.0"
         jsoupVersion = "1.11.1"
-        jobDispatcherVersion = "0.8.5"
         loadingButtonVersion = "1.8.4"
         jodaTimeVersion = "2.9.9.1"
+        playServicesVersion = "11.8.0"
     }
     repositories {
         google()

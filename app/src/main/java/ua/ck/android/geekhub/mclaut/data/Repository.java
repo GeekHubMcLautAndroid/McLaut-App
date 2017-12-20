@@ -260,7 +260,7 @@ public class Repository {
         return request;
     }
 
-    private MutableLiveData<List<String>> getAllUsersId() {
+    public MutableLiveData<List<String>> getAllUsersId() {
         final MutableLiveData<List<String>> request = new MutableLiveData<>();
 
         executor.databaseExecutor().execute(() -> {
