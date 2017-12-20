@@ -88,7 +88,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="/"
+                    android:text="@string/payment_slash"
                     android:textSize="42sp" />
 
                 <android.support.design.widget.TextInputLayout
@@ -111,7 +111,7 @@
                     android:id="@+id/fragment_tachcard_pay_cvv_text_input_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="124dp"
+                    android:layout_marginStart="124dp"
                     android:layout_weight="2"
                     android:hint="@string/payment_cvv"
                     app:passwordToggleDrawable="@drawable/password_toggle"
