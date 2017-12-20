@@ -6,7 +6,6 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.Observer;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 
 import java.util.List;
@@ -36,7 +35,6 @@ public class SyncJobService extends JobService implements Observer<List<String>>
         if (strings != null) {
             for(String s : strings){
                 Repository.getInstance().refreshUserInfo(s);
-                Log.d("JobScheduler","Change user");
             }
         }
     }
