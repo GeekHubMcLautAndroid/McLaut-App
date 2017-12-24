@@ -3,15 +3,19 @@
         <item
             android:id="@+id/general_information_fragment"
             android:checked="true"
+            android:icon="@drawable/ic_assignment_black_24dp"
             android:title="@string/general_information" />
         <item
             android:id="@+id/cash_operations"
+            android:icon="@drawable/ic_import_export_black_24dp"
             android:title="@string/cash_operations" />
     </group>
     <item
-        android:id="@+id/settings_fragment"
-        android:title="@string/settings" />
-    <item
         android:id="@+id/payment_activity"
+        android:icon="@drawable/ic_account_balance_wallet_black_24dp"
         android:title="@string/payment" />
+    <item
+        android:id="@+id/settings_fragment"
+        android:icon="@drawable/ic_settings_black_24dp"
+        android:title="@string/settings" />
 </menu>
