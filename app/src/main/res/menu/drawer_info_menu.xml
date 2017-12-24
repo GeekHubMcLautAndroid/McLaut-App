@@ -1,5 +1,4 @@
-<menu
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/general_information_fragment"
@@ -8,11 +7,11 @@
         <item
             android:id="@+id/cash_operations"
             android:title="@string/cash_operations" />
-        <item
-            android:id="@+id/settings_fragment"
-            android:title="@string/settings" />
-        <item
-            android:id="@+id/payment_activity"
-            android:title="@string/payment" />
     </group>
+    <item
+        android:id="@+id/settings_fragment"
+        android:title="@string/settings" />
+    <item
+        android:id="@+id/payment_activity"
+        android:title="@string/payment" />
 </menu>
