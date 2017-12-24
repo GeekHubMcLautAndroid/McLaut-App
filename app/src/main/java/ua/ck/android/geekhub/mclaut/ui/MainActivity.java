@@ -32,7 +32,7 @@ import ua.ck.android.geekhub.mclaut.data.model.UserCharacteristic;
 import ua.ck.android.geekhub.mclaut.tools.McLautAppExecutor;
 import ua.ck.android.geekhub.mclaut.ui.authorization.LoginActivity;
 import ua.ck.android.geekhub.mclaut.ui.cashTransactions.CashTransactionsFragment;
-import ua.ck.android.geekhub.mclaut.ui.settings.SettingsFragment;
+import ua.ck.android.geekhub.mclaut.ui.settings.SettingsActivity;
 import ua.ck.android.geekhub.mclaut.ui.tachcardPay.TachcardPayActivity;
 import ua.ck.android.geekhub.mclaut.ui.userInfo.UserInfoFragment;
 
@@ -207,9 +207,9 @@ public class MainActivity extends AppCompatActivity implements Observer<Pair<Str
 
                 break;
             case R.id.settings_fragment:
-                fragmentClass = SettingsFragment.class;
-
-                break;
+                Intent intentSettings = new Intent(getBaseContext(), SettingsActivity.class);
+                startActivity(intentSettings);
+                return;
             case R.id.payment_activity:
                 Intent intentTachCar = new Intent(getBaseContext(), TachcardPayActivity.class);
                 startActivity(intentTachCar);

@@ -1,4 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="Category">
+        <SwitchPreference
+            android:key="key1"
+            android:title="Switch Preference"
+            android:summary="Switch Summary"
+            android:defaultValue="true" />
+    </PreferenceCategory>
 
 </PreferenceScreen>

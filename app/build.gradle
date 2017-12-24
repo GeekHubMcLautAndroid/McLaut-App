@@ -10,7 +10,7 @@ android {
         versionName '0.0.5'
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
-        javaCompileOptions{
+        javaCompileOptions {
             annotationProcessorOptions {
                 arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
             }
@@ -36,6 +36,7 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
     //Tests
+
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
@@ -44,9 +45,11 @@ dependencies {
     implementation "com.google.android.gms:play-services-gcm:$playServicesVersion"
 
     //support library
+    implementation "com.android.support:support-v4:$supportLibVersion"
     implementation "com.android.support:appcompat-v7:$supportLibVersion"
     implementation "com.android.support:design:$supportLibVersion"
     implementation "com.android.support:cardview-v7:$supportLibVersion"
+    implementation "com.takisoft.fix:preference-v7:$supportLibVersion.3"
 
     //Architecture components
     implementation "android.arch.lifecycle:runtime:1.0.3"
@@ -63,7 +66,6 @@ dependencies {
     implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
     implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
     implementation "org.jsoup:jsoup:$jsoupVersion"
-
 
     //Other
     implementation "br.com.simplepass:loading-button-android:$loadingButtonVersion"

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="ua.ck.android.geekhub.mclaut">
-    <uses-permission android:name="android.permission.INTERNET"/>
 
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
@@ -13,20 +13,30 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/McLautAppTheme">
-        <activity android:name=".ui.MainActivity"/>
-        <activity android:name=".ui.tachcardPay.TachcardPayActivity"
+        <activity android:name=".ui.MainActivity" />
+        <activity
+            android:name=".ui.tachcardPay.TachcardPayActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
-            android:theme="@style/PaymentTheme"/>
-        <activity android:name=".ui.authorization.LoginActivity"
-            android:theme="@style/McLautAppTheme"
-            android:screenOrientation="portrait">
+            android:theme="@style/PaymentTheme" />
+        <activity
+            android:name=".ui.authorization.LoginActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/McLautAppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ui.settings.SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:theme="@style/PreferenceTheme"/>
 
-        <service android:name=".synchronization.SyncJobService"
-            android:exported="false" android:permission="android.permission.BIND_JOB_SERVICE"/>
+        <service
+            android:name=".synchronization.SyncJobService"
+            android:exported="false"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
     </application>
+
 </manifest>
