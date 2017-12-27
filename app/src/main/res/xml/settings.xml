@@ -1,10 +1,33 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <PreferenceCategory android:title="Category">
+    <PreferenceCategory android:title="Network settings">
+        <ListPreference
+            android:defaultValue="60"
+            android:entries="@array/update_time_list"
+            android:entryValues="@array/update_time_list_values"
+            android:key="pref_update_time"
+            android:title="Частота автооновлення" />
         <SwitchPreference
-            android:key="key1"
-            android:title="Switch Preference"
-            android:summary="Switch Summary"
-            android:defaultValue="true" />
+            android:defaultValue="false"
+            android:key="pref_always_in_tray"
+            android:summary="Дозволити фонове оновлення за допомогою мобільного інтернету."
+            android:title="Мобільний інтернет" />
     </PreferenceCategory>
-
+    <PreferenceCategory android:title="Notification setting">
+        <ListPreference
+            android:defaultValue="1"
+            android:entries="@array/alarm_time_list"
+            android:entryValues="@array/alarm_time_list_values"
+            android:key="pref_alarm"
+            android:title="Сповіщувати про низький рахунок" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="Card setting">
+        <Preference
+            android:summary="Select cards what you wanna to delete"
+            android:title="Delete card" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="About">
+        <Preference
+            android:summary="0.0.5"
+            android:title="Version" />
+    </PreferenceCategory>
 </PreferenceScreen>

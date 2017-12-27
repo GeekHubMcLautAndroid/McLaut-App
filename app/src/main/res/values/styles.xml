@@ -24,10 +24,9 @@
         <item name="colorAccent">@color/colorPrimary</item>
     </style>
 
-    <style name="PreferenceTheme" parent="@style/PreferenceFixTheme.Light.DarkActionBar">
+    <style name="PreferenceTheme" parent="@style/Theme.AppCompat.Light.DarkActionBar">
         <item name="colorAccent">@color/colorAccent</item>
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <!-- [...] -->
     </style>
 </resources>

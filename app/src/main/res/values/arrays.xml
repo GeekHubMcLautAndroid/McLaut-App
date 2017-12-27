@@ -9,4 +9,37 @@
         <item>Vatutine</item>
         <item>Zvynigorodka</item>
     </string-array>
+    <string-array name="update_time_list">
+        <item>Never</item>
+        <item>15 min</item>
+        <item>30 min</item>
+        <item>1 hour</item>
+        <item>2 hour</item>
+        <item>6 hour</item>
+        <item>12 hour</item>
+        <item>24 hour</item>
+    </string-array>
+    <string-array name="update_time_list_values">
+        <item>0</item>
+        <item>15</item>
+        <item>30</item>
+        <item>60</item>
+        <item>120</item>
+        <item>180</item>
+        <item>360</item>
+        <item>720</item>
+        <item>1440</item>
+    </string-array>
+    <string-array name="alarm_time_list">
+        <item>Never</item>
+        <item>In that day</item>
+        <item>One day before</item>
+        <item>Two day before</item>
+    </string-array>
+    <string-array name="alarm_time_list_values">
+        <item>-1</item>
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
 </resources>

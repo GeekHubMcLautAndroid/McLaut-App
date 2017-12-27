@@ -49,7 +49,8 @@ dependencies {
     implementation "com.android.support:appcompat-v7:$supportLibVersion"
     implementation "com.android.support:design:$supportLibVersion"
     implementation "com.android.support:cardview-v7:$supportLibVersion"
-    implementation "com.takisoft.fix:preference-v7:$supportLibVersion.3"
+    implementation "com.android.support:preference-v7:$supportLibVersion"
+    implementation "com.android.support:preference-v14:$supportLibVersion"
 
     //Architecture components
     implementation "android.arch.lifecycle:runtime:1.0.3"
