@@ -28,5 +28,11 @@
 
         <service android:name=".synchronization.SyncJobService"
             android:exported="false" android:permission="android.permission.BIND_JOB_SERVICE"/>
+
+        <receiver android:name=".notifications.LowBalanceNotificationReceiver">
+            <intent-filter>
+                <action android:name="start_notification"/>
+            </intent-filter>
+        </receiver>
     </application>
 </manifest>
