@@ -60,6 +60,8 @@ public class TachcardPayStep1Fragment extends Fragment {
     CircularProgressButton confirmCPB;
     @BindView(R.id.fragment_tachcard_pay_result_summ_text)
     TextView resultSummTV;
+    @BindView(R.id.fragment_tachcard_pay_pa)
+    TextInputEditText accountIdTIET;
 
     private TachcardPayViewModel viewModel;
 
@@ -75,6 +77,7 @@ public class TachcardPayStep1Fragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_tachcard_pay, container, false);
         ButterKnife.bind(this, rootView);
         viewModel = ViewModelProviders.of(this).get(TachcardPayViewModel.class);
+        accountIdTIET.setText(viewModel.getAccountID());
         viewModel.getProgressStatusData().observe(this, aBoolean -> {
             if (aBoolean) {
                 showProgress();
@@ -112,6 +115,7 @@ public class TachcardPayStep1Fragment extends Fragment {
                 Toast.makeText(getActivity(), getString(R.string.payment_network_error), Toast.LENGTH_LONG).show();
             }
         });
+
         return rootView;
     }
 

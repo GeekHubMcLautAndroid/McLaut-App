@@ -117,4 +117,8 @@ public class TachcardPayViewModel extends ViewModel implements Observer<HashMap<
     HashMap<String, CardInfoEntity> getCards() {
         return repo.getMapCardEntities();
     }
+
+    String getAccountID() {
+        return userData.getAccount();
+    }
 }
