@@ -2,6 +2,7 @@ package ua.ck.android.geekhub.mclaut.ui.settings;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.pm.PackageInfo;
 import android.content.res.Configuration;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
@@ -32,6 +33,10 @@ import ua.ck.android.geekhub.mclaut.R;
  * API Guide</a> for more information on developing a Settings UI.
  */
 public class SettingsActivity extends AppCompatPreferenceActivity {
+
+    interface VersionInterface {
+        void setVersion(String version);
+    }
 
     /**
      * A preference value change listener that updates the preference's summary
@@ -164,6 +169,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static class GeneralPreferenceFragment extends PreferenceFragment {
+
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
@@ -175,6 +181,12 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             // guidelines.
             bindPreferenceSummaryToValue(findPreference("pref_update_time"));
             bindPreferenceSummaryToValue(findPreference("pref_alarm"));
+            try {
+                PackageInfo packageInfo = getActivity().getPackageManager().getPackageInfo(getActivity().getPackageName(), 0);
+                findPreference("pref_version").setSummary(packageInfo.versionName);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 

@@ -26,6 +26,8 @@
             android:title="@string/settings_delete_cards" />
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/settings_about">
-        <Preference android:title="@string/settings_version" />
+        <Preference
+            android:key="pref_version"
+            android:title="@string/settings_version" />
     </PreferenceCategory>
 </PreferenceScreen>
