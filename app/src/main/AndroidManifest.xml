@@ -17,7 +17,7 @@
         <activity
             android:name=".ui.tachcardPay.TachcardPayActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
-            android:theme="@style/PaymentTheme" />
+            android:theme="@style/PreferenceTheme" />
         <activity
             android:name=".ui.authorization.LoginActivity"
             android:screenOrientation="portrait"
@@ -31,7 +31,7 @@
         <activity
             android:name=".ui.settings.SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:theme="@style/PreferenceTheme"/>
+            android:theme="@style/PreferenceTheme" />
 
         <service
             android:name=".synchronization.SyncJobService"
