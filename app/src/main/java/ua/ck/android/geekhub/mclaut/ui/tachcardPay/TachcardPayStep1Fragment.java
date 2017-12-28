@@ -143,19 +143,23 @@ public class TachcardPayStep1Fragment extends Fragment {
     public void openSelectCardDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         HashMap<String, CardInfoEntity> mapCardEntities = viewModel.getCards();
-        String[] type = new String[]{};
-        String[] keys = mapCardEntities.keySet().toArray(type);
-        builder.setTitle(R.string.payment_select_card).setItems(keys, (dialogInterface, i) -> {
-            cardNumberTIET.setText(mapCardEntities.get(keys[i]).getCardNumber());
-            mmTIEL.setText(mapCardEntities.get(keys[i]).getEndMonth());
-            yyTIEL.setText(mapCardEntities.get(keys[i]).getEndYear());
-            mapCardEntities.get(keys[i]).incrementCounterOfUses(getContext());
-        }).setPositiveButton(getString(R.string.payment_goto_card_settings), (dialogInterface, i) -> {
-            Intent intentSettings = new Intent(getActivity(), SettingsActivity.class);
-            startActivity(intentSettings);
-        }).setNegativeButton(getString(R.string.dialog_button_cancel), (dialogInterface, i) -> {
-        });
-        builder.create().show();
+        if (mapCardEntities.size() > 0) {
+            String[] type = new String[]{};
+            String[] keys = mapCardEntities.keySet().toArray(type);
+            builder.setTitle(R.string.payment_select_card).setItems(keys, (dialogInterface, i) -> {
+                cardNumberTIET.setText(mapCardEntities.get(keys[i]).getCardNumber());
+                mmTIEL.setText(mapCardEntities.get(keys[i]).getEndMonth());
+                yyTIEL.setText(mapCardEntities.get(keys[i]).getEndYear());
+                mapCardEntities.get(keys[i]).incrementCounterOfUses(getContext());
+            }).setPositiveButton(getString(R.string.payment_goto_card_settings), (dialogInterface, i) -> {
+                Intent intentSettings = new Intent(getActivity(), SettingsActivity.class);
+                startActivity(intentSettings);
+            }).setNegativeButton(getString(R.string.dialog_button_cancel), (dialogInterface, i) -> {
+            });
+            builder.create().show();
+        } else {
+            Toast.makeText(getActivity(), R.string.dialog_empty_card_list, Toast.LENGTH_LONG).show();
+        }
     }
 
     @OnClick(R.id.tachcard_pay_confirm)

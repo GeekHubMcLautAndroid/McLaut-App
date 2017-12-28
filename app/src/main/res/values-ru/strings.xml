@@ -64,5 +64,6 @@
     <string name="settings_version">Версия</string>
     <string name="title_activity_settings">Настройки</string>
     <string name="dialog_remove">УДАЛИТЬ</string>
+    <string name="dialog_empty_card_list">Cписок карт пустий.</string>
 
 </resources>

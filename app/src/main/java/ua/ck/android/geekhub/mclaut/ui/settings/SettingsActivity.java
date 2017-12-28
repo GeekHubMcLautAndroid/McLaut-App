@@ -19,6 +19,7 @@ import android.preference.RingtonePreference;
 import android.support.v7.app.ActionBar;
 import android.text.TextUtils;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import java.util.HashMap;
 
@@ -195,20 +196,24 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             findPreference("pref_remove_card").setOnPreferenceClickListener(preference -> {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 HashMap<String, CardInfoEntity> mapCardEntities = Repository.getInstance().getMapCardEntities();
-                String[] type = new String[]{};
-                String[] keys = mapCardEntities.keySet().toArray(type);
-                boolean[] checkedItems = new boolean[keys.length];
-                builder.setTitle(R.string.payment_select_card).setMultiChoiceItems(keys, checkedItems, (dialog, which, isChecked) -> {
-                    checkedItems[which] = isChecked;
-                }).setPositiveButton(getString(R.string.dialog_remove), (dialog, which) -> {
-                    for (int i = 0; i < checkedItems.length; i++) {
-                        if (checkedItems[i]) {
-                            Repository.getInstance().deleteCard(keys[i]);
+                if (mapCardEntities.size() > 0) {
+                    String[] type = new String[]{};
+                    String[] keys = mapCardEntities.keySet().toArray(type);
+                    boolean[] checkedItems = new boolean[keys.length];
+                    builder.setTitle(R.string.payment_select_card).setMultiChoiceItems(keys, checkedItems, (dialog, which, isChecked) -> {
+                        checkedItems[which] = isChecked;
+                    }).setPositiveButton(getString(R.string.dialog_remove), (dialog, which) -> {
+                        for (int i = 0; i < checkedItems.length; i++) {
+                            if (checkedItems[i]) {
+                                Repository.getInstance().deleteCard(keys[i]);
+                            }
                         }
-                    }
-                }).setNegativeButton(getString(R.string.dialog_button_cancel), (dialogInterface, i) -> {
-                });
-                builder.create().show();
+                    }).setNegativeButton(getString(R.string.dialog_button_cancel), (dialogInterface, i) -> {
+                    });
+                    builder.create().show();
+                } else {
+                    Toast.makeText(getActivity(), R.string.dialog_empty_card_list, Toast.LENGTH_LONG).show();
+                }
                 return true;
             });
         }

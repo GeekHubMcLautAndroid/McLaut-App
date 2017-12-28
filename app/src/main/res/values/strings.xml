@@ -90,4 +90,5 @@
     <string name="settings_about">About program</string>
     <string name="settings_version">Version</string>
     <string name="dialog_remove">REMOVE</string>
+    <string name="dialog_empty_card_list">Empty card list.</string>
 </resources>
