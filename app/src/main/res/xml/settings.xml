@@ -22,6 +22,7 @@
     </PreferenceCategory>
     <PreferenceCategory android:title="Card setting">
         <Preference
+            android:key="pref_remove_card"
             android:summary="@string/settings_delete_cards_summary"
             android:title="@string/settings_delete_cards" />
     </PreferenceCategory>

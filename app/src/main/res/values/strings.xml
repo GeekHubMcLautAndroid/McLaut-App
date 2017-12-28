@@ -89,4 +89,5 @@
     <string name="settings_delete_cards_summary">Select cards what you wanna to delete.</string>
     <string name="settings_about">About program</string>
     <string name="settings_version">Version</string>
+    <string name="dialog_remove">REMOVE</string>
 </resources>

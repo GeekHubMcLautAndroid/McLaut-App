@@ -1,6 +1,7 @@
 package ua.ck.android.geekhub.mclaut.ui.settings;
 
 import android.annotation.TargetApi;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.res.Configuration;
@@ -19,7 +20,11 @@ import android.support.v7.app.ActionBar;
 import android.text.TextUtils;
 import android.view.MenuItem;
 
+import java.util.HashMap;
+
 import ua.ck.android.geekhub.mclaut.R;
+import ua.ck.android.geekhub.mclaut.data.Repository;
+import ua.ck.android.geekhub.mclaut.data.model.CardInfoEntity;
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On
@@ -187,6 +192,25 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            findPreference("pref_remove_card").setOnPreferenceClickListener(preference -> {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                HashMap<String, CardInfoEntity> mapCardEntities = Repository.getInstance().getMapCardEntities();
+                String[] type = new String[]{};
+                String[] keys = mapCardEntities.keySet().toArray(type);
+                boolean[] checkedItems = new boolean[keys.length];
+                builder.setTitle(R.string.payment_select_card).setMultiChoiceItems(keys, checkedItems, (dialog, which, isChecked) -> {
+                    checkedItems[which] = isChecked;
+                }).setPositiveButton(getString(R.string.dialog_remove), (dialog, which) -> {
+                    for (int i = 0; i < checkedItems.length; i++) {
+                        if (checkedItems[i]) {
+                            Repository.getInstance().deleteCard(keys[i]);
+                        }
+                    }
+                }).setNegativeButton(getString(R.string.dialog_button_cancel), (dialogInterface, i) -> {
+                });
+                builder.create().show();
+                return true;
+            });
         }
     }
 
