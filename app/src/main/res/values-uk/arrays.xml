@@ -36,4 +36,10 @@
         <item>23 год.</item>
         <item>24 год.</item>
     </string-array>
+    <string-array name="alarm_time_list">
+        <item>Ніколи</item>
+        <item>В той же день</item>
+        <item>За один день</item>
+        <item>За два дня</item>
+    </string-array>
 </resources>

@@ -36,4 +36,10 @@
         <item>23 ч.</item>
         <item>24 ч.</item>
     </string-array>
+    <string-array name="alarm_time_list">
+        <item>Никогда</item>
+        <item>За тот день</item>
+        <item>За день</item>
+        <item>За два дня</item>
+    </string-array>
 </resources>
