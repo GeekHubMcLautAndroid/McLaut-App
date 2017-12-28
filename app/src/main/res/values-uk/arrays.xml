@@ -9,4 +9,30 @@
         <item>Ватутіне</item>
         <item>Звенигородка</item>
     </string-array>
+    <string-array name="update_time_list">
+        <item>Ніколи</item>
+        <item>1 год.</item>
+        <item>2 год.</item>
+        <item>3 год.</item>
+        <item>4 год.</item>
+        <item>5 год.</item>
+        <item>6 год.</item>
+        <item>7 год.</item>
+        <item>8 год.</item>
+        <item>9 год.</item>
+        <item>10 год.</item>
+        <item>11 год.</item>
+        <item>12 год.</item>
+        <item>13 год.</item>
+        <item>15 год.</item>
+        <item>16 год.</item>
+        <item>17 год.</item>
+        <item>18 год.</item>
+        <item>19 год.</item>
+        <item>20 год.</item>
+        <item>21 год.</item>
+        <item>22 год.</item>
+        <item>23 год.</item>
+        <item>24 год.</item>
+    </string-array>
 </resources>

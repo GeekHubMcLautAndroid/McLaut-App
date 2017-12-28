@@ -53,5 +53,14 @@
     <string name="payment_select_card">Оберите картку</string>
     <string name="payment_goto_card_settings">УПРАВЛЕНИЕ КАРТКАМИ</string>
     <string name="label_text_after_transaction">Баланс после операции: %1$.2f₴</string>
+    <string name="settings_autoupdate">Частота автооновлення</string>
+    <string name="settings_mobilenetwork">Мобільний інтернет</string>
+    <string name="settings_mobilenetwork_summary">Дозволити фонове оновлення за допомогою мобільного інтернету.</string>
+    <string name="settings_network">Network settings</string>
+    <string name="settings_low_balance_alarm">Сповіщувати про низький рахунок</string>
+    <string name="settings_delete_cards">Delete card</string>
+    <string name="settings_delete_cards_summary">Select cards what you wanna to delete</string>
+    <string name="settings_about">About</string>
+    <string name="settings_version">Version</string>
 
 </resources>

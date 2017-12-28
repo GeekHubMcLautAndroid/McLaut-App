@@ -1,16 +1,16 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <PreferenceCategory android:title="Network settings">
+    <PreferenceCategory android:title="@string/settings_network">
         <ListPreference
-            android:defaultValue="60"
+            android:defaultValue="1"
             android:entries="@array/update_time_list"
             android:entryValues="@array/update_time_list_values"
             android:key="pref_update_time"
-            android:title="Частота автооновлення" />
+            android:title="@string/settings_autoupdate" />
         <SwitchPreference
             android:defaultValue="false"
             android:key="pref_always_in_tray"
-            android:summary="Дозволити фонове оновлення за допомогою мобільного інтернету."
-            android:title="Мобільний інтернет" />
+            android:summary="@string/settings_mobilenetwork_summary"
+            android:title="@string/settings_mobilenetwork" />
     </PreferenceCategory>
     <PreferenceCategory android:title="Notification setting">
         <ListPreference
@@ -18,16 +18,14 @@
             android:entries="@array/alarm_time_list"
             android:entryValues="@array/alarm_time_list_values"
             android:key="pref_alarm"
-            android:title="Сповіщувати про низький рахунок" />
+            android:title="@string/settings_low_balance_alarm" />
     </PreferenceCategory>
     <PreferenceCategory android:title="Card setting">
         <Preference
-            android:summary="Select cards what you wanna to delete"
-            android:title="Delete card" />
+            android:summary="@string/settings_delete_cards_summary"
+            android:title="@string/settings_delete_cards" />
     </PreferenceCategory>
-    <PreferenceCategory android:title="About">
-        <Preference
-            android:summary="0.0.5"
-            android:title="Version" />
+    <PreferenceCategory android:title="@string/settings_about">
+        <Preference android:title="@string/settings_version" />
     </PreferenceCategory>
 </PreferenceScreen>

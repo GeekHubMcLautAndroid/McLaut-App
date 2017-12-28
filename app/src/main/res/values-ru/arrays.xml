@@ -9,4 +9,30 @@
         <item>Ватутино</item>
         <item>Звенигородка</item>
     </string-array>
+    <string-array name="update_time_list">
+        <item>Никогда</item>
+        <item>1 час</item>
+        <item>2 часа</item>
+        <item>3 часа</item>
+        <item>4 часа</item>
+        <item>5 часа</item>
+        <item>6 часа</item>
+        <item>7 часа</item>
+        <item>8 часа</item>
+        <item>9 часа</item>
+        <item>10 часа</item>
+        <item>11 часа</item>
+        <item>12 часа</item>
+        <item>13 часа</item>
+        <item>15 часа</item>
+        <item>16 часа</item>
+        <item>17 часа</item>
+        <item>18 часа</item>
+        <item>19 часа</item>
+        <item>20 часа</item>
+        <item>21 часа</item>
+        <item>22 часа</item>
+        <item>23 часа</item>
+        <item>24 часа</item>
+    </string-array>
 </resources>
