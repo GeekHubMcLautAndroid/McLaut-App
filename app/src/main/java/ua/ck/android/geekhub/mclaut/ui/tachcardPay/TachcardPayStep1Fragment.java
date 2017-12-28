@@ -3,6 +3,7 @@ package ua.ck.android.geekhub.mclaut.ui.tachcardPay;
 
 import android.app.AlertDialog;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
@@ -26,6 +27,7 @@ import butterknife.OnClick;
 import butterknife.OnTextChanged;
 import ua.ck.android.geekhub.mclaut.R;
 import ua.ck.android.geekhub.mclaut.data.model.CardInfoEntity;
+import ua.ck.android.geekhub.mclaut.ui.settings.SettingsActivity;
 
 public class TachcardPayStep1Fragment extends Fragment {
     @BindView(R.id.fragment_tachcard_pay_summ_text_input_edit_text)
@@ -149,7 +151,8 @@ public class TachcardPayStep1Fragment extends Fragment {
             yyTIEL.setText(mapCardEntities.get(keys[i]).getEndYear());
             mapCardEntities.get(keys[i]).incrementCounterOfUses(getContext());
         }).setPositiveButton(getString(R.string.payment_goto_card_settings), (dialogInterface, i) -> {
-            //TODO:Go to settings
+            Intent intentSettings = new Intent(getActivity(), SettingsActivity.class);
+            startActivity(intentSettings);
         }).setNegativeButton(getString(R.string.dialog_button_cancel), (dialogInterface, i) -> {
         });
         builder.create().show();
