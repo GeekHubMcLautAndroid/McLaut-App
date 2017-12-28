@@ -56,10 +56,11 @@
     <string name="settings_autoupdate">Частота автооновлення</string>
     <string name="settings_mobilenetwork">Мобільний інтернет</string>
     <string name="settings_mobilenetwork_summary">Дозволити фонове оновлення за допомогою мобільного інтернету.</string>
-    <string name="settings_network">Network settings</string>
+    <string name="settings_network">Мережеві налаштування</string>
     <string name="settings_low_balance_alarm">Сповіщувати про низький рахунок</string>
-    <string name="settings_delete_cards">Delete card</string>
-    <string name="settings_delete_cards_summary">Select cards what you wanna to delete</string>
-    <string name="settings_about">About</string>
-    <string name="settings_version">Version</string>
+    <string name="settings_delete_cards">Виделення карток</string>
+    <string name="settings_delete_cards_summary">Виберіть картки, які ви хочете видалити.</string>
+    <string name="settings_about">Про програму</string>
+    <string name="settings_version">Версія</string>
+    <string name="title_activity_settings">Налаштування</string>
 </resources>
