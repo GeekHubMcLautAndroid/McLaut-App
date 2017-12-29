@@ -7,6 +7,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.media.RingtoneManager;
 import android.support.v4.app.NotificationCompat;
 
 import ua.ck.android.geekhub.mclaut.R;
@@ -40,12 +41,17 @@ public class NotificationHelper {
 
     public void showLowBalanceNotification(Context context, String account, String balance, int days){
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, MCLAUT_NOTIFICATIONS_CHANNEL_ID);
-
+        String title = context.getString(R.string.notification_low_balance_title);
+        String content = context.getString(R.string.notification_low_balance_content,account,balance,days);
         //TODO: set app icon
         builder.setSmallIcon(R.drawable.ic_launcher_foreground);
-        builder.setContentTitle(context.getString(R.string.notification_low_balance_title));
-        builder.setContentText(context.getString(R.string.notification_low_balance_content,account,balance,days));
+        builder.setChannelId(MCLAUT_NOTIFICATIONS_CHANNEL_ID);
+        builder.setContentTitle(title);
+        builder.setContentText(content);
         builder.setAutoCancel(true);
+        builder.setStyle(new NotificationCompat.BigTextStyle().bigText(content));
+        builder.setSound(null);
+        builder.setVibrate(new long[]{0,0,0,0,0});
         Intent showPayActivityIntent = new Intent(context, TachcardPayActivity.class);
         PendingIntent notificationContentIntent = PendingIntent.getActivity(context,0,showPayActivityIntent,
                 0);
@@ -60,6 +66,7 @@ public class NotificationHelper {
                             NotificationManager.IMPORTANCE_DEFAULT);
             channel.enableLights(true);
             channel.enableVibration(false);
+            channel.setSound(null,null);
             channel.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
             manager.createNotificationChannel(channel);
         }

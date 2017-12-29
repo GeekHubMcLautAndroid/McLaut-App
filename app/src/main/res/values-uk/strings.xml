@@ -55,5 +55,6 @@
     <string name="label_text_after_transaction">Баланс після операції: %1$.2f₴</string>
 
     <string name="notification_low_balance_content">На особовому рахунку №%1$s залишилось %2$s₴\n
-        надання послуг закінчиться через %3$d днів</string>
+        Надання послуг закінчиться через %3$d днів</string>
+    <string name="notification_low_balance_title">Низький баланс</string>
 </resources>
