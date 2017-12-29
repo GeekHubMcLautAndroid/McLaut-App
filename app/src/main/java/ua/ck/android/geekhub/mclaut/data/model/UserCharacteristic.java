@@ -1,5 +1,6 @@
 package ua.ck.android.geekhub.mclaut.data.model;
 
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -10,8 +11,8 @@ public class UserCharacteristic {
 
     private UserInfoEntity info;
 
-    private List<CashTransactionsEntity> paymentsTransactions;
-    private List<CashTransactionsEntity> withdrawalsTransactions;
+    private List<CashTransactionsEntity> paymentsTransactions = new LinkedList<>();
+    private List<CashTransactionsEntity> withdrawalsTransactions = new LinkedList<>();
 
     public UserCharacteristic(){
 
@@ -26,10 +27,20 @@ public class UserCharacteristic {
         this.withdrawalsTransactions = withdrawalsTransactions;
     }
 
+    public UserCharacteristic(UserCharacteristic userCharacteristic){
+        this.info = new UserInfoEntity(userCharacteristic.info);
+        for(CashTransactionsEntity cashPayment : userCharacteristic.paymentsTransactions){
+            this.paymentsTransactions.add(new CashTransactionsEntity(cashPayment));
+        }
+        for(CashTransactionsEntity cashWithdrawals : userCharacteristic.withdrawalsTransactions){
+            this.withdrawalsTransactions.add(new CashTransactionsEntity(cashWithdrawals));
+        }
+    }
 
     public void setInfo(UserInfoEntity info) {
         this.info = info;
     }
+
     public UserInfoEntity getInfo() {
         return info;
     }

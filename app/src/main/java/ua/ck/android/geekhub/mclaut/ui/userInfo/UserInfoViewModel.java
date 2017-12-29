@@ -16,6 +16,7 @@ import ua.ck.android.geekhub.mclaut.data.model.UserInfoEntity;
 public class UserInfoViewModel extends ViewModel implements Observer<HashMap<String,UserCharacteristic>> {
 
     private MutableLiveData<UserInfoEntity> userData = new MutableLiveData<>();
+    private MutableLiveData<Boolean> refresher = new MutableLiveData<>();
 
     public UserInfoViewModel() {
         Repository.getInstance().getMapUsersCharacteristic().observeForever(this);
@@ -23,6 +24,13 @@ public class UserInfoViewModel extends ViewModel implements Observer<HashMap<Str
 
     public MutableLiveData<UserInfoEntity> getUserData() {
         return userData;
+    }
+
+    public MutableLiveData<Boolean> getRefresher() {
+        if(!refresher.hasObservers()) {
+            refreshData();
+        }
+        return refresher;
     }
 
     @Override
@@ -33,7 +41,7 @@ public class UserInfoViewModel extends ViewModel implements Observer<HashMap<Str
         }
     }
 
-    void refreshData(){
-        Repository.getInstance().refreshUserInfo(McLautApplication.getSelectedUser());
+    private void refreshData(){
+        refresher = Repository.getInstance().refreshUser(McLautApplication.getSelectedUser());
     }
 }

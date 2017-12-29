@@ -21,6 +21,8 @@
     <string name="dialog_button_cancel">ОТМЕНА</string>
     <string name="dialog_button_delete">УДАЛИТЬ</string>
 
+    <string name="connection_failed">Нет связи с сетью</string>
+
     <string name="label_user_information">Информация пользователя</string>
     <string name="label_connections">Подключения</string>
     <string name="active_label">Активный</string>

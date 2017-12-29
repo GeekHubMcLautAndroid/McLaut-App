@@ -53,16 +53,8 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher {
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
 
-        if(!McLautApplication.getSelectedUser().equals("NULL")
-                && !(this.getIntent().getBooleanExtra(ADD_NEW_USER, false))) {
-            Intent intent = new Intent(LoginActivity.this,
-                    MainActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intent);
-            finish();
-        }
-
         viewModel = ViewModelProviders.of(this).get(LoginViewModel.class);
+
         viewModel.getProgressStatusData().observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(@Nullable Boolean aBoolean) {
@@ -74,6 +66,23 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher {
                 }
             }
         });
+        Boolean loginActivityParam = this.getIntent()
+                .getBooleanExtra(ADD_NEW_USER, false);
+
+        viewModel.initCharacteristicMap(loginActivityParam)
+                .observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(@Nullable Boolean aBoolean) {
+                if(aBoolean){
+                    continueAuthorization();
+                } else {
+                    startMainActivity();
+                }
+            }
+        });
+    }
+
+    private void continueAuthorization(){
         loginTextInputEditText.addTextChangedListener(this);
         passwordEditText.addTextChangedListener(this);
         viewModel.getResultStatus().observe(this, new Observer<Integer>() {
@@ -85,11 +94,7 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher {
                             @Override
                             public void onChanged(@Nullable Boolean aBoolean) {
                                 if(aBoolean){
-                                    Intent intent = new Intent(LoginActivity.this,
-                                            MainActivity.class);
-                                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                    startActivity(intent);
-                                    finish();
+                                    startMainActivity();
                                 }
                             }
                         });
@@ -125,6 +130,14 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher {
     @OnClick(R.id.login_activity_button_sign_in)
     public void logInButtonClick(){
         login();
+    }
+
+    private void startMainActivity(){
+        Intent intent = new Intent(LoginActivity.this,
+                MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+        finish();
     }
 
     private void login(){

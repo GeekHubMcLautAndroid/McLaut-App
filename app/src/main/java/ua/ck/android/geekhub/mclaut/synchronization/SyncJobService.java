@@ -33,9 +33,7 @@ public class SyncJobService extends JobService implements Observer<List<String>>
     @Override
     public void onChanged(@Nullable List<String> strings) {
         if (strings != null) {
-            for(String s : strings){
-                Repository.getInstance().refreshUserInfo(s);
-            }
+            Repository.getInstance().refreshUsers(strings);
         }
     }
 }

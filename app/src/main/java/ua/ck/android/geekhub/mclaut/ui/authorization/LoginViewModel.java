@@ -39,6 +39,25 @@ public class LoginViewModel extends ViewModel implements Observer<LoginResultInf
         });
     }
 
+    public MutableLiveData<Boolean> initCharacteristicMap(Boolean launchForAddingNewUser){
+        MutableLiveData<Boolean> mapWasInited = new MutableLiveData<>();
+        if((launchForAddingNewUser)||(McLautApplication.getSelectedUser().equals("NULL"))){
+            mapWasInited.setValue(true);
+        } else {
+            Repository.getInstance().getMapUsersCharacteristic()
+                    .observeForever(new Observer<HashMap<String, UserCharacteristic>>() {
+                        @Override
+                        public void onChanged(@Nullable HashMap<String, UserCharacteristic> characteristicHashMap) {
+                            if (characteristicHashMap != null) {
+                                mapWasInited.postValue(false);
+                                showProgressStatus.postValue(false);
+                            }
+                        }
+                    });
+        }
+        return mapWasInited;
+    }
+
     @Override
     public void onChanged(@Nullable LoginResultInfo loginResultInfo) {
         resultStatus.postValue(loginResultInfo.getLocalResultCode());

@@ -51,6 +51,20 @@ public class UserInfoEntity {
         this.withdrawDateLast = withdrawDateLast;
     }
 
+    public UserInfoEntity(@NonNull UserInfoEntity userInfoEntity) {
+        this.id = userInfoEntity.id;
+        this.city = userInfoEntity.city;
+        this.name = userInfoEntity.name;
+        this.login = userInfoEntity.login;
+        this.account = userInfoEntity.account;
+        this.balance = userInfoEntity.balance;
+        this.isActive = userInfoEntity.isActive;
+        this.certificate = userInfoEntity.certificate;
+        this.paymentDateLast = userInfoEntity.paymentDateLast;
+        this.withdrawDateLast = userInfoEntity.withdrawDateLast;
+        this.userConnectionsInfo = userInfoEntity.userConnectionsInfo;
+    }
+
     @Ignore
     public UserInfoEntity() {
     }

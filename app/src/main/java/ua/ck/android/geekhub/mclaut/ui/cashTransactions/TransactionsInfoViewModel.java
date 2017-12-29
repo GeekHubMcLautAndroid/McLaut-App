@@ -56,5 +56,6 @@ public class TransactionsInfoViewModel extends ViewModel implements Observer<Has
     public void setTransactionsType(int transactionsType) {
         this.transactionsType = transactionsType;
         Repository.getInstance().getMapUsersCharacteristic().observeForever(this);
+
     }
 }

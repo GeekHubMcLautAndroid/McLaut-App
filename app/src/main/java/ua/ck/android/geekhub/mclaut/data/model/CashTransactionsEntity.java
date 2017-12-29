@@ -43,6 +43,14 @@ public class CashTransactionsEntity {
         this.sumBefore = sumBefore;
     }
 
+    public CashTransactionsEntity(CashTransactionsEntity cashTransactionsEntity) {
+        this.sum = cashTransactionsEntity.sum;
+        this.type = cashTransactionsEntity.type;
+        this.date = cashTransactionsEntity.date;
+        this.idClient = cashTransactionsEntity.idClient;
+        this.sumBefore = cashTransactionsEntity.sumBefore;
+    }
+
     public int getType() {
         return type;
     }

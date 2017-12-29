@@ -14,7 +14,7 @@ public class PaymentsListEntity {
     public PaymentsListEntity() {
     }
 
-    public List<CashTransactionsEntity> getPayments() {
+    public synchronized List<CashTransactionsEntity> getPayments() {
         return payments;
     }
 

@@ -20,6 +20,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.HashMap;
 
@@ -72,6 +73,7 @@ public class MainActivity extends AppCompatActivity implements Observer<Pair<Str
 
         mDrawerToggle = setupDrawerToggle();
         mDrawerLayout.addDrawerListener(mDrawerToggle);
+
 
         viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
 

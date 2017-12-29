@@ -1,6 +1,7 @@
 package ua.ck.android.geekhub.mclaut.ui.userInfo;
 
 import android.annotation.SuppressLint;
+import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
@@ -10,17 +11,20 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ua.ck.android.geekhub.mclaut.R;
+import ua.ck.android.geekhub.mclaut.app.McLautApplication;
 import ua.ck.android.geekhub.mclaut.data.model.UserConnectionsInfo;
 import ua.ck.android.geekhub.mclaut.data.model.UserInfoEntity;
 
@@ -65,7 +69,6 @@ public class UserInfoFragment extends Fragment implements SwipeRefreshLayout.OnR
             public void onChanged(@Nullable UserInfoEntity userInfoEntity) {
                 if(userInfoEntity != null) {
                     setUserData(userInfoEntity);
-                    refreshLayout.setRefreshing(false);
                 }
             }
         });
@@ -78,6 +81,9 @@ public class UserInfoFragment extends Fragment implements SwipeRefreshLayout.OnR
 
         return rootView;
     }
+
+
+
     private void setUserData(UserInfoEntity userInfoEntity){
         if (userInfoEntity != null) {
             String balance = userInfoEntity.getBalance() + getString(R.string.uah_symbol);
@@ -129,9 +135,34 @@ public class UserInfoFragment extends Fragment implements SwipeRefreshLayout.OnR
         accountNumberTextView.setText(accountNumber);
     }
 
+    private static final int SHORT_DURATION = 2000;
+    private static Long lastUsedTime;
+    private static Long momentTime;
+
     //on swipe
     @Override
     public void onRefresh() {
-        viewModel.refreshData();
+        momentTime = System.currentTimeMillis();
+        refreshLayout.setRefreshing(true);
+        if ((lastUsedTime == null)
+                || (momentTime - lastUsedTime > SHORT_DURATION)) {
+            lastUsedTime = System.currentTimeMillis();
+            viewModel.getRefresher().observe(this, new Observer<Boolean>() {
+                @Override
+                public void onChanged(@Nullable Boolean aBoolean) {
+                    if (!aBoolean) {
+                        Toast.makeText(
+                                McLautApplication.getContext()
+                                , McLautApplication.getContext()
+                                        .getResources().getString(R.string.connection_failed)
+                                , Toast.LENGTH_SHORT).show();
+                    }
+                    refreshLayout.setRefreshing(false);
+                    viewModel.getRefresher().removeObserver(this);
+                }
+            });
+        } else {
+            refreshLayout.setRefreshing(false);
+        }
     }
 }

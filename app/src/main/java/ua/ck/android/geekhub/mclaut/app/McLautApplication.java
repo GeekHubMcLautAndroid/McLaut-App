@@ -1,11 +1,16 @@
 package ua.ck.android.geekhub.mclaut.app;
 
+import android.app.ActivityManager;
+import android.app.ActivityManager.RunningAppProcessInfo;
 import android.app.Application;
 import android.app.job.JobInfo;
 import android.app.job.JobScheduler;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
+
+import java.util.List;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import ua.ck.android.geekhub.mclaut.synchronization.ScheduleStarter;
 
@@ -23,6 +28,8 @@ public class McLautApplication extends Application{
     private static McLautApplication instance;
     private static SharedPreferences preferences;
     private static SharedPreferences.Editor editor;
+
+    public static final Lock locker = new ReentrantLock();
 
     public static McLautApplication getInstance() {
         return instance;
@@ -81,5 +88,27 @@ public class McLautApplication extends Application{
             }
         }
         return hasBeenScheduled;
+    }
+
+    public boolean isForegroundApp(){
+        ActivityManager myActivityManager =
+                (ActivityManager) getSystemService(ACTIVITY_SERVICE);
+        List<RunningAppProcessInfo> runningAppList =
+                myActivityManager.getRunningAppProcesses();
+        if (runningAppList == null) {
+            return false;
+        }
+
+        for(RunningAppProcessInfo runningApp : runningAppList){
+            if (runningApp.importance == RunningAppProcessInfo.IMPORTANCE_FOREGROUND){
+                if (runningApp.processName.equals(getContext().getPackageName())){
+                    return true;
+                }
+            } else {
+                continue;
+            }
+        }
+
+        return false;
     }
 }

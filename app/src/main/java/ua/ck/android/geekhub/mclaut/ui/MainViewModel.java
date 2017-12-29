@@ -17,7 +17,9 @@ public class MainViewModel extends ViewModel implements SharedPreferences.OnShar
     private MutableLiveData<Pair<String, String>> userIdAndName = new MutableLiveData<>();
 
     public MainViewModel() {
-        Repository.getInstance().getMapUsersCharacteristic().observeForever(new Observer<HashMap<String, UserCharacteristic>>() {
+        Repository.getInstance()
+                .getMapUsersCharacteristic()
+                .observeForever(new Observer<HashMap<String, UserCharacteristic>>() {
             @Override
             public void onChanged(@Nullable HashMap<String, UserCharacteristic> stringUserCharacteristicHashMap) {
                 if ((stringUserCharacteristicHashMap != null)
@@ -56,5 +58,10 @@ public class MainViewModel extends ViewModel implements SharedPreferences.OnShar
             );
             userIdAndName.postValue(res);
         }
+    }
+
+    public void refreshData(){
+        Repository.getInstance().refreshUser(McLautApplication.getSelectedUser());
+
     }
 }

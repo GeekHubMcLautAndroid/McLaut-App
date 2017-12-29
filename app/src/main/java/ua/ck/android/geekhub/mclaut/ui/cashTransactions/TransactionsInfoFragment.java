@@ -17,12 +17,15 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ua.ck.android.geekhub.mclaut.R;
+import ua.ck.android.geekhub.mclaut.data.Repository;
 import ua.ck.android.geekhub.mclaut.data.model.CashTransactionsEntity;
 
 public class TransactionsInfoFragment extends Fragment implements Observer<List<CashTransactionsEntity>> {
 
     @BindView(R.id.fragment_transactions_info_recycler_view)
     RecyclerView mainRecyclerView;
+
+    TransactionsInfoViewModel viewModel;
 
     @Nullable
     @Override
@@ -32,7 +35,7 @@ public class TransactionsInfoFragment extends Fragment implements Observer<List<
 
         int transactionsType = getArguments().getInt("transactionsType");
 
-        TransactionsInfoViewModel viewModel = ViewModelProviders.of(this).get(TransactionsInfoViewModel.class);
+        viewModel = ViewModelProviders.of(this).get(TransactionsInfoViewModel.class);
         viewModel.setTransactionsType(transactionsType);
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
@@ -51,5 +54,11 @@ public class TransactionsInfoFragment extends Fragment implements Observer<List<
         CashTransactionsRecyclerAdapter adapter =
                 new CashTransactionsRecyclerAdapter(cashTransactionsEntities);
         mainRecyclerView.setAdapter(adapter);
+    }
+
+    @Override
+    public void onDestroyView() {
+        Repository.getInstance().getMapUsersCharacteristic().removeObserver(viewModel);
+        super.onDestroyView();
     }
 }

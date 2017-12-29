@@ -11,20 +11,11 @@ import java.util.Iterator;
 import java.util.List;
 
 import ua.ck.android.geekhub.mclaut.data.database.LocalDatabase;
-import ua.ck.android.geekhub.mclaut.data.model.CardInfoEntity;
-import ua.ck.android.geekhub.mclaut.data.model.CashTransactionsEntity;
-import ua.ck.android.geekhub.mclaut.data.model.LoginResultInfo;
-import ua.ck.android.geekhub.mclaut.data.model.PaymentsListEntity;
-import ua.ck.android.geekhub.mclaut.data.model.UserCharacteristic;
-import ua.ck.android.geekhub.mclaut.data.model.UserConnectionsInfo;
-import ua.ck.android.geekhub.mclaut.data.model.UserInfoEntity;
-import ua.ck.android.geekhub.mclaut.data.model.WithdrawalsListEntity;
+import ua.ck.android.geekhub.mclaut.data.model.*;
 import ua.ck.android.geekhub.mclaut.data.network.NetworkDataSource;
 import ua.ck.android.geekhub.mclaut.data.network.TachcardDataSource;
 import ua.ck.android.geekhub.mclaut.tools.McLautAppExecutor;
 import ua.ck.android.geekhub.mclaut.app.McLautApplication;
-import ua.ck.android.geekhub.mclaut.ui.tachcardPay.TachcardPayStep1Fragment;
-import ua.ck.android.geekhub.mclaut.ui.tachcardPay.TachcardPayViewModel;
 
 public class Repository {
 
@@ -38,12 +29,14 @@ public class Repository {
     private int refresherCity;
 
     private UserCharacteristic userCharacteristicForMap = new UserCharacteristic();
+    private MutableLiveData<Integer> refreshStatus = new MutableLiveData<>();
     private MutableLiveData<Integer> iObserver = new MutableLiveData<>();
     private HashMap<String, CardInfoEntity> mapCardEntities;
 
     private static final Integer ALL_FIELDS_UPDATED = 4;
-    private static final Integer NON_FIELDS_UPDATED = 0;
-    private static final Integer ADD_NEW_FIELD = 1;
+    private static final Integer NON_FIELDS_UPDATED = null;
+
+    private static final Integer CONNECTION_ERROR = 404;
     public static final Integer ONE_USER = 1;
 
     private Repository() {
@@ -73,7 +66,7 @@ public class Repository {
             userIds.observeForever(new Observer<List<String>>() {
                 @Override
                 public void onChanged(@Nullable List<String> usersId) {
-                    if(usersId != null) {
+                    if(usersId.size() > 0) {
                         userIds.removeObserver(this);
 
                         HashMap currentMap;
@@ -286,15 +279,6 @@ public class Repository {
     }
 
     private void insertUserInfoToDatabase(final UserInfoEntity userInfoEntity) {
-
-        userCharacteristicForMap.setInfo(userInfoEntity);
-
-        if (iObserver.getValue() == null) {
-            iObserver.setValue(ADD_NEW_FIELD);
-        } else {
-            iObserver.setValue(iObserver.getValue() + ADD_NEW_FIELD);
-        }
-
         executor.databaseExecutor()
                 .execute(() -> {
                             LocalDatabase.getInstance(
@@ -305,14 +289,6 @@ public class Repository {
     }
 
     private void insertUserConnectionInfoToDatabase(final List<UserConnectionsInfo> userConnectionsInfoList) {
-
-        userCharacteristicForMap.getInfo().setUserConnectionsInfoList(userConnectionsInfoList);
-
-        if (iObserver.getValue() == null) {
-            iObserver.setValue(ADD_NEW_FIELD);
-        } else {
-            iObserver.setValue(iObserver.getValue() + ADD_NEW_FIELD);
-        }
 
         executor.databaseExecutor()
                 .execute(() -> {
@@ -329,54 +305,299 @@ public class Repository {
     }
 
 
-    private void insertPaymentsToDatabase(final PaymentsListEntity paymentsList) {
+    private void insertPaymentsToDatabase(final List<CashTransactionsEntity> paymentsList) {
+        executor.databaseExecutor()
+                .execute(() -> {
+                    for (Iterator<CashTransactionsEntity> iter = paymentsList.iterator();
+                         iter.hasNext(); ) {
+
+                        CashTransactionsEntity payment = iter.next();
+                        payment.setTypeOfTransaction(CashTransactionsEntity.PAYMENTS);
+
+                        LocalDatabase.getInstance(
+                                McLautApplication.getContext()).dao()
+                                .insertCashTransactionsEntities(payment);
+                    }
+                });
+    }
+
+    private void insertWithdrawalsToDatabase(final List<CashTransactionsEntity> withdrawalsList) {
+        executor.databaseExecutor()
+                .execute(() -> {
+                    for (Iterator<CashTransactionsEntity> iter = withdrawalsList.iterator();
+                         iter.hasNext(); ) {
+
+                        CashTransactionsEntity withdrawal = iter.next();
+                        withdrawal.setTypeOfTransaction(CashTransactionsEntity.WITHDRAWALS);
+
+                        LocalDatabase.getInstance(
+                                McLautApplication.getContext()).dao()
+                                .insertCashTransactionsEntities(withdrawal);
+                    }
+                });
+    }
+
+    public MutableLiveData<LoginResultInfo> addNewUserToDatabase(String login,
+                                                                 String password,
+                                                                 int city) {
+
+        refresherCity = city;
+
+        MutableLiveData<LoginResultInfo> data = NetworkDataSource
+                .getInstance()
+                .checkLogin(login, password, city);
+
+        data.observeForever(new Observer<LoginResultInfo>() {
+            @Override
+            public void onChanged(@Nullable LoginResultInfo loginResultInfo) {
+                if (loginResultInfo.getResultCode() == NetworkDataSource.RESPONSE_SUCCESSFUL_CODE) {
+                    if (!loginResultInfo.getCertificate().equals("0")) {
+                        refresherCertificate = loginResultInfo.getCertificate();
+                        findAllInformation();
+                    }
+                    data.removeObserver(this);
+                }
+            }
+        });
+        return data;
+    }
+
+    private void findAllInformation(){
+        executor.mainThread().execute(()->{
+            userCharacteristicForMap = new UserCharacteristic();
+
+            putOrReplaceUserCharacteristicsListener();
+
+            findUserInfoInInternet();
+            findPayments();
+            findWithdrawals();
+        });
+    }
+
+    public void deleteUserFromDatabase(String userId){
+        HashMap<String, UserCharacteristic>
+                currentCharacteristics = mapUsersCharacteristic.getValue();
+        currentCharacteristics.remove(userId);
+        mapUsersCharacteristic.setValue(currentCharacteristics);
+
+        executor.databaseExecutor().execute(() ->{
+            LocalDatabase.getInstance(
+                    McLautApplication.getContext()).dao()
+                    .deleteUserInfoById(userId);
+        });
+    }
+
+    private void findUserInfoInInternet() {
+
+        MutableLiveData<UserInfoEntity> data = NetworkDataSource.
+                getInstance().getUserInfo(refresherCertificate, refresherCity);
+
+        data.observeForever(new Observer<UserInfoEntity>() {
+                @Override
+                public void onChanged(@Nullable UserInfoEntity userInfoEntity) {
+                    if (userInfoEntity.getLocalResCode() == NetworkDataSource.RESPONSE_SUCCESSFUL_CODE) {
+
+                        userInfoEntity.setCertificate(refresherCertificate);
+                        userInfoEntity.setCity(refresherCity);
+
+                        putInfoToCharacteristic(userInfoEntity);
+                        putConnectionsToCharacteristic(
+                                userInfoEntity.getUserConnectionsInfoList());
+
+                    } else if (userInfoEntity.getLocalResCode() == NetworkDataSource.RESPONSE_FAILURE_CODE){
+
+                        iObserver.postValue(CONNECTION_ERROR);
+                    }
+                    data.removeObserver(this);
+                }
+        });
+    }
+
+    private void findPayments(){
+        MutableLiveData<PaymentsListEntity> data = NetworkDataSource.getInstance().
+                getPayments(refresherCertificate, refresherCity);
+
+        data.observeForever(new Observer<PaymentsListEntity>() {
+            @Override
+            public void onChanged(@Nullable PaymentsListEntity paymentsListEntity) {
+                if(paymentsListEntity.getLocalResCode() == NetworkDataSource.RESPONSE_SUCCESSFUL_CODE ) {
+                    putPaymentsToCharacteristic(paymentsListEntity);
+                } else if (paymentsListEntity.getLocalResCode() == NetworkDataSource.RESPONSE_FAILURE_CODE){
+
+                    iObserver.postValue(CONNECTION_ERROR);
+                }
+                data.removeObserver(this);
+            }
+        });
+    }
+
+    private void findWithdrawals(){
+        MutableLiveData<WithdrawalsListEntity> data = NetworkDataSource.
+                getInstance().getWithdrawals(refresherCertificate, refresherCity);
+
+        data.observeForever(new Observer<WithdrawalsListEntity>() {
+            @Override
+            public void onChanged(@Nullable WithdrawalsListEntity withdrawalsListEntity) {
+                if(withdrawalsListEntity.getLocalResCode() == NetworkDataSource.RESPONSE_SUCCESSFUL_CODE ) {
+                    putWithdrawalsToCharacteristic(withdrawalsListEntity);
+                } else if (withdrawalsListEntity.getLocalResCode() == NetworkDataSource.RESPONSE_FAILURE_CODE){
+
+                    iObserver.postValue(CONNECTION_ERROR);
+                }
+                data.removeObserver(this);
+            }
+        });
+    }
+
+    private void putInfoToCharacteristic(UserInfoEntity userInfo){
+
+        userCharacteristicForMap.setInfo(userInfo);
+        if (conditionOfAddition()) {
+            iObserver.postValue(ALL_FIELDS_UPDATED);
+        }
+    }
+
+    private void putConnectionsToCharacteristic(List<UserConnectionsInfo> userConnectionsList){
+
+        userCharacteristicForMap.getInfo().setUserConnectionsInfoList(userConnectionsList);
+        if (conditionOfAddition()) {
+            iObserver.postValue(ALL_FIELDS_UPDATED);
+        }
+    }
+
+    private void putPaymentsToCharacteristic(PaymentsListEntity paymentsList){
 
         userCharacteristicForMap.setPaymentsTransactions(paymentsList.getPayments());
-
-        if (iObserver.getValue() == null) {
-            iObserver.setValue(ADD_NEW_FIELD);
-        } else {
-            iObserver.setValue(iObserver.getValue() + ADD_NEW_FIELD);
+        if (conditionOfAddition()) {
+            iObserver.postValue(ALL_FIELDS_UPDATED);
         }
-
-        executor.databaseExecutor().execute(() -> {
-            for (Iterator<CashTransactionsEntity> iter = paymentsList.getPayments().iterator();
-                 iter.hasNext(); ) {
-
-                CashTransactionsEntity payment = iter.next();
-                payment.setTypeOfTransaction(CashTransactionsEntity.PAYMENTS);
-
-                LocalDatabase.getInstance(
-                        McLautApplication.getContext()).dao()
-                        .insertCashTransactionsEntities(payment);
-            }
-        });
-
     }
 
-    private void insertWithdrawalsToDatabase(final WithdrawalsListEntity withdrawalsList) {
+    private void putWithdrawalsToCharacteristic(WithdrawalsListEntity withdrawalsList){
 
         userCharacteristicForMap.setWithdrawalsTransactions(withdrawalsList.getWithdrawals());
-
-        if (iObserver.getValue() == null) {
-            iObserver.setValue(ADD_NEW_FIELD);
-        } else {
-            iObserver.setValue(iObserver.getValue() + ADD_NEW_FIELD);
+        if (conditionOfAddition()) {
+            iObserver.postValue(ALL_FIELDS_UPDATED);
         }
+    }
 
-        executor.databaseExecutor().execute(() -> {
-            for (Iterator<CashTransactionsEntity> iter = withdrawalsList.getWithdrawals().iterator();
-                 iter.hasNext(); ) {
+    private boolean conditionOfAddition() {
+        if ((userCharacteristicForMap.getInfo() != null)
+                &&  (userCharacteristicForMap.getInfo().getUserConnectionsInfoList().size() > 0)
+                    &&  (userCharacteristicForMap.getPaymentsTransactions().size() > 0)
+                        &&  (userCharacteristicForMap.getWithdrawalsTransactions().size() > 0)) {
+            return true;
+        }
+        return false;
+    }
 
-                CashTransactionsEntity withdrawal = iter.next();
-                withdrawal.setTypeOfTransaction(CashTransactionsEntity.WITHDRAWALS);
+    private void putOrReplaceUserCharacteristicsListener(){
+        iObserver.setValue(NON_FIELDS_UPDATED);
+        iObserver.observeForever(new Observer<Integer>() {
+            @Override
+            public void onChanged(@Nullable Integer integer) {
+                if (integer == ALL_FIELDS_UPDATED){
+                    McLautApplication.selectUser(
+                            userCharacteristicForMap.getInfo().getId());
 
-                LocalDatabase.getInstance(
-                        McLautApplication.getContext()).dao()
-                        .insertCashTransactionsEntities(withdrawal);
+                    insertUserCharacteristicsToMap(
+                            new UserCharacteristic(userCharacteristicForMap));
+
+                    insertUserCharacteristicsToDatabase(
+                            new UserCharacteristic(userCharacteristicForMap));
+
+                    refreshStatus.postValue(ALL_FIELDS_UPDATED);
+                    iObserver.removeObserver(this);
+
+                } else if (integer == CONNECTION_ERROR){
+
+                    refreshStatus.postValue(CONNECTION_ERROR);
+                    iObserver.removeObserver(this);
+                }
             }
         });
     }
+
+    private void insertUserCharacteristicsToMap(UserCharacteristic userCharacteristic){
+        HashMap currentMap = mapUsersCharacteristic.getValue();
+
+        if (currentMap == null) {
+            currentMap = new HashMap<String, UserCharacteristic>();
+        }
+
+        currentMap.put(userCharacteristic.getInfo().getId(), userCharacteristic);
+
+        mapUsersCharacteristic.postValue(currentMap);
+    }
+
+    private void insertUserCharacteristicsToDatabase(final UserCharacteristic userCharacteristic){
+        insertUserInfoToDatabase(
+                userCharacteristic.getInfo());
+
+        insertUserConnectionInfoToDatabase(
+                userCharacteristic.getInfo().getUserConnectionsInfoList());
+
+        insertPaymentsToDatabase(
+                userCharacteristic.getPaymentsTransactions());
+
+        insertWithdrawalsToDatabase(
+                userCharacteristic.getWithdrawalsTransactions());
+    }
+
+    public void refreshUsers(List<String> usersId){
+        Iterator<String> iterator = usersId.iterator();
+        refreshStatus.observeForever(new Observer<Integer>() {
+            @Override
+            public void onChanged(@Nullable Integer integer) {
+                if(iterator.hasNext()){
+                    refreshUserInfo(iterator.next());
+                } else {
+                    refreshStatus.removeObserver(this);
+                }
+            }
+        });
+    }
+
+    public MutableLiveData<Boolean> refreshUser(String userId){
+        MutableLiveData<Boolean> resultOfRefresh = new MutableLiveData<>();
+        refreshStatus.observeForever(new Observer<Integer>() {
+            @Override
+            public void onChanged(@Nullable Integer integer) {
+                if(integer != null) {
+                    if (integer == ALL_FIELDS_UPDATED) {
+                        resultOfRefresh.postValue(true);
+                    } else {
+                        resultOfRefresh.postValue(false);
+                    }
+                    refreshStatus.setValue(NON_FIELDS_UPDATED);
+                    refreshStatus.removeObserver(this);
+                }
+            }
+        });
+        refreshUserInfo(userId);
+
+        return resultOfRefresh;
+    }
+
+    private void refreshUserInfo(String userId){
+        executor.databaseExecutor()
+                .execute(() -> {
+                    refresherCertificate = LocalDatabase.getInstance(
+                            McLautApplication.getContext()).dao()
+                            .getUserCertificate(userId);
+                    refresherCity = LocalDatabase.getInstance(
+                            McLautApplication.getContext()).dao()
+                            .getUserCity(userId);
+
+                    findAllInformation();
+                });
+    }
+
+//Card methods
+    public void getPaymentRedirection(MutableLiveData<Document> redirectDocument,String... strings) {
+        TachcardDataSource.getInstance().pay(redirectDocument,strings);
+    }
+
 
     public void addNewCard(CardInfoEntity cardInfoEntity){
 
@@ -406,142 +627,4 @@ public class Repository {
                     deleteCardEntity(cardInfoEntity);
         });
     }
-
-    public MutableLiveData<LoginResultInfo> addNewUserToDatabase(String login, String password, int city) {
-
-        refresherCity = city;
-
-        MutableLiveData<LoginResultInfo> data = NetworkDataSource.getInstance().checkLogin(login, password, city);
-
-        data.observeForever(new Observer<LoginResultInfo>() {
-            @Override
-            public void onChanged(@Nullable LoginResultInfo loginResultInfo) {
-                if (loginResultInfo.getResultCode() == NetworkDataSource.RESPONSE_SUCCESSFUL_CODE) {
-                    if (!loginResultInfo.getCertificate().equals("0")) {
-                        refresherCertificate = loginResultInfo.getCertificate();
-                        findUserInfoInInternet();
-                    }
-                    data.removeObserver(this);
-                }
-            }
-        });
-        return data;
-    }
-
-    public void deleteUserFromDatabase(String userId){
-        HashMap<String, UserCharacteristic>
-                currentCharacteristics = mapUsersCharacteristic.getValue();
-        currentCharacteristics.remove(userId);
-        mapUsersCharacteristic.setValue(currentCharacteristics);
-
-        executor.databaseExecutor().execute(() ->{
-            LocalDatabase.getInstance(
-                    McLautApplication.getContext()).dao()
-                    .deleteUserInfoById(userId);
-        });
-    }
-
-    private void findUserInfoInInternet() {
-
-        MutableLiveData<UserInfoEntity> data = NetworkDataSource.
-                getInstance().getUserInfo(refresherCertificate, refresherCity);
-
-        data.observeForever(new Observer<UserInfoEntity>() {
-                @Override
-                public void onChanged(@Nullable UserInfoEntity userInfoEntity) {
-                    if (userInfoEntity.getLocalResCode() == NetworkDataSource.RESPONSE_SUCCESSFUL_CODE) {
-
-                        userInfoEntity.setCertificate(refresherCertificate);
-                        userInfoEntity.setCity(refresherCity);
-
-                        iObserver.setValue(NON_FIELDS_UPDATED);
-                        putOrReplaceUserCharacteristics();
-
-                        insertUserInfoToDatabase(userInfoEntity);
-                        insertUserConnectionInfoToDatabase(userInfoEntity.getUserConnectionsInfoList());
-                        findUserCashTransactions();
-
-                    data.removeObserver(this);
-                }
-            }
-        });
-    }
-
-    private void putOrReplaceUserCharacteristics(){
-        iObserver.observeForever(new Observer<Integer>() {
-            @Override
-            public void onChanged(@Nullable Integer integer) {
-                if (integer == ALL_FIELDS_UPDATED) {
-
-                    McLautApplication.selectUser(userCharacteristicForMap.getInfo().getId());
-
-                    HashMap currentMap = mapUsersCharacteristic.getValue();
-                    if (currentMap == null) {
-                        currentMap = new HashMap<String, UserCharacteristic>();
-                    }
-                    currentMap.put(userCharacteristicForMap.getInfo().getId(), userCharacteristicForMap);
-                    userCharacteristicForMap = new UserCharacteristic();
-
-                    mapUsersCharacteristic.postValue(currentMap);
-
-                    iObserver.removeObserver(this);
-                }
-            }
-        });
-    }
-
-    public void refreshUserInfo(String userId){
-
-        executor.databaseExecutor()
-                .execute(() -> {
-                    refresherCertificate = LocalDatabase.getInstance(
-                            McLautApplication.getContext()).dao()
-                            .getUserCertificate(userId);
-                    refresherCity = LocalDatabase.getInstance(
-                            McLautApplication.getContext()).dao()
-                            .getUserCity(userId);
-
-                    findUserInfoInInternet();
-                });
-    }
-
-    private void findUserCashTransactions(){
-        findPayments();
-        findWithdrawals();
-    }
-
-    private void findPayments(){
-        MutableLiveData<PaymentsListEntity> data = NetworkDataSource.getInstance().
-                getPayments(refresherCertificate, refresherCity);
-
-        data.observeForever(new Observer<PaymentsListEntity>() {
-             @Override
-             public void onChanged(@Nullable PaymentsListEntity paymentsListEntity) {
-                 if(paymentsListEntity.getLocalResCode() == NetworkDataSource.RESPONSE_SUCCESSFUL_CODE ) {
-                     data.removeObserver(this);
-                     insertPaymentsToDatabase(paymentsListEntity);
-                 }
-             }
-        });
-    }
-
-    private void findWithdrawals(){
-        MutableLiveData<WithdrawalsListEntity> data = NetworkDataSource.
-                getInstance().getWithdrawals(refresherCertificate, refresherCity);
-
-        data.observeForever(new Observer<WithdrawalsListEntity>() {
-             @Override
-             public void onChanged(@Nullable WithdrawalsListEntity withdrawalsListEntity) {
-                 if(withdrawalsListEntity.getLocalResCode() == NetworkDataSource.RESPONSE_SUCCESSFUL_CODE ) {
-                     data.removeObserver(this);
-                     insertWithdrawalsToDatabase(withdrawalsListEntity);
-                 }
-             }
-        });
-    }
-
-    public void getPaymentRedirection(MutableLiveData<Document> redirectDocument,String... strings) {
-        TachcardDataSource.getInstance().pay(redirectDocument,strings);
-    }
-
 }

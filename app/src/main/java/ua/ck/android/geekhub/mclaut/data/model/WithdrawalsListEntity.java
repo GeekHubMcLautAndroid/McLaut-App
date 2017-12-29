@@ -14,7 +14,7 @@ public class WithdrawalsListEntity {
     public WithdrawalsListEntity() {
     }
 
-    public List<CashTransactionsEntity> getWithdrawals() {
+    public synchronized List<CashTransactionsEntity> getWithdrawals() {
         return withdrawals;
     }
 

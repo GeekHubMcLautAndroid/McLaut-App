@@ -21,6 +21,8 @@
     <string name="dialog_button_cancel">СКАСУВАТИ</string>
     <string name="dialog_button_delete">ВИДАЛИТИ</string>
 
+    <string name="connection_failed">Відсутнє з'єднання з мережею</string>
+
     <string name="label_user_information">Інформація користувача</string>
     <string name="label_connections">Підключення</string>
     <string name="active_label">Активний</string>

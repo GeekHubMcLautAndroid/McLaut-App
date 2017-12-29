@@ -29,6 +29,8 @@
     <string name="dialog_button_cancel">CANCEL</string>
     <string name="dialog_button_delete">DELETE</string>
 
+    <string name="connection_failed">Any network connection</string>
+
     <!--Payment strings-->
     <string name="payment_next">Next</string>
     <string name="payment_cvv" translatable="false">CVV</string>
