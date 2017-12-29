@@ -1,17 +1,12 @@
 package ua.ck.android.geekhub.mclaut.app;
 
-import android.app.AlarmManager;
 import android.app.Application;
-import android.app.PendingIntent;
 import android.app.job.JobInfo;
 import android.app.job.JobScheduler;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.util.Log;
 
-import java.util.Calendar;
-
+import ua.ck.android.geekhub.mclaut.notifications.NotificationsAlarmReceiver;
 import ua.ck.android.geekhub.mclaut.synchronization.ScheduleStarter;
 
 /**
@@ -23,9 +18,7 @@ public class McLautApplication extends Application{
     public static final String USER_ID = "_user_id";
     private static final String MCLAUT_PREFERENCES = "_mclaut_preferences";
     private static final int JOB_ID = 1;
-    public static final int NOTIFICATION_HOUR_OF_DAY = 4;
-    public static final int NOTIFICATION_MINUTES_SECONDS_OF_DAY = 0;
-    public static final String ALARM_MANAGER_INTENT_ACTION = "start_notification";
+
 
     private static String userId;
     private static McLautApplication instance;
@@ -66,9 +59,7 @@ public class McLautApplication extends Application{
             ScheduleStarter.getInstance(this).startSchedule(this);
         }
 
-        if(!checkLowBalanceNotificationAlarmManagerEnabled()){
-            setLowBalanceNotificationAlarmManager();
-        }
+        new NotificationsAlarmReceiver().startAlarmManager(this);
 
         super.onCreate();
     }
@@ -94,26 +85,5 @@ public class McLautApplication extends Application{
         }
         return hasBeenScheduled;
     }
-    private void setLowBalanceNotificationAlarmManager(){
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, NOTIFICATION_HOUR_OF_DAY);
-        calendar.set(Calendar.MINUTE, NOTIFICATION_MINUTES_SECONDS_OF_DAY);
-        calendar.set(Calendar.SECOND, NOTIFICATION_MINUTES_SECONDS_OF_DAY);
 
-        Intent alarmIntent = new Intent(ALARM_MANAGER_INTENT_ACTION);
-        PendingIntent alarmPendingIntent = PendingIntent.
-                getBroadcast(this,0,alarmIntent,0);
-
-
-        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        if (alarmManager != null) {
-            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),
-                    AlarmManager.INTERVAL_DAY,alarmPendingIntent);
-        }
-    }
-    private boolean checkLowBalanceNotificationAlarmManagerEnabled(){
-        return (PendingIntent.getBroadcast(this, 0,
-                new Intent(ALARM_MANAGER_INTENT_ACTION),
-                PendingIntent.FLAG_NO_CREATE) != null);
-    }
 }

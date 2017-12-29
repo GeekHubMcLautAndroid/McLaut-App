@@ -2,9 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="ua.ck.android.geekhub.mclaut">
     <uses-permission android:name="android.permission.INTERNET"/>
-
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="com.android.alarm.permission.SET_ALARM"/>
     <application
         android:name=".app.McLautApplication"
         android:allowBackup="true"
@@ -29,10 +29,6 @@
         <service android:name=".synchronization.SyncJobService"
             android:exported="false" android:permission="android.permission.BIND_JOB_SERVICE"/>
 
-        <receiver android:name=".notifications.LowBalanceNotificationReceiver">
-            <intent-filter>
-                <action android:name="start_notification"/>
-            </intent-filter>
-        </receiver>
+        <receiver android:name=".notifications.NotificationsAlarmReceiver"/>
     </application>
 </manifest>

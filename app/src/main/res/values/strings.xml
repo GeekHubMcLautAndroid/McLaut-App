@@ -77,4 +77,10 @@
     <string name="payment_select_card">Select card</string>
     <string name="payment_goto_card_settings">MANAGE CARDS</string>
     <string name="payment_slash">/</string>
+
+    <!--Low balance notification-->
+    <string name="notification_low_balance_title">Low balance</string>
+    <string name="notification_low_balance_content">In account №%1$s remains %2$s₴\n
+        The service will end through %3$d days</string>
+
 </resources>
