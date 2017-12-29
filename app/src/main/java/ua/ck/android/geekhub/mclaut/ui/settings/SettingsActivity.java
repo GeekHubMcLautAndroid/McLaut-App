@@ -40,10 +40,6 @@ import ua.ck.android.geekhub.mclaut.data.model.CardInfoEntity;
  */
 public class SettingsActivity extends AppCompatPreferenceActivity {
 
-    interface VersionInterface {
-        void setVersion(String version);
-    }
-
     /**
      * A preference value change listener that updates the preference's summary
      * to reflect its new value.
