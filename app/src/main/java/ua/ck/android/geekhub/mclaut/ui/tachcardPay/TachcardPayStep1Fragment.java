@@ -6,6 +6,7 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
@@ -162,7 +163,7 @@ public class TachcardPayStep1Fragment extends Fragment {
             });
             builder.create().show();
         } else {
-            Toast.makeText(getActivity(), R.string.dialog_empty_card_list, Toast.LENGTH_LONG).show();
+            Snackbar.make(getView(), R.string.dialog_empty_card_list, Snackbar.LENGTH_LONG).show();
         }
     }
 

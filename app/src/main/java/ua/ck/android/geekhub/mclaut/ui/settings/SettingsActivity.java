@@ -16,10 +16,10 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.RingtonePreference;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.text.TextUtils;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import java.util.HashMap;
 
@@ -212,7 +212,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                     });
                     builder.create().show();
                 } else {
-                    Toast.makeText(getActivity(), R.string.dialog_empty_card_list, Toast.LENGTH_LONG).show();
+                    Snackbar.make(getView(), R.string.dialog_empty_card_list, Snackbar.LENGTH_LONG).show();
                 }
                 return true;
             });
