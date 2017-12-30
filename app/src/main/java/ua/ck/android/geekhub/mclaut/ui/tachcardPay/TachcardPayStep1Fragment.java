@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -63,6 +64,10 @@ public class TachcardPayStep1Fragment extends Fragment {
     TextView resultSummTV;
     @BindView(R.id.fragment_tachcard_pay_pa)
     TextInputEditText accountIdTIET;
+    @BindView(R.id.fragment_tachcard_pay_city_spinner)
+    Spinner citySpin;
+    @BindView(R.id.fragment_tachcard_pay_city_text_view)
+    TextView cityTV;
 
     private TachcardPayViewModel viewModel;
 
@@ -116,7 +121,12 @@ public class TachcardPayStep1Fragment extends Fragment {
                 Toast.makeText(getActivity(), getString(R.string.payment_network_error), Toast.LENGTH_LONG).show();
             }
         });
-
+        citySpin.setEnabled(false);
+        citySpin.setFocusable(false);
+        accountIdTIET.setEnabled(false);
+        accountIdTIET.setFocusable(false);
+        cityTV.setEnabled(false);
+        citySpin.setSelection(viewModel.getAccountCity());
         return rootView;
     }
 
