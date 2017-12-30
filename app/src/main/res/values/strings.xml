@@ -84,7 +84,7 @@
     <string name="settings_mobilenetwork">Mobile network</string>
     <string name="settings_mobilenetwork_summary">Allow background updates via mobile network.</string>
     <string name="settings_network">Network settings</string>
-    <string name="settings_low_balance_alarm">Сповіщувати про низький рахунок</string>
+    <string name="settings_low_balance_alarm">Notify about low balance</string>
     <string name="settings_delete_cards">Delete cards</string>
     <string name="settings_delete_cards_summary">Select cards what you wanna to delete.</string>
     <string name="settings_about">About program</string>
