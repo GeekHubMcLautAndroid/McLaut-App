@@ -116,7 +116,9 @@ public class UserInfoFragment extends Fragment implements SwipeRefreshLayout.OnR
                     new ConnectionsRecyclerAdapter(currUserConnectionsInfo, getActivity());
             connectionsRecycler.setAdapter(recyclerAdapter);
         }
-        String balance = userInfoEntity.getBalance() + getString(R.string.uah_symbol);
+        double balanceD = Double.parseDouble(userInfoEntity.getBalance());
+
+        String balance = String.format("%.2f",balanceD) + getString(R.string.uah_symbol);
         balanceTextView.setText(balance);
         usernameTextView.setText(userInfoEntity.getName());
 

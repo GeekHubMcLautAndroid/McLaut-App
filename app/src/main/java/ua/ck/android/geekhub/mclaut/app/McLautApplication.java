@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+
+import ua.ck.android.geekhub.mclaut.notifications.NotificationsAlarmReceiver;
 import ua.ck.android.geekhub.mclaut.synchronization.ScheduleStarter;
 
 /**
@@ -23,6 +25,7 @@ public class McLautApplication extends Application{
     public static final String USER_ID = "_user_id";
     private static final String MCLAUT_PREFERENCES = "_mclaut_preferences";
     private static final int JOB_ID = 1;
+
 
     private static String userId;
     private static McLautApplication instance;
@@ -65,6 +68,8 @@ public class McLautApplication extends Application{
             ScheduleStarter.getInstance(this).startSchedule(this);
         }
 
+        new NotificationsAlarmReceiver().startAlarmManager(this);
+
         super.onCreate();
     }
 
@@ -90,6 +95,7 @@ public class McLautApplication extends Application{
         return hasBeenScheduled;
     }
 
+
     public boolean isForegroundApp(){
         ActivityManager myActivityManager =
                 (ActivityManager) getSystemService(ACTIVITY_SERVICE);
@@ -111,4 +117,5 @@ public class McLautApplication extends Application{
 
         return false;
     }
+
 }
