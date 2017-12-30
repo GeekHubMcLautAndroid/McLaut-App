@@ -13,15 +13,51 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             android:orientation="vertical"
             android:paddingHorizontal="@dimen/login_screen_sideways_margin"
             android:paddingVertical="@dimen/login_screen_image_top_margin"
             tools:targetApi="o">
 
             <android.support.design.widget.TextInputLayout
+                android:id="@+id/fragment_tachcard_pay_pa_til"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/personal_account">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/fragment_tachcard_pay_pa_tiet"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:maxLength="5" />
+            </android.support.design.widget.TextInputLayout>
+
+            <TextView
+                android:id="@+id/fragment_tachcard_pay_city_text_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="24dp"
+                android:text="@string/city"
+                android:textSize="16sp" />
+
+            <Spinner
+                android:id="@+id/fragment_tachcard_pay_city_spinner"
+                style="@style/Widget.AppCompat.Spinner.Underlined"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:entries="@array/mclaut_cityes"
+                android:spinnerMode="dialog" />
+
+
+            <android.support.design.widget.TextInputLayout
                 android:id="@+id/fragment_tachcard_pay_summ_text_input_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
                 android:hint="@string/payment_replenishment_amount"
                 android:nextFocusDown="@id/fragment_tachcard_pay_card_number_text_input_edit_text">
 
@@ -111,7 +147,7 @@
                     android:id="@+id/fragment_tachcard_pay_cvv_text_input_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="124dp"
+                    android:layout_marginStart="125dp"
                     android:layout_weight="2"
                     android:hint="@string/payment_cvv"
                     app:passwordToggleDrawable="@drawable/password_toggle"
@@ -150,7 +186,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
                 android:text="@string/payment_amount_due_empty"
-                android:textColor="@color/colorPrimary"
+                android:textColor="@color/colorAccent"
                 android:textSize="24sp" />
 
             <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
@@ -159,7 +195,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="24dp"
-                android:background="@color/colorPrimary"
+                android:background="@color/colorAccent"
                 android:text="@string/payment_next"
                 android:textColor="@android:color/white"
                 app:spinning_bar_color="@android:color/white"

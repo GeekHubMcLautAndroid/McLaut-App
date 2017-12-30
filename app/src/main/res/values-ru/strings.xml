@@ -55,6 +55,21 @@
     <string name="payment_select_card">Оберите картку</string>
     <string name="payment_goto_card_settings">УПРАВЛЕНИЕ КАРТКАМИ</string>
     <string name="label_text_after_transaction">Баланс после операции: %1$.2f₴</string>
+    <string name="settings_autoupdate">Частота автообновления</string>
+    <string name="settings_mobilenetwork">Мобильный интернет</string>
+    <string name="settings_mobilenetwork_summary">Разрешить фоновое обновление с помощью мобильного интернета.</string>
+    <string name="settings_network">Настройки сети</string>
+    <string name="settings_low_balance_alarm">Сообщать о низком счете</string>
+    <string name="settings_delete_cards">Удаление карт</string>
+    <string name="settings_delete_cards_summary">Выберите карты, которые вы хотите удалить.</string>
+    <string name="settings_about">О программе</string>
+    <string name="settings_version">Версия</string>
+    <string name="title_activity_settings">Настройки</string>
+    <string name="dialog_remove">УДАЛИТЬ</string>
+    <string name="dialog_empty_card_list">Cписок карт пустий.</string>
+    <string name="payment_bad_account_id">Неверный идентификатор учетной записи.</string>
+    <string name="payment_click">"Нажмите "</string>
+    <string name="payment_times_to_unclock">" раз для разблокировки параметра."</string>
 
     <string name="notification_low_balance_content">На лицевом счёте №%1$s осталось %2$s₴          Предоставление услуг закончится через %3$d дней</string>
     <string name="notification_low_balance_title">Низкий баланс</string>

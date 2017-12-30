@@ -3,8 +3,10 @@ package ua.ck.android.geekhub.mclaut.ui.tachcardPay;
 
 import android.app.AlertDialog;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
@@ -13,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,6 +29,7 @@ import butterknife.OnClick;
 import butterknife.OnTextChanged;
 import ua.ck.android.geekhub.mclaut.R;
 import ua.ck.android.geekhub.mclaut.data.model.CardInfoEntity;
+import ua.ck.android.geekhub.mclaut.ui.settings.SettingsActivity;
 
 public class TachcardPayStep1Fragment extends Fragment {
     @BindView(R.id.fragment_tachcard_pay_summ_text_input_edit_text)
@@ -58,8 +62,17 @@ public class TachcardPayStep1Fragment extends Fragment {
     CircularProgressButton confirmCPB;
     @BindView(R.id.fragment_tachcard_pay_result_summ_text)
     TextView resultSummTV;
+    @BindView(R.id.fragment_tachcard_pay_pa_til)
+    TextInputLayout accountIdTIL;
+    @BindView(R.id.fragment_tachcard_pay_pa_tiet)
+    TextInputEditText accountIdTIET;
+    @BindView(R.id.fragment_tachcard_pay_city_spinner)
+    Spinner citySpin;
+    @BindView(R.id.fragment_tachcard_pay_city_text_view)
+    TextView cityTV;
 
     private TachcardPayViewModel viewModel;
+    private int lockCount = 3;
 
     public interface OnPaymentRedirect {
         void redirect(String location, String html);
@@ -73,6 +86,7 @@ public class TachcardPayStep1Fragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_tachcard_pay, container, false);
         ButterKnife.bind(this, rootView);
         viewModel = ViewModelProviders.of(this).get(TachcardPayViewModel.class);
+        accountIdTIET.setText(viewModel.getAccountID());
         viewModel.getProgressStatusData().observe(this, aBoolean -> {
             if (aBoolean) {
                 showProgress();
@@ -82,6 +96,9 @@ public class TachcardPayStep1Fragment extends Fragment {
         });
         viewModel.getSetError().observe(this, integer -> {
             switch (integer) {
+                case -1:
+                    accountIdTIL.setError(getString(R.string.payment_bad_account_id));
+                    break;
                 case 0:
                     summTIL.setError(getString(R.string.error_minimum_refung));
                     summTIL.setErrorEnabled(true);
@@ -110,13 +127,31 @@ public class TachcardPayStep1Fragment extends Fragment {
                 Toast.makeText(getActivity(), getString(R.string.payment_network_error), Toast.LENGTH_LONG).show();
             }
         });
+        citySpin.setEnabled(false);
+        accountIdTIET.setEnabled(false);
+        cityTV.setEnabled(false);
+        citySpin.setSelection(viewModel.getAccountCity());
+        accountIdTIL.setError(getString(R.string.payment_click) + " " + lockCount + " " + getString(R.string.payment_times_to_unclock));
         return rootView;
+    }
+
+    @OnClick(R.id.fragment_tachcard_pay_pa_til)
+    public void unlock() {
+        if (lockCount == 1) {
+            accountIdTIL.setErrorEnabled(false);
+            accountIdTIET.setEnabled(true);
+            citySpin.setEnabled(true);
+            cityTV.setEnabled(true);
+        } else {
+            lockCount--;
+            accountIdTIL.setError(getString(R.string.payment_click) + " " + lockCount + " " + getString(R.string.payment_times_to_unclock));
+        }
     }
 
     @OnTextChanged(R.id.fragment_tachcard_pay_summ_text_input_edit_text)
     public void showFinalSumm() {
         String summString = summTIEL.getText().toString();
-        if (summString.length() < 1) {
+        if (summString.length() < 1 || summString.equals(".")) {
             resultSummTV.setText(R.string.payment_amount_due_empty);
         } else {
             double summDouble = Double.parseDouble(summString);
@@ -141,18 +176,23 @@ public class TachcardPayStep1Fragment extends Fragment {
     public void openSelectCardDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         HashMap<String, CardInfoEntity> mapCardEntities = viewModel.getCards();
-        String[] type = new String[]{};
-        String[] keys = mapCardEntities.keySet().toArray(type);
-        builder.setTitle(R.string.payment_select_card).setItems(keys, (dialogInterface, i) -> {
-            cardNumberTIET.setText(mapCardEntities.get(keys[i]).getCardNumber());
-            mmTIEL.setText(mapCardEntities.get(keys[i]).getEndMonth());
-            yyTIEL.setText(mapCardEntities.get(keys[i]).getEndYear());
-            mapCardEntities.get(keys[i]).incrementCounterOfUses(getContext());
-        }).setPositiveButton(getString(R.string.payment_goto_card_settings), (dialogInterface, i) -> {
-            //TODO:Go to settings
-        }).setNegativeButton(getString(R.string.dialog_button_cancel), (dialogInterface, i) -> {
-        });
-        builder.create().show();
+        if (mapCardEntities.size() > 0) {
+            String[] type = new String[]{};
+            String[] keys = mapCardEntities.keySet().toArray(type);
+            builder.setTitle(R.string.payment_select_card).setItems(keys, (dialogInterface, i) -> {
+                cardNumberTIET.setText(mapCardEntities.get(keys[i]).getCardNumber());
+                mmTIEL.setText(mapCardEntities.get(keys[i]).getEndMonth());
+                yyTIEL.setText(mapCardEntities.get(keys[i]).getEndYear());
+                mapCardEntities.get(keys[i]).incrementCounterOfUses(getContext());
+            }).setPositiveButton(getString(R.string.payment_goto_card_settings), (dialogInterface, i) -> {
+                Intent intentSettings = new Intent(getActivity(), SettingsActivity.class);
+                startActivity(intentSettings);
+            }).setNegativeButton(getString(R.string.dialog_button_cancel), (dialogInterface, i) -> {
+            });
+            builder.create().show();
+        } else {
+            Snackbar.make(getView(), R.string.dialog_empty_card_list, Snackbar.LENGTH_LONG).show();
+        }
     }
 
     @OnClick(R.id.tachcard_pay_confirm)
@@ -162,12 +202,14 @@ public class TachcardPayStep1Fragment extends Fragment {
         String mm = mmTIEL.getText().toString();
         String yy = yyTIEL.getText().toString();
         String cvv = cvvTIEL.getText().toString();
+        String accountID = accountIdTIET.getText().toString();
+        int city = citySpin.getSelectedItemPosition();
         summTIL.setErrorEnabled(false);
         cardNumberTIL.setErrorEnabled(false);
         mmTIL.setErrorEnabled(false);
         yyTIL.setErrorEnabled(false);
         cvvTIL.setErrorEnabled(false);
-        viewModel.pay(getContext(), summ, cardNumber, mm, yy, cvv, saveCardCB.isChecked());
+        viewModel.pay(getContext(), accountID, city, summ, cardNumber, mm, yy, cvv, saveCardCB.isChecked());
     }
 
     @OnClick(R.id.fragment_tachcard_pay_save_card_text)
@@ -179,6 +221,9 @@ public class TachcardPayStep1Fragment extends Fragment {
         confirmCPB.startAnimation();
         summTIEL.setEnabled(false);
         selectCardButton.setEnabled(false);
+        accountIdTIL.setEnabled(false);
+        citySpin.setEnabled(false);
+        cityTV.setEnabled(false);
         cardNumberTIET.setEnabled(false);
         mmTIEL.setEnabled(false);
         yyTIEL.setEnabled(false);
@@ -193,5 +238,11 @@ public class TachcardPayStep1Fragment extends Fragment {
         mmTIEL.setEnabled(true);
         yyTIEL.setEnabled(true);
         cvvTIEL.setEnabled(true);
+        if (lockCount == 1) {
+            accountIdTIL.setErrorEnabled(false);
+            accountIdTIET.setEnabled(true);
+            citySpin.setEnabled(true);
+            cityTV.setEnabled(true);
+        }
     }
 }

@@ -20,8 +20,9 @@
         <item name="android:colorControlNormal">@android:color/white</item>
     </style>
 
-    <style name="PaymentTheme" parent="McLautAppTheme">
-        <item name="colorAccent">@color/colorPrimary</item>
+    <style name="PreferenceTheme" parent="@style/Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
     </style>
-
 </resources>

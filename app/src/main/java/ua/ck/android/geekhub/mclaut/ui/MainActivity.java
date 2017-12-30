@@ -4,6 +4,7 @@ import android.app.DialogFragment;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
@@ -12,7 +13,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Pair;
 import android.view.Menu;
@@ -20,7 +20,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.HashMap;
 
@@ -33,7 +32,7 @@ import ua.ck.android.geekhub.mclaut.data.model.UserCharacteristic;
 import ua.ck.android.geekhub.mclaut.tools.McLautAppExecutor;
 import ua.ck.android.geekhub.mclaut.ui.authorization.LoginActivity;
 import ua.ck.android.geekhub.mclaut.ui.cashTransactions.CashTransactionsFragment;
-import ua.ck.android.geekhub.mclaut.ui.settings.SettingsFragment;
+import ua.ck.android.geekhub.mclaut.ui.settings.SettingsActivity;
 import ua.ck.android.geekhub.mclaut.ui.tachcardPay.TachcardPayActivity;
 import ua.ck.android.geekhub.mclaut.ui.userInfo.UserInfoFragment;
 
@@ -209,9 +208,9 @@ public class MainActivity extends AppCompatActivity implements Observer<Pair<Str
 
                 break;
             case R.id.settings_fragment:
-                fragmentClass = SettingsFragment.class;
-
-                break;
+                Intent intentSettings = new Intent(getBaseContext(), SettingsActivity.class);
+                startActivity(intentSettings);
+                return;
             case R.id.payment_activity:
                 Intent intentTachCar = new Intent(getBaseContext(), TachcardPayActivity.class);
                 startActivity(intentTachCar);

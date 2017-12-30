@@ -20,9 +20,7 @@
     <string name="dialog_text">Ви впевнені ?</string>
     <string name="dialog_button_cancel">СКАСУВАТИ</string>
     <string name="dialog_button_delete">ВИДАЛИТИ</string>
-
-    <string name="connection_failed">Відсутнє з'єднання з мережею</string>
-
+    <string name="connection_failed">Відсутнє з\'єднання з мережею</string>
     <string name="label_user_information">Інформація користувача</string>
     <string name="label_connections">Підключення</string>
     <string name="active_label">Активний</string>
@@ -55,8 +53,22 @@
     <string name="payment_select_card">Оберіть картку</string>
     <string name="payment_goto_card_settings">КЕРУВАННЯ КАРТКАМИ</string>
     <string name="label_text_after_transaction">Баланс після операції: %1$.2f₴</string>
-
     <string name="notification_low_balance_content">На особовому рахунку №%1$s залишилось %2$s₴\n
         Надання послуг закінчиться через %3$d днів</string>
     <string name="notification_low_balance_title">Низький баланс</string>
+    <string name="settings_autoupdate">Частота автооновлення</string>
+    <string name="settings_mobilenetwork">Мобільний інтернет</string>
+    <string name="settings_mobilenetwork_summary">Дозволити фонове оновлення за допомогою мобільного інтернету.</string>
+    <string name="settings_network">Мережеві налаштування</string>
+    <string name="settings_low_balance_alarm">Сповіщувати про низький рахунок</string>
+    <string name="settings_delete_cards">Виделення карток</string>
+    <string name="settings_delete_cards_summary">Виберіть картки, які ви хочете видалити.</string>
+    <string name="settings_about">Про програму</string>
+    <string name="settings_version">Версія</string>
+    <string name="title_activity_settings">Налаштування</string>
+    <string name="dialog_remove">ВИДАЛИТИ</string>
+    <string name="dialog_empty_card_list">Cписок карток порожній.</string>
+    <string name="payment_bad_account_id">Неправильний ідентифікатор облікового запису.</string>
+    <string name="payment_click">"Натисніть "</string>
+    <string name="payment_times_to_unclock">разів для розблокування параметра.</string>
 </resources>

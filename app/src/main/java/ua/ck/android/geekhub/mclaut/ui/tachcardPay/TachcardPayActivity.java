@@ -6,19 +6,12 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.widget.FrameLayout;
 
-import butterknife.BindView;
 import butterknife.ButterKnife;
 import ua.ck.android.geekhub.mclaut.R;
 
 public class TachcardPayActivity extends AppCompatActivity implements TachcardPayStep1Fragment.OnPaymentRedirect {
-    @BindView(R.id.flPaymentContent)
-    FrameLayout mFrameLayout;
     private FragmentManager fragmentManager;
-    @BindView(R.id.toolBar)
-    Toolbar toolbar;
 
     @Override
     public boolean onSupportNavigateUp() {
@@ -31,7 +24,6 @@ public class TachcardPayActivity extends AppCompatActivity implements TachcardPa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tachcard_pay);
         ButterKnife.bind(this);
-        setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(R.string.payment);
         Fragment fragment = new TachcardPayStep1Fragment();

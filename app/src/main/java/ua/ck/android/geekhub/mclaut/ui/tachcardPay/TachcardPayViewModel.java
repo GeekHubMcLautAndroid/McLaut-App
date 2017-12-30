@@ -47,9 +47,15 @@ public class TachcardPayViewModel extends ViewModel implements Observer<HashMap<
         userData = characteristic.getInfo();
     }
 
-    void pay(Context context, String summ, String cardNumber, String mm, String yy, String cvv, boolean saveCard) {
+    void pay(Context context, String accountID, int city, String summ, String cardNumber, String mm, String yy, String cvv, boolean saveCard) {
         showProgressStatus.postValue(true);
         int[] digits = new int[cardNumber.length()];
+        int errorBadAccount = -1;
+        if (accountID.length() != 5) {
+            setError.postValue(errorBadAccount);
+            showProgressStatus.postValue(false);
+            return;
+        }
         int errorMinimumRefungCode = 0;
         if (summ.length() < 1) {
             setError.postValue(errorMinimumRefungCode);
@@ -95,8 +101,8 @@ public class TachcardPayViewModel extends ViewModel implements Observer<HashMap<
         }
         String[] regions = new String[]{"cherkasy", "smela", "kanev", "zoloto", "ph", "vatutino", "zven"};
         String baseUrl = context.getString(R.string.payment_baseUrl);
-        baseUrl += regions[userData.getCity()];
-        baseUrl += "?&amount=" + String.format(Locale.ENGLISH, "%.2f", summDouble) + "&account=" + userData.getAccount();
+        baseUrl += regions[city];
+        baseUrl += "?&amount=" + String.format(Locale.ENGLISH, "%.2f", summDouble) + "&account=" + accountID;
         repo.getPaymentRedirection(redirectDocument, baseUrl, cardNumber, mm, yy, cvv);
         Repository.getInstance().getMapUsersCharacteristic().removeObserver(this);
     }
@@ -116,5 +122,13 @@ public class TachcardPayViewModel extends ViewModel implements Observer<HashMap<
 
     HashMap<String, CardInfoEntity> getCards() {
         return repo.getMapCardEntities();
+    }
+
+    String getAccountID() {
+        return userData.getAccount();
+    }
+
+    int getAccountCity() {
+        return userData.getCity();
     }
 }
