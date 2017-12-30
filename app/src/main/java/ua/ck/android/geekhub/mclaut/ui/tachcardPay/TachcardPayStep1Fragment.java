@@ -148,7 +148,7 @@ public class TachcardPayStep1Fragment extends Fragment {
     @OnTextChanged(R.id.fragment_tachcard_pay_summ_text_input_edit_text)
     public void showFinalSumm() {
         String summString = summTIEL.getText().toString();
-        if (summString.length() < 1) {
+        if (summString.length() < 1 || summString.equals(".")) {
             resultSummTV.setText(R.string.payment_amount_due_empty);
         } else {
             double summDouble = Double.parseDouble(summString);
