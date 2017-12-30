@@ -2,6 +2,8 @@ package ua.ck.android.geekhub.mclaut.notifications;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.Observer;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -27,10 +29,12 @@ public class NotificationsAlarmReceiver extends BroadcastReceiver implements Obs
     public static final int ALARM_MANAGER_REQUEST_CODE = 101;
     public static final int NOTIFICATION_HOUR_OF_DAY = 4;
     public static final int NOTIFICATION_MINUTES_SECONDS_OF_DAY = 0;
+    private MutableLiveData<List<String>> userIds;
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Repository.getInstance().getAllUsersId().observeForever(this);
+        userIds = Repository.getInstance().getAllUsersId();
+        userIds.observeForever(this);
     }
 
     public void startAlarmManager(Context context){
@@ -51,7 +55,6 @@ public class NotificationsAlarmReceiver extends BroadcastReceiver implements Obs
     //When get all user's ids
     @Override
     public void onChanged(@Nullable List<String> strings) {
-        //TEMP
         try {
             if (strings != null && strings.size() != 0) {
                 for (String id : strings) {
@@ -72,6 +75,7 @@ public class NotificationsAlarmReceiver extends BroadcastReceiver implements Obs
                     }
                 }
             }
+            userIds.removeObserver(this);
         }
         catch (NullPointerException e){
             return;
