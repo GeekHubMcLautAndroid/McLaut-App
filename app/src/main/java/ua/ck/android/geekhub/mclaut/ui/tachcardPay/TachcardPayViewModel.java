@@ -51,7 +51,7 @@ public class TachcardPayViewModel extends ViewModel implements Observer<HashMap<
         showProgressStatus.postValue(true);
         int[] digits = new int[cardNumber.length()];
         int errorBadAccount = -1;
-        if (accountID.length() != 5) {
+        if (accountID.length() < 1) {
             setError.postValue(errorBadAccount);
             showProgressStatus.postValue(false);
             return;

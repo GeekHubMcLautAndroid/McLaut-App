@@ -30,8 +30,7 @@
                     android:id="@+id/fragment_tachcard_pay_pa_tiet"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="number"
-                    android:maxLength="5" />
+                    android:inputType="number" />
             </android.support.design.widget.TextInputLayout>
 
             <TextView
@@ -51,7 +50,6 @@
                 android:layout_marginTop="8dp"
                 android:entries="@array/mclaut_cityes"
                 android:spinnerMode="dialog" />
-
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/fragment_tachcard_pay_summ_text_input_layout"
