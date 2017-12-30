@@ -96,6 +96,9 @@ public class TachcardPayStep1Fragment extends Fragment {
         });
         viewModel.getSetError().observe(this, integer -> {
             switch (integer) {
+                case -1:
+                    accountIdTIL.setError(getString(R.string.payment_bad_account_id));
+                    break;
                 case 0:
                     summTIL.setError(getString(R.string.error_minimum_refung));
                     summTIL.setErrorEnabled(true);
@@ -128,7 +131,7 @@ public class TachcardPayStep1Fragment extends Fragment {
         accountIdTIET.setEnabled(false);
         cityTV.setEnabled(false);
         citySpin.setSelection(viewModel.getAccountCity());
-        accountIdTIL.setError("Click " + lockCount + " times for unlock this options.");
+        accountIdTIL.setError(getString(R.string.payment_click) + " " + lockCount + " " + getString(R.string.payment_times_to_unclock));
         return rootView;
     }
 
@@ -141,7 +144,7 @@ public class TachcardPayStep1Fragment extends Fragment {
             cityTV.setEnabled(true);
         } else {
             lockCount--;
-            accountIdTIL.setError("Click " + lockCount + " times for unlock this options.");
+            accountIdTIL.setError(getString(R.string.payment_click) + " " + lockCount + " " + getString(R.string.payment_times_to_unclock));
         }
     }
 
@@ -199,12 +202,14 @@ public class TachcardPayStep1Fragment extends Fragment {
         String mm = mmTIEL.getText().toString();
         String yy = yyTIEL.getText().toString();
         String cvv = cvvTIEL.getText().toString();
+        String accountID = accountIdTIET.getText().toString();
+        int city = citySpin.getSelectedItemPosition();
         summTIL.setErrorEnabled(false);
         cardNumberTIL.setErrorEnabled(false);
         mmTIL.setErrorEnabled(false);
         yyTIL.setErrorEnabled(false);
         cvvTIL.setErrorEnabled(false);
-        viewModel.pay(getContext(), summ, cardNumber, mm, yy, cvv, saveCardCB.isChecked());
+        viewModel.pay(getContext(), accountID, city, summ, cardNumber, mm, yy, cvv, saveCardCB.isChecked());
     }
 
     @OnClick(R.id.fragment_tachcard_pay_save_card_text)
@@ -216,6 +221,9 @@ public class TachcardPayStep1Fragment extends Fragment {
         confirmCPB.startAnimation();
         summTIEL.setEnabled(false);
         selectCardButton.setEnabled(false);
+        accountIdTIL.setEnabled(false);
+        citySpin.setEnabled(false);
+        cityTV.setEnabled(false);
         cardNumberTIET.setEnabled(false);
         mmTIEL.setEnabled(false);
         yyTIEL.setEnabled(false);
@@ -230,5 +238,11 @@ public class TachcardPayStep1Fragment extends Fragment {
         mmTIEL.setEnabled(true);
         yyTIEL.setEnabled(true);
         cvvTIEL.setEnabled(true);
+        if (lockCount == 1) {
+            accountIdTIL.setErrorEnabled(false);
+            accountIdTIET.setEnabled(true);
+            citySpin.setEnabled(true);
+            cityTV.setEnabled(true);
+        }
     }
 }

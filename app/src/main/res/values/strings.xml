@@ -91,4 +91,7 @@
     <string name="settings_version">Version</string>
     <string name="dialog_remove">REMOVE</string>
     <string name="dialog_empty_card_list">Empty card list.</string>
+    <string name="payment_bad_account_id">Incorrect account id.</string>
+    <string name="payment_click">Click</string>
+    <string name="payment_times_to_unclock">times for unlock this options.</string>
 </resources>

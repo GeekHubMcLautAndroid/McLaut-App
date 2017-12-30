@@ -65,4 +65,7 @@
     <string name="title_activity_settings">Налаштування</string>
     <string name="dialog_remove">ВИДАЛИТИ</string>
     <string name="dialog_empty_card_list">Cписок карток порожній.</string>
+    <string name="payment_bad_account_id">Неправильний ідентифікатор облікового запису.</string>
+    <string name="payment_click">"Натисніть "</string>
+    <string name="payment_times_to_unclock">разів для розблокування параметра.</string>
 </resources>

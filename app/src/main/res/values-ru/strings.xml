@@ -65,5 +65,8 @@
     <string name="title_activity_settings">Настройки</string>
     <string name="dialog_remove">УДАЛИТЬ</string>
     <string name="dialog_empty_card_list">Cписок карт пустий.</string>
+    <string name="payment_bad_account_id">Неверный идентификатор учетной записи.</string>
+    <string name="payment_click">"Нажмите "</string>
+    <string name="payment_times_to_unclock">" раз для разблокировки параметра."</string>
 
 </resources>
