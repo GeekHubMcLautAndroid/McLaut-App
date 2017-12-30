@@ -62,7 +62,9 @@ public class TachcardPayStep1Fragment extends Fragment {
     CircularProgressButton confirmCPB;
     @BindView(R.id.fragment_tachcard_pay_result_summ_text)
     TextView resultSummTV;
-    @BindView(R.id.fragment_tachcard_pay_pa)
+    @BindView(R.id.fragment_tachcard_pay_pa_til)
+    TextInputLayout accountIdTIL;
+    @BindView(R.id.fragment_tachcard_pay_pa_tiet)
     TextInputEditText accountIdTIET;
     @BindView(R.id.fragment_tachcard_pay_city_spinner)
     Spinner citySpin;
@@ -70,6 +72,7 @@ public class TachcardPayStep1Fragment extends Fragment {
     TextView cityTV;
 
     private TachcardPayViewModel viewModel;
+    private int lockCount = 3;
 
     public interface OnPaymentRedirect {
         void redirect(String location, String html);
@@ -122,12 +125,24 @@ public class TachcardPayStep1Fragment extends Fragment {
             }
         });
         citySpin.setEnabled(false);
-        citySpin.setFocusable(false);
         accountIdTIET.setEnabled(false);
-        accountIdTIET.setFocusable(false);
         cityTV.setEnabled(false);
         citySpin.setSelection(viewModel.getAccountCity());
+        accountIdTIL.setError("Click " + lockCount + " times for unlock this options.");
         return rootView;
+    }
+
+    @OnClick(R.id.fragment_tachcard_pay_pa_til)
+    public void unlock() {
+        if (lockCount == 1) {
+            accountIdTIL.setErrorEnabled(false);
+            accountIdTIET.setEnabled(true);
+            citySpin.setEnabled(true);
+            cityTV.setEnabled(true);
+        } else {
+            lockCount--;
+            accountIdTIL.setError("Click " + lockCount + " times for unlock this options.");
+        }
     }
 
     @OnTextChanged(R.id.fragment_tachcard_pay_summ_text_input_edit_text)

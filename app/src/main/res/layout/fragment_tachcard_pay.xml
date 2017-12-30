@@ -19,14 +19,16 @@
             tools:targetApi="o">
 
             <android.support.design.widget.TextInputLayout
+                android:id="@+id/fragment_tachcard_pay_pa_til"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/personal_account">
 
                 <android.support.design.widget.TextInputEditText
-                    android:id="@+id/fragment_tachcard_pay_pa"
+                    android:id="@+id/fragment_tachcard_pay_pa_tiet"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:inputType="number" />
             </android.support.design.widget.TextInputLayout>
 
             <TextView
@@ -60,6 +62,7 @@
                     android:id="@+id/fragment_tachcard_pay_summ_text_input_edit_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:focusedByDefault="true"
                     android:inputType="numberDecimal"
                     android:maxLength="16" />
             </android.support.design.widget.TextInputLayout>
