@@ -101,4 +101,6 @@
     <string name="payment_bad_account_id">Incorrect account id.</string>
     <string name="payment_click">Click</string>
     <string name="payment_times_to_unclock">times for unlock this options.</string>
+    <string name="settings_card_settings">Card setting</string>
+    <string name="settings_notification_setting">Notification setting</string>
 </resources>

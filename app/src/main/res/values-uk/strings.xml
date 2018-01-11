@@ -61,7 +61,7 @@
     <string name="settings_mobilenetwork_summary">Дозволити фонове оновлення за допомогою мобільного інтернету.</string>
     <string name="settings_network">Мережеві налаштування</string>
     <string name="settings_low_balance_alarm">Сповіщувати про низький рахунок</string>
-    <string name="settings_delete_cards">Виделення карток</string>
+    <string name="settings_delete_cards">Видалення карток</string>
     <string name="settings_delete_cards_summary">Виберіть картки, які ви хочете видалити.</string>
     <string name="settings_about">Про програму</string>
     <string name="settings_version">Версія</string>
@@ -71,4 +71,6 @@
     <string name="payment_bad_account_id">Неправильний ідентифікатор облікового запису.</string>
     <string name="payment_click">"Натисніть "</string>
     <string name="payment_times_to_unclock">разів для розблокування параметра.</string>
+    <string name="settings_card_settings">Налаштування карт</string>
+    <string name="settings_notification_setting">Налаштування сповіщень</string>
 </resources>

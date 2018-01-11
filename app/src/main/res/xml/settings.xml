@@ -12,7 +12,7 @@
             android:summary="@string/settings_mobilenetwork_summary"
             android:title="@string/settings_mobilenetwork" />
     </PreferenceCategory>
-    <PreferenceCategory android:title="Notification setting">
+    <PreferenceCategory android:title="@string/settings_notification_setting">
         <ListPreference
             android:defaultValue="1"
             android:entries="@array/alarm_time_list"
@@ -20,7 +20,7 @@
             android:key="pref_alarm"
             android:title="@string/settings_low_balance_alarm" />
     </PreferenceCategory>
-    <PreferenceCategory android:title="Card setting">
+    <PreferenceCategory android:title="@string/settings_card_settings">
         <Preference
             android:key="pref_remove_card"
             android:summary="@string/settings_delete_cards_summary"
