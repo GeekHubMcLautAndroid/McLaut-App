@@ -11,13 +11,13 @@
     tools:context="ua.ck.android.geekhub.mclaut.ui.authorization.LoginActivity">
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="70dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/login_screen_sideways_margin"
         android:layout_marginStart="@dimen/login_screen_sideways_margin"
         android:layout_marginTop="@dimen/login_screen_image_top_margin"
         android:layout_weight="1"
-        android:src="@drawable/logomclaut"
+        android:src="@drawable/mclaut_logo"
         tools:ignore="ContentDescription" />
 
     <LinearLayout
