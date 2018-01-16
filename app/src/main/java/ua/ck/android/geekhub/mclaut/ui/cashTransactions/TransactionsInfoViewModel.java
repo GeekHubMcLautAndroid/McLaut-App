@@ -24,6 +24,7 @@ public class TransactionsInfoViewModel extends ViewModel implements Observer<Has
     private static final int TRANSACTION_TYPE_ALL = 2;
     private int transactionsType;
 
+
     MutableLiveData<List<CashTransactionsEntity>> getTransactions() {
         return transactions;
     }
@@ -58,4 +59,6 @@ public class TransactionsInfoViewModel extends ViewModel implements Observer<Has
         Repository.getInstance().getMapUsersCharacteristic().observeForever(this);
 
     }
+
+
 }
