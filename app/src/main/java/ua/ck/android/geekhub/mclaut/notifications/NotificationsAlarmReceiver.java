@@ -8,7 +8,9 @@ import android.arch.lifecycle.Observer;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 
 import java.util.Calendar;
@@ -29,6 +31,7 @@ public class NotificationsAlarmReceiver extends BroadcastReceiver implements Obs
     public static final int ALARM_MANAGER_REQUEST_CODE = 101;
     public static final int NOTIFICATION_HOUR_OF_DAY = 4;
     public static final int NOTIFICATION_MINUTES_SECONDS_OF_DAY = 0;
+    public static final String PREFERENCE_DAYS_DEFAULT_VALUE = "-1";
     private MutableLiveData<List<String>> userIds;
 
     @Override
@@ -47,7 +50,7 @@ public class NotificationsAlarmReceiver extends BroadcastReceiver implements Obs
         calendar.set(Calendar.MINUTE, NOTIFICATION_MINUTES_SECONDS_OF_DAY);
         calendar.set(Calendar.SECOND, NOTIFICATION_MINUTES_SECONDS_OF_DAY);
         if (alarmManager != null) {
-            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),
+            alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),
                     AlarmManager.INTERVAL_DAY,pendingIntent);
         }
     }
@@ -67,8 +70,9 @@ public class NotificationsAlarmReceiver extends BroadcastReceiver implements Obs
                         dayCounter += (Double.parseDouble(entity.getBalance()) /
                                 Double.parseDouble(info.getPayAtDay()));
                     }
-                    //TODO: get value from preferences
-                    if(dayCounter <= 2) {
+                    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(McLautApplication.getContext());
+                    int days = Integer.parseInt(prefs.getString("pref_alarm",PREFERENCE_DAYS_DEFAULT_VALUE));
+                    if(days != Integer.parseInt(PREFERENCE_DAYS_DEFAULT_VALUE) && dayCounter <= days) {
                         NotificationHelper.
                                 getInstance(McLautApplication.getContext()).
                                 showLowBalanceNotification(McLautApplication.getContext(), entity.getAccount(), entity.getBalance(), 2);
