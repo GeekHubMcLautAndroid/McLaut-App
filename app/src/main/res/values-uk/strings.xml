@@ -73,4 +73,5 @@
     <string name="payment_times_to_unclock">разів для розблокування параметра.</string>
     <string name="settings_card_settings">Налаштування карт</string>
     <string name="settings_notification_setting">Налаштування сповіщень</string>
+    <string name="payment_end">Оплата завершена.</string>
 </resources>

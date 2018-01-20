@@ -75,4 +75,5 @@
     <string name="notification_low_balance_title">Низкий баланс</string>
     <string name="settings_card_settings">Настройки карт</string>
     <string name="settings_notification_setting">Настройки оповещений</string>
+    <string name="payment_end">Оплата окончена.</string>
 </resources>
