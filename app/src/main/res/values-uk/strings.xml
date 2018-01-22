@@ -74,4 +74,6 @@
     <string name="settings_card_settings">Налаштування карт</string>
     <string name="settings_notification_setting">Налаштування сповіщень</string>
     <string name="payment_end">Оплата завершена.</string>
+    <string name="tachcard_activity_menu_reload">Перезавантажити</string>
+    <string name="tachcard_activity_menu_open_in_browser">Відкрити в браузері</string>
 </resources>

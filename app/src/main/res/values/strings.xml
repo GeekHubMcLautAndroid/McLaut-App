@@ -104,4 +104,7 @@
     <string name="settings_card_settings">Card setting</string>
     <string name="settings_notification_setting">Notification setting</string>
     <string name="payment_end">Payment end.</string>
+    <string name="tachcard_activity_menu_reload">Reload</string>
+    <string name="tachcard_activity_menu_open_in_browser">Open in browser</string>
+    <string name="tachcard_pay_url" translatable="false">https://user.tachcard.com/uk/mclaut</string>
 </resources>

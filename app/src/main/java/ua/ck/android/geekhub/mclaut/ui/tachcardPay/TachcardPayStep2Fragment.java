@@ -33,6 +33,7 @@ public class TachcardPayStep2Fragment extends Fragment {
                 if (!url.equals(location) && !url.contains("user.tachcard.com")) {
                     Toast.makeText(getContext(), getResources().getString(R.string.payment_end), Toast.LENGTH_LONG).show();
                     getActivity().finish();
+                    return;
                 }
                 super.onPageFinished(view, url);
             }
