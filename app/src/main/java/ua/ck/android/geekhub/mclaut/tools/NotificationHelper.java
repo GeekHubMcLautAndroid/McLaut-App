@@ -7,7 +7,6 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.media.RingtoneManager;
 import android.support.v4.app.NotificationCompat;
 
 import ua.ck.android.geekhub.mclaut.R;
@@ -44,7 +43,7 @@ public class NotificationHelper {
         String title = context.getString(R.string.notification_low_balance_title);
         String content = context.getString(R.string.notification_low_balance_content,account,balance,days);
         //TODO: set app icon
-        builder.setSmallIcon(R.drawable.ic_launcher_foreground);
+        builder.setSmallIcon(R.drawable.ic_notification);
         builder.setChannelId(MCLAUT_NOTIFICATIONS_CHANNEL_ID);
         builder.setContentTitle(title);
         builder.setContentText(content);
