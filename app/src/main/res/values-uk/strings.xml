@@ -55,10 +55,6 @@
     <string name="label_text_after_transaction">Баланс після операції: %1$.2f₴</string>
     <string name="notification_low_balance_content">На особовому рахунку №%1$s залишилось %2$.2f₴\nНадання послуг закінчиться через %3$d днів</string>
     <string name="notification_low_balance_title">Низький баланс</string>
-    <string name="settings_autoupdate">Частота автооновлення</string>
-    <string name="settings_mobilenetwork">Мобільний інтернет</string>
-    <string name="settings_mobilenetwork_summary">Дозволити фонове оновлення за допомогою мобільного інтернету.</string>
-    <string name="settings_network">Мережеві налаштування</string>
     <string name="settings_low_balance_alarm">Сповіщувати про низький рахунок</string>
     <string name="settings_delete_cards">Видалення карток</string>
     <string name="settings_delete_cards_summary">Виберіть картки, які ви хочете видалити.</string>

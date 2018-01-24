@@ -9,33 +9,6 @@
         <item>Ватутино</item>
         <item>Звенигородка</item>
     </string-array>
-    <string-array name="update_time_list">
-        <item>Никогда</item>
-        <item>1 ч.</item>
-        <item>2 ч.</item>
-        <item>3 ч.</item>
-        <item>4 ч.</item>
-        <item>5 ч.</item>
-        <item>6 ч.</item>
-        <item>7 ч.</item>
-        <item>8 ч.</item>
-        <item>9 ч.</item>
-        <item>10 ч.</item>
-        <item>11 ч.</item>
-        <item>12 ч.</item>
-        <item>13 ч.</item>
-        <item>14 ч.</item>
-        <item>15 ч.</item>
-        <item>16 ч.</item>
-        <item>17 ч.</item>
-        <item>18 ч.</item>
-        <item>19 ч.</item>
-        <item>20 ч.</item>
-        <item>21 ч.</item>
-        <item>22 ч.</item>
-        <item>23 ч.</item>
-        <item>24 ч.</item>
-    </string-array>
     <string-array name="alarm_time_list">
         <item>Никогда</item>
         <item>За тот день</item>
