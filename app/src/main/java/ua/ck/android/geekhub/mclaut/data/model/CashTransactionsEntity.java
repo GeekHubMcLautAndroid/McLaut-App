@@ -2,7 +2,6 @@ package ua.ck.android.geekhub.mclaut.data.model;
 
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
-import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
 import com.google.gson.annotations.SerializedName;
@@ -51,6 +50,15 @@ public class CashTransactionsEntity {
         this.sumBefore = cashTransactionsEntity.sumBefore;
     }
 
+    public CashTransactionsEntity(CashTransactionsEntity cashTransactionsEntity, int typeOfTransaction) {
+        this.sum = cashTransactionsEntity.sum;
+        this.type = cashTransactionsEntity.type;
+        this.date = cashTransactionsEntity.date;
+        this.idClient = cashTransactionsEntity.idClient;
+        this.sumBefore = cashTransactionsEntity.sumBefore;
+        this.typeOfTransaction = typeOfTransaction;
+    }
+
     public int getType() {
         return type;
     }
@@ -83,5 +91,5 @@ public class CashTransactionsEntity {
         }
         this.typeOfTransaction = WITHDRAWALS;
     }
-    
+
 }

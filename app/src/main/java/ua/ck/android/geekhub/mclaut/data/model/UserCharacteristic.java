@@ -8,6 +8,8 @@ import java.util.List;
  */
 
 public class UserCharacteristic {
+    public static final int PAYMENTS = 1;
+    public static final int WITHDRAWALS = 0;
 
     private UserInfoEntity info;
 
@@ -30,10 +32,10 @@ public class UserCharacteristic {
     public UserCharacteristic(UserCharacteristic userCharacteristic){
         this.info = new UserInfoEntity(userCharacteristic.info);
         for(CashTransactionsEntity cashPayment : userCharacteristic.paymentsTransactions){
-            this.paymentsTransactions.add(new CashTransactionsEntity(cashPayment));
+            this.paymentsTransactions.add(new CashTransactionsEntity(cashPayment, PAYMENTS));
         }
         for(CashTransactionsEntity cashWithdrawals : userCharacteristic.withdrawalsTransactions){
-            this.withdrawalsTransactions.add(new CashTransactionsEntity(cashWithdrawals));
+            this.withdrawalsTransactions.add(new CashTransactionsEntity(cashWithdrawals, WITHDRAWALS));
         }
     }
 
