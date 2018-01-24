@@ -18,7 +18,7 @@ import ua.ck.android.geekhub.mclaut.data.model.UserInfoEntity;
  */
 @android.arch.persistence.room.Dao
 public interface Dao {
-// UserInfo
+    // UserInfo
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertUserInfo(UserInfoEntity entity);
 
@@ -47,7 +47,7 @@ public interface Dao {
 
 ////
 
-// UserConnectionInfo
+    // UserConnectionInfo
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertUserConnectionsInfo(UserConnectionsInfo entity);
 
@@ -57,7 +57,7 @@ public interface Dao {
 
 ////
 
-// СashTransactions
+    // СashTransactions
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertCashTransactionsEntities(CashTransactionsEntity entity);
 
@@ -71,9 +71,13 @@ public interface Dao {
             "        ORDER BY date")
     List<CashTransactionsEntity> findAllWithdrawalsEntities(String userId);
 
+    @Query("SELECT * FROM cashTransactions " +
+            "        WHERE idClient = :userId AND typeOfTransaction = 1 AND date = MAX(date)")
+    CashTransactionsEntity findLastPaymentsEntities(String userId);
+
 ////
 
-// CardInfo
+    // CardInfo
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertCardInfoEntity(CardInfoEntity entity);
 
@@ -91,7 +95,6 @@ public interface Dao {
 
     @Query("SELECT id FROM userInfo")
     List<String> getAllUsersId();
-
 
 
 }
