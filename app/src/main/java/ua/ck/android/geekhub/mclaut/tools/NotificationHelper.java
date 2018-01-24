@@ -38,11 +38,10 @@ public class NotificationHelper {
         this.manager = manager;
     }
 
-    public void showLowBalanceNotification(Context context, String account, String balance, int days){
+    public void showLowBalanceNotification(Context context, String account, double balance, int days) {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, MCLAUT_NOTIFICATIONS_CHANNEL_ID);
         String title = context.getString(R.string.notification_low_balance_title);
         String content = context.getString(R.string.notification_low_balance_content,account,balance,days);
-        //TODO: set app icon
         builder.setSmallIcon(R.drawable.ic_notification);
         builder.setChannelId(MCLAUT_NOTIFICATIONS_CHANNEL_ID);
         builder.setContentTitle(title);

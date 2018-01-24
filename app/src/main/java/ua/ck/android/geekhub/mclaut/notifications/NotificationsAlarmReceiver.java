@@ -96,10 +96,10 @@ public class NotificationsAlarmReceiver extends BroadcastReceiver implements Obs
                         }
                         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(McLautApplication.getContext());
                         int days = Integer.parseInt(prefs.getString("pref_alarm", PREFERENCE_DAYS_DEFAULT_VALUE));
-                        if (days != Integer.parseInt(PREFERENCE_DAYS_DEFAULT_VALUE) && daysToEnd <= days && daysToEnd >= 0) {
+                        if (daysToEnd <= days && daysToEnd >= 0) {
                             NotificationHelper.
                                     getInstance(McLautApplication.getContext()).
-                                    showLowBalanceNotification(McLautApplication.getContext(), entity.getAccount(), entity.getBalance(), 2);
+                                    showLowBalanceNotification(McLautApplication.getContext(), entity.getAccount(), summAfterLastTransaction, daysToEnd);
                         }
                     });
                 }

@@ -71,7 +71,7 @@
     <string name="payment_click">"Нажмите "</string>
     <string name="payment_times_to_unclock">" раз для разблокировки параметра."</string>
 
-    <string name="notification_low_balance_content">На лицевом счёте №%1$s осталось %2$s₴          Предоставление услуг закончится через %3$d дней</string>
+    <string name="notification_low_balance_content">На лицевом счёте №%1$s осталось %2$.2f₴\nПредоставление услуг закончится через %3$d дней</string>
     <string name="notification_low_balance_title">Низкий баланс</string>
     <string name="settings_card_settings">Настройки карт</string>
     <string name="settings_notification_setting">Настройки оповещений</string>

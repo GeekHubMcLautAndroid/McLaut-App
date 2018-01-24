@@ -82,8 +82,7 @@
 
     <!--Low balance notification-->
     <string name="notification_low_balance_title">Low balance</string>
-    <string name="notification_low_balance_content">In account №%1$s remains %2$s₴\n
-        The service will end through %3$d days</string>
+    <string name="notification_low_balance_content">In account №%1$s remains %2$.2f₴\nThe service will end through %3$d days</string>
     <string name="title_activity_settings">Settings</string>
 
     <!-- Strings related to Settings -->
