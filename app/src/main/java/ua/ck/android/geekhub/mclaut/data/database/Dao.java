@@ -72,7 +72,9 @@ public interface Dao {
     List<CashTransactionsEntity> findAllWithdrawalsEntities(String userId);
 
     @Query("SELECT * FROM cashTransactions " +
-            "        WHERE idClient = :userId AND typeOfTransaction = 1 AND date = MAX(date)")
+            "        WHERE idClient = :userId AND typeOfTransaction = 1" +
+            "        ORDER BY date DESC" +
+            "        LIMIT 1")
     CashTransactionsEntity findLastPaymentsEntities(String userId);
 
 ////
