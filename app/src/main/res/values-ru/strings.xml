@@ -9,7 +9,7 @@
     <string name="error_empty_field">Заполните это поле</string>
 
     <!--Drawer items names-->
-    <string name="general_information">Главная Информация</string>
+    <string name="general_information">Главная информация</string>
     <string name="cash_operations">Денежные операции</string>
     <string name="settings">Настройки</string>
     <string name="payment">Пополнениe</string>
