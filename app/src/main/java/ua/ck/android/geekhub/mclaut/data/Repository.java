@@ -260,13 +260,13 @@ public class Repository {
         return request;
     }
 
-    private MutableLiveData<CashTransactionsEntity> getLastPayment(String userId) {
+    public MutableLiveData<CashTransactionsEntity> getLastTransaction(String userId) {
         final MutableLiveData<CashTransactionsEntity> request = new MutableLiveData<>();
         executor.databaseExecutor().execute(() -> {
             CashTransactionsEntity lastPayment = new CashTransactionsEntity(
                     LocalDatabase.getInstance(
                             McLautApplication.getContext()).dao()
-                            .findLastPaymentsEntities(userId));
+                            .findLastTransactionEntities(userId));
             request.postValue(lastPayment);
         });
         return request;

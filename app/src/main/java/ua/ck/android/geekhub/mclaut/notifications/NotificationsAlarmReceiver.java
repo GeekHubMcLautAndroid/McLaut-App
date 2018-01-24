@@ -11,13 +11,17 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 
+import org.joda.time.DateTime;
+
 import java.util.Calendar;
 import java.util.List;
 
 import ua.ck.android.geekhub.mclaut.app.McLautApplication;
 import ua.ck.android.geekhub.mclaut.data.Repository;
+import ua.ck.android.geekhub.mclaut.data.model.CashTransactionsEntity;
 import ua.ck.android.geekhub.mclaut.data.model.UserConnectionsInfo;
 import ua.ck.android.geekhub.mclaut.data.model.UserInfoEntity;
+import ua.ck.android.geekhub.mclaut.tools.DateConverter;
 import ua.ck.android.geekhub.mclaut.tools.NotificationHelper;
 
 
@@ -38,9 +42,9 @@ public class NotificationsAlarmReceiver extends BroadcastReceiver implements Obs
         userIds.observeForever(this);
     }
 
-    public void startAlarmManager(Context context){
-        Intent alarmIntent = new Intent(context,NotificationsAlarmReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, ALARM_MANAGER_REQUEST_CODE,alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+    public void startAlarmManager(Context context) {
+        Intent alarmIntent = new Intent(context, NotificationsAlarmReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, ALARM_MANAGER_REQUEST_CODE, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT);
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
         Calendar calendar = Calendar.getInstance();
@@ -48,8 +52,8 @@ public class NotificationsAlarmReceiver extends BroadcastReceiver implements Obs
         calendar.set(Calendar.MINUTE, NOTIFICATION_MINUTES_SECONDS_OF_DAY);
         calendar.set(Calendar.SECOND, NOTIFICATION_MINUTES_SECONDS_OF_DAY);
         if (alarmManager != null) {
-            alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),
-                    AlarmManager.INTERVAL_DAY,pendingIntent);
+            alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+                    AlarmManager.INTERVAL_DAY, pendingIntent);
         }
     }
 
@@ -63,24 +67,45 @@ public class NotificationsAlarmReceiver extends BroadcastReceiver implements Obs
                     UserInfoEntity entity = Repository.getInstance().
                             getMapUsersCharacteristic().getValue().
                             get(id).getInfo();
-                    double dayCounter = 0;
-                    for (UserConnectionsInfo info : entity.getUserConnectionsInfoList()) {
-                        dayCounter += (Double.parseDouble(entity.getBalance()) /
-                                Double.parseDouble(info.getPayAtDay()));
-                    }
-                    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(McLautApplication.getContext());
-                    int days = Integer.parseInt(prefs.getString("pref_alarm",PREFERENCE_DAYS_DEFAULT_VALUE));
-                    if(days != Integer.parseInt(PREFERENCE_DAYS_DEFAULT_VALUE) && dayCounter <= days) {
-                        NotificationHelper.
-                                getInstance(McLautApplication.getContext()).
-                                showLowBalanceNotification(McLautApplication.getContext(), entity.getAccount(), entity.getBalance(), 2);
-                    }
+                    MutableLiveData<CashTransactionsEntity> cashEntityLiveData = Repository.getInstance().getLastTransaction(id);
+                    cashEntityLiveData.observeForever(cashEntity -> {
+                        int dayCounter = 0;
+                        double payAtDay = 0;
+                        if (cashEntity == null) {
+                            return;
+                        }
+                        double summAfterLastTransaction = cashEntity.getSumBefore();
+                        if (cashEntity.getTypeOfTransaction() == 1)  // 1 equals PAYMENTS
+                        {
+                            summAfterLastTransaction += cashEntity.getSum();
+                        } else {
+                            summAfterLastTransaction -= cashEntity.getSum();
+                        }
+                        for (UserConnectionsInfo info : entity.getUserConnectionsInfoList()) {
+                            payAtDay += Double.parseDouble(info.getPayAtDay());
+                        }
+                        dayCounter += (summAfterLastTransaction) / payAtDay;
+                        DateTime transactionDate = DateConverter.fromTimestampToDateTime(cashEntity.getDate());
+                        DateTime now = DateTime.now();
+                        int daysToEnd;
+                        if (now.getYear() == transactionDate.getYear()) {
+                            daysToEnd = transactionDate.getDayOfYear() + dayCounter - now.getDayOfYear();
+                        } else {
+                            int yearDif = Math.abs(now.getYear() - transactionDate.getYear());
+                            daysToEnd = transactionDate.getDayOfYear() + dayCounter - now.getDayOfYear() - 365 * yearDif;//Maybe sometimes I make it better;
+                        }
+                        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(McLautApplication.getContext());
+                        int days = Integer.parseInt(prefs.getString("pref_alarm", PREFERENCE_DAYS_DEFAULT_VALUE));
+                        if (days != Integer.parseInt(PREFERENCE_DAYS_DEFAULT_VALUE) && daysToEnd <= days && daysToEnd >= 0) {
+                            NotificationHelper.
+                                    getInstance(McLautApplication.getContext()).
+                                    showLowBalanceNotification(McLautApplication.getContext(), entity.getAccount(), entity.getBalance(), 2);
+                        }
+                    });
                 }
             }
             userIds.removeObserver(this);
-        }
-        catch (NullPointerException e){
-            return;
+        } catch (NullPointerException ignored) {
         }
     }
 }
