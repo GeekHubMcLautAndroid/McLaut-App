@@ -21,11 +21,13 @@
         tools:ignore="ContentDescription" />
 
     <LinearLayout
+        android:id="@+id/login_activity_main_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/login_screen_sideways_margin"
         android:layout_weight="1"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="gone">
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/login_activity_login_text_input_layout"
@@ -41,8 +43,8 @@
                 android:layout_height="wrap_content"
                 android:drawablePadding="8dp"
                 android:drawableStart="@drawable/ic_username_edittext_icon"
-                android:textColor="@android:color/white"
                 android:maxLines="1"
+                android:textColor="@android:color/white"
                 android:theme="@style/LoginScreenEdittextStyle" />
         </android.support.design.widget.TextInputLayout>
 
@@ -59,9 +61,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawablePadding="8dp"
+                android:drawableStart="@drawable/ic_password_edittext_icon"
                 android:inputType="textPassword"
                 android:maxLines="1"
-                android:drawableStart="@drawable/ic_password_edittext_icon"
                 android:textColor="@android:color/white"
                 android:theme="@style/LoginScreenEdittextStyle" />
         </android.support.design.widget.TextInputLayout>
@@ -91,13 +93,12 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="24dp"
-            android:text="@string/log_in_button_text"
             android:background="@color/colorAccent"
-            app:spinning_bar_width="4dp"
+            android:text="@string/log_in_button_text"
+            android:textColor="@android:color/white"
             app:spinning_bar_color="#FFF"
             app:spinning_bar_padding="6dp"
-            android:textColor="@android:color/white"
-            />
+            app:spinning_bar_width="4dp" />
 
     </LinearLayout>
 

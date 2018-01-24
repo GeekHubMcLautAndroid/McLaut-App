@@ -1,19 +1,18 @@
 package ua.ck.android.geekhub.mclaut.ui.authorization;
 
-import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
-import android.support.annotation.Nullable;
+import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
+import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
@@ -21,9 +20,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import ua.ck.android.geekhub.mclaut.R;
-import ua.ck.android.geekhub.mclaut.data.Repository;
 import ua.ck.android.geekhub.mclaut.ui.MainActivity;
-import ua.ck.android.geekhub.mclaut.app.McLautApplication;
 
 public class LoginActivity extends AppCompatActivity implements TextWatcher {
 
@@ -44,6 +41,8 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher {
     TextInputEditText passwordEditText;
     @BindView(R.id.login_activity_button_sign_in)
     CircularProgressButton buttonLogin;
+    @BindView(R.id.login_activity_main_content)
+    LinearLayout mainContent;
 
     private LoginViewModel viewModel;
 
@@ -55,13 +54,11 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher {
 
         viewModel = ViewModelProviders.of(this).get(LoginViewModel.class);
 
-        viewModel.getProgressStatusData().observe(this, new Observer<Boolean>() {
-            @Override
-            public void onChanged(@Nullable Boolean aBoolean) {
-                if(aBoolean){
+        viewModel.getProgressStatusData().observe(this, aBoolean -> {
+            if (aBoolean != null) {
+                if (aBoolean) {
                     showProgress();
-                }
-                else {
+                } else {
                     hideProgress();
                 }
             }
@@ -70,30 +67,28 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher {
                 .getBooleanExtra(ADD_NEW_USER, false);
 
         viewModel.initCharacteristicMap(loginActivityParam)
-                .observe(this, new Observer<Boolean>() {
-            @Override
-            public void onChanged(@Nullable Boolean aBoolean) {
-                if(aBoolean){
-                    continueAuthorization();
-                } else {
-                    startMainActivity();
-                }
-            }
-        });
+                .observe(this, aBoolean -> {
+                    if (aBoolean != null) {
+                        if (aBoolean) {
+                            continueAuthorization();
+                        } else {
+                            startMainActivity();
+                        }
+                    }
+                });
     }
 
-    private void continueAuthorization(){
+    private void continueAuthorization() {
+        mainContent.setVisibility(View.VISIBLE);
         loginTextInputEditText.addTextChangedListener(this);
         passwordEditText.addTextChangedListener(this);
-        viewModel.getResultStatus().observe(this, new Observer<Integer>() {
-            @Override
-            public void onChanged(@Nullable Integer integer) {
-                switch (integer){
+        viewModel.getResultStatus().observe(this, integer -> {
+            if (integer != null) {
+                switch (integer) {
                     case RESPONSE_SUCCESSFUL_CODE:
-                        viewModel.getResultLoadDataAboutUserFromInternet().observe(LoginActivity.this, new Observer<Boolean>() {
-                            @Override
-                            public void onChanged(@Nullable Boolean aBoolean) {
-                                if(aBoolean){
+                        viewModel.getResultLoadDataAboutUserFromInternet().observe(LoginActivity.this, aBoolean -> {
+                            if (aBoolean != null) {
+                                if (aBoolean) {
                                     startMainActivity();
                                 }
                             }
@@ -115,59 +110,57 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher {
             }
         });
 
-        passwordEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-                if ((keyEvent != null && (keyEvent.getKeyCode() == KeyEvent.KEYCODE_ENTER)) ||
-                        (i == EditorInfo.IME_ACTION_DONE)) {
-                    login();
-                }
-                return false;
+        passwordEditText.setOnEditorActionListener((textView, i, keyEvent) -> {
+            if ((keyEvent != null && (keyEvent.getKeyCode() == KeyEvent.KEYCODE_ENTER)) ||
+                    (i == EditorInfo.IME_ACTION_DONE)) {
+                login();
             }
+            return false;
         });
     }
 
     @OnClick(R.id.login_activity_button_sign_in)
-    public void logInButtonClick(){
+    public void logInButtonClick() {
         login();
     }
 
-    private void startMainActivity(){
+    private void startMainActivity() {
         Intent intent = new Intent(LoginActivity.this,
                 MainActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
         finish();
     }
 
-    private void login(){
+    private void login() {
         String login = loginTextInputEditText.getText().toString();
         String password = passwordEditText.getText().toString();
         int city = cityesSpinner.getSelectedItemPosition();
         boolean error = false;
-        if(login.equals("")) {
+        if (login.equals("")) {
             loginTextInputLayout.setError(getString(R.string.error_empty_field));
             loginTextInputLayout.setErrorEnabled(true);
             error = true;
         }
-        if(password.equals("")){
+        if (password.equals("")) {
             passwordTextInputLayout.setError(getString(R.string.error_empty_field));
             passwordTextInputLayout.setErrorEnabled(true);
             error = true;
         }
-        if(!error) {
+        if (!error) {
             viewModel.login(login, password, city);
         }
 
     }
 
-    public void showProgress(){
+    public void showProgress() {
         buttonLogin.startAnimation();
         cityesSpinner.setEnabled(false);
         loginTextInputLayout.setEnabled(false);
         passwordTextInputLayout.setEnabled(false);
     }
-    public  void hideProgress(){
+
+    public void hideProgress() {
         buttonLogin.revertAnimation();
         cityesSpinner.setEnabled(true);
         loginTextInputLayout.setEnabled(true);
