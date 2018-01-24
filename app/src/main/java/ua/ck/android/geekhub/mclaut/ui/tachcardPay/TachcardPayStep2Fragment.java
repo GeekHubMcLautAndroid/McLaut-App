@@ -8,6 +8,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
+import android.widget.Toast;
+
+import ua.ck.android.geekhub.mclaut.R;
 
 public class TachcardPayStep2Fragment extends Fragment {
 
@@ -23,6 +27,17 @@ public class TachcardPayStep2Fragment extends Fragment {
         location = argument.getString("location");
         html = argument.getString("html");
         outWebView = new WebView(inflater.getContext());
+        outWebView.setWebViewClient(new WebViewClient() {
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                if (!url.equals(location) && !url.contains("user.tachcard.com")) {
+                    Toast.makeText(getContext(), getResources().getString(R.string.payment_end), Toast.LENGTH_LONG).show();
+                    getActivity().finish();
+                    return;
+                }
+                super.onPageFinished(view, url);
+            }
+        });
         outWebView.getSettings().setJavaScriptEnabled(true);
         return outWebView;
     }
