@@ -5,7 +5,6 @@ import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -16,7 +15,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Pair;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -36,7 +34,7 @@ import ua.ck.android.geekhub.mclaut.ui.settings.SettingsActivity;
 import ua.ck.android.geekhub.mclaut.ui.tachcardPay.TachcardPayActivity;
 import ua.ck.android.geekhub.mclaut.ui.userInfo.UserInfoFragment;
 
-public class MainActivity extends AppCompatActivity implements Observer<Pair<String,String>> {
+public class MainActivity extends AppCompatActivity implements Observer<Pair<String, String>> {
     @BindView(R.id.drawer_layout)
     DrawerLayout mDrawerLayout;
     @BindView(R.id.toolBar)
@@ -76,13 +74,14 @@ public class MainActivity extends AppCompatActivity implements Observer<Pair<Str
 
         viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
 
-        viewModel.getUserIdAndName().observe(this,this);
+        viewModel.getUserIdAndName().observe(this, this);
 
         setToolbarTitle();
 
         selectDrawerItem();
 
     }
+
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
@@ -107,33 +106,29 @@ public class MainActivity extends AppCompatActivity implements Observer<Pair<Str
 
     private void setupDrawerNavigationView(NavigationView navigationView) {
         navigationView.setNavigationItemSelectedListener(
-                new NavigationView.OnNavigationItemSelectedListener() {
-                    @Override
-                    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-
-                        if(item.getActionView() != null){
-                            ImageButton button = item.getActionView()
-                                    .findViewById(R.id.bt_remove_user);
-                                McLautApplication.selectUser(button.getTag(R.string.btn_tag_key_id).toString());
-                                mDrawerLayout.closeDrawers();
-                        }
-                        idActiveFragment = item.getItemId();
-                        selectDrawerItem();
-                        return true;
+                item -> {
+                    if (item.getActionView() != null) {
+                        ImageButton button = item.getActionView()
+                                .findViewById(R.id.bt_remove_user);
+                        McLautApplication.selectUser(button.getTag(R.string.btn_tag_key_id).toString());
+                        mDrawerLayout.closeDrawers();
                     }
+                    idActiveFragment = item.getItemId();
+                    selectDrawerItem();
+                    return true;
                 }
         );
     }
 
-    public void drawerLayoutButtonClick(View view){
+    public void drawerLayoutButtonClick(View view) {
 
-        if(view.getTag().equals(getResources()
-                .getString(R.string.enable_user_list))){
+        if (view.getTag().equals(getResources()
+                .getString(R.string.enable_user_list))) {
             selectUserListMenu();
         } else if (view.getTag().equals(getResources()
                 .getString(R.string.enable_info))) {
             selectInfoMenu();
-        } else if (view.getId() == R.id.bt_remove_user){
+        } else if (view.getId() == R.id.bt_remove_user) {
 
             DialogFragment dialogFragment = new RemoveUserDialogFragment();
 
@@ -157,9 +152,9 @@ public class MainActivity extends AppCompatActivity implements Observer<Pair<Str
     }
 
     private void selectUserListMenu() {
-        McLautAppExecutor.getInstance().mainThread().execute(()->{
+        McLautAppExecutor.getInstance().mainThread().execute(() -> {
             buttonSelectLayout.setTag(getResources()
-                .getString(R.string.enable_info));
+                    .getString(R.string.enable_info));
             buttonSelectLayout.setImageDrawable(getDrawable(R.drawable.info));
             mNavigationView.getMenu().clear();
             mNavigationView.inflateMenu(R.menu.drawer_users_menu);
@@ -170,7 +165,7 @@ public class MainActivity extends AppCompatActivity implements Observer<Pair<Str
             int index = 0;
 
             for (HashMap.Entry<String, UserCharacteristic> entry :
-                    Repository.getInstance().getMapUsersCharacteristic().getValue().entrySet()){
+                    Repository.getInstance().getMapUsersCharacteristic().getValue().entrySet()) {
 
                 String name = entry.getValue().getInfo().getName();
                 String id = entry.getValue().getInfo().getId();
@@ -205,33 +200,34 @@ public class MainActivity extends AppCompatActivity implements Observer<Pair<Str
                 break;
             case R.id.general_information_fragment:
                 fragmentClass = UserInfoFragment.class;
-
                 break;
             case R.id.settings_fragment:
                 Intent intentSettings = new Intent(getBaseContext(), SettingsActivity.class);
                 startActivity(intentSettings);
+                mDrawerLayout.closeDrawers();
                 return;
             case R.id.payment_activity:
                 Intent intentTachCar = new Intent(getBaseContext(), TachcardPayActivity.class);
                 startActivity(intentTachCar);
+                mDrawerLayout.closeDrawers();
                 return;
             case R.id.add_new_user:
                 Intent intentLoginActivity = new Intent(getBaseContext(), LoginActivity.class);
                 intentLoginActivity.putExtra(LoginActivity.ADD_NEW_USER, true);
                 startActivity(intentLoginActivity);
+                mDrawerLayout.closeDrawers();
                 return;
             default:
                 fragmentClass = UserInfoFragment.class;
                 idActiveFragment = R.id.general_information_fragment;
-
                 break;
         }
         intializedFragment(fragmentClass);
     }
 
 
-    private void intializedFragment(Class fragmentClass){
-        Fragment fragment = null;
+    private void intializedFragment(Class fragmentClass) {
+        Fragment fragment;
 
         try {
             fragment = (Fragment) fragmentClass.newInstance();
@@ -244,7 +240,7 @@ public class MainActivity extends AppCompatActivity implements Observer<Pair<Str
             setToolbarTitle();
             mDrawerLayout.closeDrawers();
 
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -258,15 +254,15 @@ public class MainActivity extends AppCompatActivity implements Observer<Pair<Str
     }
 
     private ActionBarDrawerToggle setupDrawerToggle() {
-        return  new ActionBarDrawerToggle(this,
+        return new ActionBarDrawerToggle(this,
                 mDrawerLayout,
                 toolbar,
                 R.string.drawer_toggle_open,
-                R.string.drawer_toggle_close){
+                R.string.drawer_toggle_close) {
             @Override
             public void onDrawerClosed(View view) {
                 super.onDrawerClosed(view);
-                if(!buttonSelectLayout.getTag().equals(getResources()
+                if (!buttonSelectLayout.getTag().equals(getResources()
                         .getString(R.string.enable_user_list))) {
                     selectInfoMenu();
                 }
