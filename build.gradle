@@ -2,7 +2,7 @@
 
 buildscript {
     ext {
-        supportLibVersion = "26.1.0"
+        supportLibVersion = "27.0.2"
         architectureComponentsLibrary = "1.0.0"
         butterknifeVersion = "8.8.1"
         retrofitVersion = "2.3.0"

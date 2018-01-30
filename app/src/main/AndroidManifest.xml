@@ -40,6 +40,9 @@
             android:permission="android.permission.BIND_JOB_SERVICE" />
 
         <receiver android:name=".notifications.NotificationsAlarmReceiver" />
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="0afb885cc5c48a5d5aaa4f2939a422fe76cbe604" />
     </application>
 
 </manifest>

@@ -8,6 +8,8 @@ import android.app.job.JobScheduler;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.crashlytics.android.Crashlytics;
+import io.fabric.sdk.android.Fabric;
 import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -71,6 +73,7 @@ public class McLautApplication extends Application{
         new NotificationsAlarmReceiver().startAlarmManager(this);
 
         super.onCreate();
+        Fabric.with(this, new Crashlytics());
     }
 
     private static void initPreferences(){

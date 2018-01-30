@@ -1,4 +1,19 @@
+buildscript {
+    repositories {
+        maven { url 'https://maven.fabric.io/public' }
+    }
+
+    dependencies {
+        classpath 'io.fabric.tools:gradle:1.+'
+    }
+}
 apply plugin: 'com.android.application'
+apply plugin: 'io.fabric'
+
+repositories {
+    maven { url 'https://maven.fabric.io/public' }
+}
+
 
 android {
     compileSdkVersion 27
@@ -53,7 +68,7 @@ dependencies {
     implementation "com.android.support:preference-v14:$supportLibVersion"
 
     //Architecture components
-    implementation "android.arch.lifecycle:runtime:1.0.3"
+    implementation "android.arch.lifecycle:runtime:$architectureComponentsLibrary"
     implementation "android.arch.lifecycle:extensions:$architectureComponentsLibrary"
     annotationProcessor "android.arch.lifecycle:compiler:$architectureComponentsLibrary"
     implementation "android.arch.persistence.room:runtime:$architectureComponentsLibrary"
@@ -71,5 +86,8 @@ dependencies {
     //Other
     implementation "br.com.simplepass:loading-button-android:$loadingButtonVersion"
     implementation "net.danlew:android.joda:$jodaTimeVersion"
+    compile('com.crashlytics.sdk.android:crashlytics:2.8.0@aar') {
+        transitive = true;
+    }
 
 }
