@@ -30,7 +30,7 @@ public class TachcardPayStep2Fragment extends Fragment {
         outWebView.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageFinished(WebView view, String url) {
-                if (!url.equals(location) && url.contains("user.tachcard.com")) {
+                if (!url.equals(location) && url.contains("tachcard")) {
                     Toast.makeText(getContext(), getResources().getString(R.string.payment_end), Toast.LENGTH_LONG).show();
                     getActivity().finish();
                     return;
